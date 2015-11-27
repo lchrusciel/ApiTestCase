@@ -1,0 +1,22 @@
+language: php
+
+cache:
+  directories:
+    - bin
+    - vendor
+
+php:
+  - 5.6
+  - 5.5
+
+env:
+  matrix:
+    - PREFER_LOWEST="--prefer-lowest"
+    - PREFER_LOWEST=""
+
+
+before_script:
+  - composer update --prefer-source PREFER_LOWEST
+
+script:
+  - bin/phpunit test
