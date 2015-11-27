@@ -1,0 +1,11 @@
+app_hello_world:
+    pattern: /
+    methods: [GET]
+    defaults:
+        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::basicAction"
+
+app_ambitious_action:
+    pattern: /service/
+    methods: [GET]
+    defaults:
+        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::notSoBasicAction"

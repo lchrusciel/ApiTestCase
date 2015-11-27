@@ -1,0 +1,38 @@
+{
+    "name": "lakion/api-test-case",
+    "description": "Perfect TestCase for JSON API TDD with Symfony.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name":     "Łukasz Chruściel",
+            "email":    "lukasz.chrusciel@lakion.com"
+        },
+        {
+            "name":     "Paweł Jędrzejewski",
+            "homepage": "http://pjedrzejewski.com"
+        },
+        {
+            "name":     "Michał Marcinkowski",
+            "email":    "michal.marcinkowski@lakion.com"
+        }
+    ],
+    "require": {
+        "coduo/php-matcher": "~1.1",
+        "phpspec/php-diff": "~1.0",
+        "phpunit/phpunit": "4.8",
+        "polishsymfonycommunity/symfony-mocker-container": "~1.0",
+        "symfony/framework-bundle": "~2.3| >3.0",
+        "symfony/finder": "~2.3| >3.0",
+        "symfony/browser-kit": "~2.3| >3.0"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lakion\\ApiTestCase\\": "src/",
+            "Lakion\\ApiTestCase\\Test\\": "test/src/"
+        }
+    }
+}

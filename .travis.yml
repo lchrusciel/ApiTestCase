@@ -1,0 +1,17 @@
+language: php
+
+cache:
+  directories:
+    - bin
+    - vendor
+
+php:
+  - 7.0
+  - 5.6
+  - 5.5
+
+before_script:
+  - composer install --prefer-source
+
+script:
+  - bin/phpunit test
