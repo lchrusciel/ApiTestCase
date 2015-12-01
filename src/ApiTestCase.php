@@ -81,7 +81,6 @@ abstract class ApiTestCase extends WebTestCase
         }
 
         $this->assertResponseCode($response, $statusCode);
-
         $this->assertJsonHeader($response);
         $this->assertJsonResponseContent($response, $filename);
     }
@@ -114,9 +113,11 @@ abstract class ApiTestCase extends WebTestCase
     private function showErrorInBrowserIfOccurred(Response $response)
     {
         if (!$response->isSuccessful()) {
+            $openCommand = (isset($_SERVER['OPEN_BROWSER_COMMAND'])) ? $_SERVER['OPEN_BROWSER_COMMAND'] : 'open %s';
+
             $filename = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . uniqid() . '.html';
             file_put_contents($filename, $response->getContent());
-            system(sprintf('open %s', escapeshellarg($filename)));
+            system(sprintf($openCommand, escapeshellarg($filename)));
 
             throw new \Exception('Internal server error.');
         }
