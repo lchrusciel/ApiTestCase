@@ -95,10 +95,6 @@ abstract class ApiTestCase extends WebTestCase
         ));
         $actualResponse = $response->getContent();
 
-        if ('json' === $mimeType) {
-            $actualResponse = json_encode(json_decode($actualResponse), JSON_PRETTY_PRINT);
-        }
-
         $factory = new SimpleFactory();
         $matcher = $factory->createMatcher();
 
