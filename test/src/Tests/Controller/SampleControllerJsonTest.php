@@ -13,7 +13,6 @@ namespace Lakion\ApiTestCase\Test\Tests\Controller;
 
 use Lakion\ApiTestCase\JsonApiTestCase;
 
-
 /**
  * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
  */

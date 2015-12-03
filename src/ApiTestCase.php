@@ -106,15 +106,15 @@ abstract class ApiTestCase extends WebTestCase
 
         if (!$result) {
             $difference = $matcher->getError();
-            $difference = $difference . PHP_EOL;
+            $difference = $difference.PHP_EOL;
 
-            $expectedResponse = explode(PHP_EOL, (string)$expectedResponse);
-            $actualResponse = explode(PHP_EOL, (string)$actualResponse);
+            $expectedResponse = explode(PHP_EOL, (string) $expectedResponse);
+            $actualResponse = explode(PHP_EOL, (string) $actualResponse);
 
             $diff = new \Diff($expectedResponse, $actualResponse, array());
 
             $renderer = new \Diff_Renderer_Text_Unified();
-            $difference = $difference . $diff->render($renderer);
+            $difference = $difference.$diff->render($renderer);
             $this->fail($difference);
         }
     }
@@ -129,7 +129,7 @@ abstract class ApiTestCase extends WebTestCase
         if (!$response->isSuccessful()) {
             $openCommand = (isset($_SERVER['OPEN_BROWSER_COMMAND'])) ? $_SERVER['OPEN_BROWSER_COMMAND'] : 'open %s';
 
-            $filename = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . uniqid() . '.html';
+            $filename = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.uniqid().'.html';
             file_put_contents($filename, $response->getContent());
             system(sprintf($openCommand, escapeshellarg($filename)));
 
@@ -162,7 +162,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getExpectedResponsesFolder()
     {
-        return (isset($_SERVER['EXPECTED_RESPONSE_DIR'])) ? $this->getRootDir() . $_SERVER['EXPECTED_RESPONSE_DIR'] : $this->guessResponsesFolder() . '/Expected';
+        return (isset($_SERVER['EXPECTED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['EXPECTED_RESPONSE_DIR'] : $this->guessResponsesFolder().'/Expected';
     }
 
     /**
@@ -170,7 +170,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getMockedResponsesFolder()
     {
-        return (isset($_SERVER['MOCKED_RESPONSE_DIR'])) ? $this->getRootDir() . $_SERVER['MOCKED_RESPONSE_DIR'] : $this->guessResponsesFolder() . '/Mocked';
+        return (isset($_SERVER['MOCKED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['MOCKED_RESPONSE_DIR'] : $this->guessResponsesFolder().'/Mocked';
     }
 
     /**
@@ -180,7 +180,7 @@ abstract class ApiTestCase extends WebTestCase
     {
         $calledClass =  get_called_class();
         $calledClassFolder = dirname((new \ReflectionClass($calledClass))->getFileName());
-        $responsesFolder = $calledClassFolder . '/../Responses';
+        $responsesFolder = $calledClassFolder.'/../Responses';
         if (file_exists($responsesFolder)) {
             return $responsesFolder;
         }

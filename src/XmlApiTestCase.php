@@ -42,7 +42,6 @@ abstract class XmlApiTestCase extends ApiTestCase
         $this->assertResponseCode($response, $statusCode);
         $this->assertXmlHeader($response);
         $this->assertXmlResponseContent($response, $filename);
-
     }
 
     /**
