@@ -5,3 +5,4 @@ test/app/cache/*
 !test/app/cache/.gitkeep
 test/app/logs/*
 !test/app/logs/.gitkeep
+composer.lock

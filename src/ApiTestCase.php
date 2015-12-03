@@ -11,9 +11,10 @@
 
 namespace Lakion\ApiTestCase;
 
-use Coduo\PHPMatcher\Factory\SimpleFactory;
+use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Coduo\PHPMatcher\Factory\SimpleFactory;
 
 /**
  * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
@@ -23,13 +24,13 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class ApiTestCase extends WebTestCase
 {
     /**
-     * @var \Symfony\Bundle\FrameworkBundle\Client
+     * @var Client
      */
     protected $client;
 
     public function setUp()
     {
-        $this->client = static::createClient(array(), array('HTTP_Accept' => 'application/json'));
+        $this->client = static::createClient();
     }
 
     public function tearDown()
@@ -66,95 +67,37 @@ abstract class ApiTestCase extends WebTestCase
     }
 
     /**
-     * Asserts that response has JSON content.
-     * If filename is set, asserts that response content matches the one in given file.
-     * If statusCode is set, asserts that response has given status code.
-     *
      * @param Response $response
-     * @param string|null $filename
-     * @param string|null $statusCode
+     * @param string $contentType
      */
-    protected function assertJsonResponse(Response $response, $filename, $statusCode = 200)
-    {
-        if (isset($_SERVER['OPEN_ERROR_IN_BROWSER']) && true === $_SERVER['OPEN_ERROR_IN_BROWSER']) {
-            $this->showErrorInBrowserIfOccurred($response);
-        }
-
-        $this->assertResponseCode($response, $statusCode);
-        $this->assertJsonHeader($response);
-        $this->assertJsonResponseContent($response, $filename);
-    }
-
-    /**
-     * Provides array from decoded json file. Requires MOCKED_RESPONSE_DIR defined variable to work properly.
-     *
-     * @param string $filename
-     *
-     * @return array
-     *
-     * @throws \Exception
-     */
-    protected function getJsonResponseFixture($filename)
-    {
-        $responseSource = $this->getMockedResponsesFolder();
-
-        return json_decode(file_get_contents(sprintf(
-            '%s/%s.json',
-            $responseSource,
-            $filename
-        )), true);
-    }
-
-    /**
-     * @param Response $response
-     *
-     * @throws \Exception
-     */
-    private function showErrorInBrowserIfOccurred(Response $response)
-    {
-        if (!$response->isSuccessful()) {
-            $openCommand = (isset($_SERVER['OPEN_BROWSER_COMMAND'])) ? $_SERVER['OPEN_BROWSER_COMMAND'] : 'open %s';
-
-            $filename = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . uniqid() . '.html';
-            file_put_contents($filename, $response->getContent());
-            system(sprintf($openCommand, escapeshellarg($filename)));
-
-            throw new \Exception('Internal server error.');
-        }
-    }
-
-    /**
-     * @param Response $response
-     * @param int $statusCode
-     */
-    private function assertJsonHeader($response)
+    protected function assertHeader(Response $response, $contentType)
     {
         $this->assertTrue(
-            $response->headers->contains('Content-Type', 'application/json'),
+            $response->headers->contains('Content-Type', $contentType),
             $response->headers
         );
     }
 
     /**
-     * Asserts that response has JSON content matching the one given in file.
-     *
      * @param Response $response
      * @param string $filename
-     *
-     * @throws \Exception
+     * @param string $mimeType
      */
-    private function assertJsonResponseContent(Response $response, $filename)
+    protected function assertResponseContent(Response $response, $filename, $mimeType)
     {
         $responseSource = $this->getExpectedResponsesFolder();
 
         $expectedResponse = file_get_contents(sprintf(
-            '%s/%s.json',
+            '%s/%s.%s',
             $responseSource,
-            $filename
+            $filename,
+            $mimeType
         ));
         $actualResponse = $response->getContent();
 
-        $actualResponse = json_encode(json_decode($actualResponse), JSON_PRETTY_PRINT);
+        if ('json' === $mimeType) {
+            $actualResponse = json_encode(json_decode($actualResponse), JSON_PRETTY_PRINT);
+        }
 
         $factory = new SimpleFactory();
         $matcher = $factory->createMatcher();
@@ -177,11 +120,41 @@ abstract class ApiTestCase extends WebTestCase
     }
 
     /**
-     * @return string
+     * @param Response $response
+     *
+     * @throws \Exception
      */
-    private function getRootDir()
+    protected function showErrorInBrowserIfOccurred(Response $response)
     {
-        return $this->get('kernel')->getRootDir();
+        if (!$response->isSuccessful()) {
+            $openCommand = (isset($_SERVER['OPEN_BROWSER_COMMAND'])) ? $_SERVER['OPEN_BROWSER_COMMAND'] : 'open %s';
+
+            $filename = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . uniqid() . '.html';
+            file_put_contents($filename, $response->getContent());
+            system(sprintf($openCommand, escapeshellarg($filename)));
+
+            throw new \Exception('Internal server error.');
+        }
+    }
+
+    /**
+     * Provides array from decoded json file. Requires MOCKED_RESPONSE_DIR defined variable to work properly.
+     *
+     * @param string $filename
+     *
+     * @return array
+     *
+     * @throws \Exception
+     */
+    protected function getJsonResponseFixture($filename)
+    {
+        $responseSource = $this->getMockedResponsesFolder();
+
+        return json_decode(file_get_contents(sprintf(
+            '%s/%s.json',
+            $responseSource,
+            $filename
+        )), true);
     }
 
     /**
@@ -213,5 +186,13 @@ abstract class ApiTestCase extends WebTestCase
         }
 
         throw new \RuntimeException(sprintf('Folder %s does not exist. Please define EXPECTED_RESPONSE_DIR and MOCKED_RESPONSE_DIR variables with path to your Responses', $responsesFolder));
+    }
+
+    /**
+     * @return string
+     */
+    private function getRootDir()
+    {
+        return $this->get('kernel')->getRootDir();
     }
 }
