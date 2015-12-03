@@ -11,12 +11,13 @@
 
 namespace Lakion\ApiTestCase\Test\Tests\Controller;
 
-use Lakion\ApiTestCase\ApiTestCase;
+use Lakion\ApiTestCase\JsonApiTestCase;
+
 
 /**
  * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
  */
-class SampleControllerTest extends ApiTestCase
+class SampleControllerJsonTest extends JsonApiTestCase
 {
     public function testGetHelloWorldResponse()
     {
@@ -24,7 +25,7 @@ class SampleControllerTest extends ApiTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertJsonResponse($response, 'hello_world');
+        $this->assertResponse($response, 'hello_world');
     }
 
     public function testGetHelloWorldWithMatcherResponse()
@@ -33,7 +34,7 @@ class SampleControllerTest extends ApiTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertJsonResponse($response, 'hello_matcher_world');
+        $this->assertResponse($response, 'hello_matcher_world');
     }
 
     public function testGetHelloWorldWithWildCardResponse()
@@ -42,7 +43,7 @@ class SampleControllerTest extends ApiTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertJsonResponse($response, 'hello_wild_card');
+        $this->assertResponse($response, 'hello_wild_card');
     }
 
     public function testGetResponseFromMockedService()
@@ -56,6 +57,6 @@ class SampleControllerTest extends ApiTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertJsonResponse($response, 'ambitious_action_response');
+        $this->assertResponse($response, 'ambitious_action_response');
     }
 }
