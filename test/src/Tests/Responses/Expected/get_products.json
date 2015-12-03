@@ -1,14 +1,17 @@
 [
     {
         "id": @integer@,
-        "name": "Star-Wars T-shirt",
-        "sku": "SWTS",
-        "price": 5500
+        "name": "Phone",
+        "price": 200
     },
     {
         "id": @integer@,
-        "name": "Han Solo Mug",
-        "sku": "HSM",
-        "price": 500
+        "name": "Book",
+        "price": 15
+    },
+    {
+        "id": @integer@,
+        "name": "Mug",
+        "price": 5
     }
 ]

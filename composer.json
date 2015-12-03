@@ -24,7 +24,13 @@
         "polishsymfonycommunity/symfony-mocker-container": "^1.0",
         "symfony/framework-bundle": "^2.3|^3.0",
         "symfony/finder": "^2.3|^3.0",
-        "symfony/browser-kit": "^2.3|^3.0"
+        "symfony/browser-kit": "^2.3|^3.0",
+        "nelmio/alice": "@dev",
+        "doctrine/orm": "^2.5",
+        "doctrine/data-fixtures": "^1.1",
+        "doctrine/doctrine-bundle": "^1.6",
+        "symfony/console": "^2.3|^3.0",
+        "symfony/serializer": "^2.3|^3.0"
     },
     "config": {
         "bin-dir": "bin"

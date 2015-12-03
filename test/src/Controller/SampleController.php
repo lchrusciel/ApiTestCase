@@ -16,6 +16,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
@@ -72,25 +76,17 @@ class SampleController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $encoders = array(new XmlEncoder(), new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $productRepository = $this->getDoctrine()->getRepository('ApiTestCase:Product');
+        $products = $productRepository->findAll();
+
         $acceptFormat = $request->headers->get('Accept');
+
         if ('application/xml' === $acceptFormat) {
-            $content = sprintf('
-<?xml version="1.0" encoding="UTF-8"?>
-<products>
-    <product>
-        <id>%s</id>
-        <name>"Star-Wars T-shirt"</name>
-        <sku>"SWTS"</sku>
-        <price>5500</price>
-    </product>
-    <product>
-        <id>%s</id>
-        <name>"Han Solo Mug"</name>
-        <sku>"HSM"</sku>
-        <price>500</price>
-    </product>
-</products>'
-                , rand(), rand());
+            $content = $serializer->serialize($products, 'xml');
 
             $response = new Response($content);
             $response->headers->set('Content-Type', MediaTypes::XML);
@@ -99,22 +95,11 @@ class SampleController extends Controller
         }
 
         if ('application/json' === $acceptFormat) {
-            $content = array(
-                array(
-                    'id' => rand(),
-                    'name' => 'Star-Wars T-shirt',
-                    'sku' => 'SWTS',
-                    'price' => 5500,
-                ),
-                array(
-                    'id' => rand(),
-                    'name' => 'Han Solo Mug',
-                    'sku' => 'HSM',
-                    'price' => 500,
-                ),
-            );
+            $content = $serializer->serialize($products, 'json');
+            $response = new Response($content);
+            $response->headers->set('Content-Type', MediaTypes::JSON);
 
-            return new JsonResponse($content);
+            return $response;
         }
     }
 }

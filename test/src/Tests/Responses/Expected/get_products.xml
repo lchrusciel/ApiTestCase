@@ -1,15 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<products>
-  <product>
+<?xml version="1.0" ?>
+<response>
+  <item key="0">
     <id>@string@</id>
-    <name>"Star-Wars T-shirt"</name>
-    <sku>"SWTS"</sku>
-    <price>5500</price>
-  </product>
-  <product>
+    <name>Phone</name>
+    <price>200</price>
+  </item>
+  <item key="1">
     <id>@string@</id>
-    <name>"Han Solo Mug"</name>
-    <sku>"HSM"</sku>
-    <price>500</price>
-  </product>
-</products>
+    <name>Book</name>
+    <price>15</price>
+  </item>
+  <item key="2">
+    <id>@string@</id>
+    <name>Mug</name>
+    <price>5</price>
+  </item>
+</response>

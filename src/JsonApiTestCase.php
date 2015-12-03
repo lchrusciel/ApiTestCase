@@ -23,6 +23,7 @@ abstract class JsonApiTestCase extends ApiTestCase
 {
     public function setUp()
     {
+        parent::setUp();
         $this->client = static::createClient(array(), array('HTTP_ACCEPT' => MediaTypes::JSON));
     }
 

@@ -1,0 +1,14 @@
+Lakion\ApiTestCase\Test\Entity\Product:
+    type: entity
+    table: test_product
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+        price:
+            type: integer

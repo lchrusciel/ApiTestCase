@@ -6,3 +6,4 @@ test/app/cache/*
 test/app/logs/*
 !test/app/logs/.gitkeep
 composer.lock
+test/app/config/parameters.php

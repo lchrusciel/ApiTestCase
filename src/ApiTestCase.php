@@ -11,6 +11,9 @@
 
 namespace Lakion\ApiTestCase;
 
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Doctrine\ORM\EntityManager;
+use Nelmio\Alice\Fixtures\Loader;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,9 +31,15 @@ abstract class ApiTestCase extends WebTestCase
      */
     protected $client;
 
+    /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+
     public function setUp()
     {
         $this->client = static::createClient();
+        $this->entityManager = $this->get('doctrine.orm.entity_manager');
     }
 
     public function tearDown()
@@ -45,6 +54,14 @@ abstract class ApiTestCase extends WebTestCase
         $this->client = null;
 
         parent::tearDown();
+    }
+
+    protected function purgeDataBase()
+    {
+        $purger = new ORMPurger($this->entityManager);
+        $purger->purge();
+
+        $this->entityManager->clear();
     }
 
     /**
@@ -154,6 +171,39 @@ abstract class ApiTestCase extends WebTestCase
         )), true);
     }
 
+    protected function loadPlatformData()
+    {
+        $loader = new Loader();
+
+        $directory = $this->getFixturesFolder();
+        $files = $this->getFilesFromDirectory($directory);
+
+        foreach ($files as $file) {
+            $objects = $loader->load($directory.$file);
+            $this->persistObjects($objects);
+        }
+
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param array $objects
+     */
+    private function persistObjects(array $objects)
+    {
+        foreach ($objects as $object) {
+            $this->entityManager->persist($object);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    private function getFixturesFolder()
+    {
+        return (isset($_SERVER['FIXTURES_DIR'])) ? $this->getRootDir().$_SERVER['FIXTURES_DIR'] : $this->getRootDir().'/../src/DataFixtures/ORM/';
+    }
+
     /**
      * @return string
      */
@@ -178,11 +228,38 @@ abstract class ApiTestCase extends WebTestCase
         $calledClass =  get_called_class();
         $calledClassFolder = dirname((new \ReflectionClass($calledClass))->getFileName());
         $responsesFolder = $calledClassFolder.'/../Responses';
-        if (file_exists($responsesFolder)) {
-            return $responsesFolder;
+
+        $this->folderExists($responsesFolder);
+
+        return $responsesFolder;
+    }
+
+    /**
+     * @param string $directory
+     *
+     * @return array
+     */
+    private function getFilesFromDirectory($directory)
+    {
+        $this->folderExists($directory);
+
+        $files = scandir($directory);
+        $files = array_diff($files, array('..', '.'));
+        if (!$files) {
+            throw new \RuntimeException(sprintf('There is no files to load in folder %s', $directory));
         }
 
-        throw new \RuntimeException(sprintf('Folder %s does not exist. Please define EXPECTED_RESPONSE_DIR and MOCKED_RESPONSE_DIR variables with path to your Responses', $responsesFolder));
+        return $files;
+    }
+
+    /**
+     * @param string $directory
+     */
+    private function folderExists($directory)
+    {
+        if (!file_exists($directory)) {
+            throw new \RuntimeException(sprintf('Folder %s does not exist', $directory));
+        }
     }
 
     /**
