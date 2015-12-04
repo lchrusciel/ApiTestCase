@@ -53,13 +53,30 @@ abstract class XmlApiTestCase extends ApiTestCase
     }
 
     /**
-     * @param Response $response
+     * @param Response $actualResponse
      * @param $filename
      *
      * @throws \Exception
      */
-    private function assertXmlResponseContent(Response $response, $filename)
+    private function assertXmlResponseContent(Response $actualResponse, $filename)
     {
-        parent::assertResponseContent($response, $filename, 'xml');
+        $actualResponseContent = $actualResponse->getContent();
+
+        parent::assertResponseContent($this->prettifyXml($actualResponseContent), $filename, 'xml');
+    }
+
+    /**
+     * @param $actualResponse
+     *
+     * @return string
+     */
+    private function prettifyXml($actualResponse)
+    {
+        $domXmlDocument = new \DOMDocument('1.0');
+        $domXmlDocument->preserveWhiteSpace = false;
+        $domXmlDocument->formatOutput = true;
+        $domXmlDocument->loadXML(str_replace("\n", "", $actualResponse));
+
+        return $domXmlDocument->saveXML();
     }
 }
