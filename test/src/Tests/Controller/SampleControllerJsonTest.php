@@ -58,4 +58,13 @@ class SampleControllerJsonTest extends JsonApiTestCase
 
         $this->assertResponse($response, 'ambitious_action_response');
     }
+
+    public function testProductIndexResponse()
+    {
+        $this->client->request('GET', '/products/');
+
+        $response = $this->client->getResponse();
+
+        $this->assertResponse($response, 'get_products');
+    }
 }

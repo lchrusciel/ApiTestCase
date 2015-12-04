@@ -81,11 +81,11 @@ abstract class ApiTestCase extends WebTestCase
     }
 
     /**
-     * @param Response $response
+     * @param string $actualResponse
      * @param string $filename
      * @param string $mimeType
      */
-    protected function assertResponseContent(Response $response, $filename, $mimeType)
+    protected function assertResponseContent($actualResponse, $filename, $mimeType)
     {
         $responseSource = $this->getExpectedResponsesFolder();
 
@@ -95,7 +95,6 @@ abstract class ApiTestCase extends WebTestCase
             $filename,
             $mimeType
         ));
-        $actualResponse = $response->getContent();
 
         $factory = new SimpleFactory();
         $matcher = $factory->createMatcher();

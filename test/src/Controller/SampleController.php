@@ -23,13 +23,15 @@ use Symfony\Component\HttpFoundation\Request;
 class SampleController extends Controller
 {
     /**
-     * @return JsonResponse
+     * @param Request $request
+     *
+     * @return JsonResponse|Response
      */
     public function basicAction(Request $request)
     {
-        $accept = $request->headers->get('Accept');
+        $acceptFormat = $request->headers->get('Accept');
 
-        if ('application/json' === $accept) {
+        if ('application/json' === $acceptFormat) {
             return new JsonResponse(['message' => 'Hello ApiTestCase World!']);
         }
 
@@ -42,13 +44,15 @@ class SampleController extends Controller
     }
 
     /**
-     * @return JsonResponse
+     * @param Request $request
+     *
+     * @return JsonResponse|Response
      */
     public function notSoBasicAction(Request $request)
     {
-        $accept = $request->headers->get('Accept');
+        $acceptFormat = $request->headers->get('Accept');
 
-        if ('application/json' === $accept) {
+        if ('application/json' === $acceptFormat) {
             return new JsonResponse($this->get('app.service')->getOutsideApiResponse());
         }
 
@@ -59,5 +63,58 @@ class SampleController extends Controller
         $response->headers->set('Content-Type', MediaTypes::XML);
 
         return $response;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse|Response
+     */
+    public function indexAction(Request $request)
+    {
+        $acceptFormat = $request->headers->get('Accept');
+        if ('application/xml' === $acceptFormat) {
+            $content = sprintf('
+<?xml version="1.0" encoding="UTF-8"?>
+<products>
+    <product>
+        <id>%s</id>
+        <name>"Star-Wars T-shirt"</name>
+        <sku>"SWTS"</sku>
+        <price>5500</price>
+    </product>
+    <product>
+        <id>%s</id>
+        <name>"Han Solo Mug"</name>
+        <sku>"HSM"</sku>
+        <price>500</price>
+    </product>
+</products>'
+                , rand(), rand());
+
+            $response = new Response($content);
+            $response->headers->set('Content-Type', MediaTypes::XML);
+
+            return $response;
+        }
+
+        if ('application/json' === $acceptFormat) {
+            $content = array(
+                array(
+                    'id' => rand(),
+                    'name' => 'Star-Wars T-shirt',
+                    'sku' => 'SWTS',
+                    'price' => 5500,
+                ),
+                array(
+                    'id' => rand(),
+                    'name' => 'Han Solo Mug',
+                    'sku' => 'HSM',
+                    'price' => 500,
+                ),
+            );
+
+            return new JsonResponse($content);
+        }
     }
 }

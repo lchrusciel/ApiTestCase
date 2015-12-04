@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products>
+  <product>
+    <id>@string@</id>
+    <name>"Star-Wars T-shirt"</name>
+    <sku>"SWTS"</sku>
+    <price>5500</price>
+  </product>
+  <product>
+    <id>@string@</id>
+    <name>"Han Solo Mug"</name>
+    <sku>"HSM"</sku>
+    <price>500</price>
+  </product>
+</products>

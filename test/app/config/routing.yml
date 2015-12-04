@@ -9,3 +9,9 @@ app_ambitious_action:
     methods: [GET]
     defaults:
         _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::notSoBasicAction"
+
+app_product_index:
+    path: /products/
+    methods: [GET]
+    defaults:
+        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::indexAction"

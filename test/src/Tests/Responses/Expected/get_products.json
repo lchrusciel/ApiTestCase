@@ -1,0 +1,14 @@
+[
+    {
+        "id": @integer@,
+        "name": "Star-Wars T-shirt",
+        "sku": "SWTS",
+        "price": 5500
+    },
+    {
+        "id": @integer@,
+        "name": "Han Solo Mug",
+        "sku": "HSM",
+        "price": 500
+    }
+]

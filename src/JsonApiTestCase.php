@@ -45,7 +45,6 @@ abstract class JsonApiTestCase extends ApiTestCase
 
         $this->assertResponseCode($response, $statusCode);
         $this->assertJsonHeader($response);
-        $this->makeResponseContentPretty($response);
         $this->assertJsonResponseContent($response, $filename);
     }
 
@@ -67,13 +66,17 @@ abstract class JsonApiTestCase extends ApiTestCase
      */
     private function assertJsonResponseContent(Response $response, $filename)
     {
-        parent::assertResponseContent($response, $filename, 'json');
+        $content = $response->getContent();
+        parent::assertResponseContent($this->prettifyJson($content), $filename, 'json');
     }
 
-    private function makeResponseContentPretty(Response $response)
+    /**
+     * @param $content
+     *
+     * @return string
+     */
+    private function prettifyJson($content)
     {
-        $content = $response->getContent();
-        $content = json_encode(json_decode($content), JSON_PRETTY_PRINT);
-        $response->setContent($content);
+        return json_encode(json_decode($content), JSON_PRETTY_PRINT);
     }
 }
