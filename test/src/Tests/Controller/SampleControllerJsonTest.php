@@ -61,6 +61,8 @@ class SampleControllerJsonTest extends JsonApiTestCase
 
     public function testProductIndexResponse()
     {
+        $this->purgeDataBase();
+        $this->loadPlatformData();
         $this->client->request('GET', '/products/');
 
         $response = $this->client->getResponse();

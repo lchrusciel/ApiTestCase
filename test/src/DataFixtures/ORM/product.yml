@@ -1,0 +1,10 @@
+Lakion\ApiTestCase\Test\Entity\Product:
+    product1:
+        name: 'Phone'
+        price: 200
+    product2:
+        name: 'Book'
+        price: 15
+    product3:
+        name: 'Mug'
+        price: 5
