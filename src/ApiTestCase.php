@@ -179,7 +179,7 @@ abstract class ApiTestCase extends WebTestCase
         $files = $this->getFilesFromDirectory($directory);
 
         foreach ($files as $file) {
-            $objects = $loader->load($directory.$file);
+            $objects = $loader->load($directory.'/'.$file);
             $this->persistObjects($objects);
         }
 
@@ -201,7 +201,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getFixturesFolder()
     {
-        return (isset($_SERVER['FIXTURES_DIR'])) ? $this->getRootDir().$_SERVER['FIXTURES_DIR'] : $this->getRootDir().'/../src/DataFixtures/ORM/';
+        return (isset($_SERVER['FIXTURES_DIR'])) ? $this->getRootDir().$_SERVER['FIXTURES_DIR'] : $this->getCalledClassFolder().'/../DataFixtures/ORM';
     }
 
     /**
@@ -209,7 +209,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getExpectedResponsesFolder()
     {
-        return (isset($_SERVER['EXPECTED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['EXPECTED_RESPONSE_DIR'] : $this->guessResponsesFolder().'/Expected';
+        return (isset($_SERVER['EXPECTED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['EXPECTED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Expected';
     }
 
     /**
@@ -217,21 +217,20 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getMockedResponsesFolder()
     {
-        return (isset($_SERVER['MOCKED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['MOCKED_RESPONSE_DIR'] : $this->guessResponsesFolder().'/Mocked';
+        return (isset($_SERVER['MOCKED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['MOCKED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Mocked';
     }
 
     /**
      * @return string
      */
-    private function guessResponsesFolder()
+    private function getCalledClassFolder()
     {
         $calledClass =  get_called_class();
         $calledClassFolder = dirname((new \ReflectionClass($calledClass))->getFileName());
-        $responsesFolder = $calledClassFolder.'/../Responses';
 
-        $this->folderExists($responsesFolder);
+        $this->folderExists($calledClassFolder);
 
-        return $responsesFolder;
+        return $calledClassFolder;
     }
 
     /**
