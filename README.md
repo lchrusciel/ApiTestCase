@@ -39,6 +39,7 @@ To customize your test suite configuration you can add a few more options to php
     <server name="KERNEL_CLASS_PATH" value="/path/to/kernel/class" />
     <server name="EXPECTED_RESPONSE_DIR" value="/path/to/expected/responses/" />
     <server name="MOCKED_RESPONSE_DIR" value="/path/to/mocked/responses/" />
+    <server name="FIXTURES_DIR" value="/path/to/DataFixtures/ORM/" />
     <server name="OPEN_ERROR_IN_BROWSER" value="true/false" />
     <server name="OPEN_BROWSER_COMMAND" value="open %s" />
     <server name="IS_DOCTRINE_ORM_SUPPORTED" value="true/false" />
@@ -47,12 +48,19 @@ To customize your test suite configuration you can add a few more options to php
  * `KERNEL_DIR` variable contains a path to kernel of your project. If not set, WebTestCase will look for AppKernel in the folder where you have your phpunit.xml file.
  * `KERNEL_CLASS_PATH` allows you to specify exactly which class in which folder should be used in order to setup the Kernel. 
  * `EXPECTED_RESPONSE_DIR` and `MOCKED_RESPONSE_DIR` variables contain paths to folders with expected and mocked responses. `EXPECTED_RESPONSE_DIR` is used when API result is compared with existing json file. `MOCKED_RESPONSE_DIR` should contains files with mocked responses from outside API's. Both variable can have same value but we recommend to keep it separated. If these values aren't set, ApiTestCase will try to guess location of responses. It will try to look for the responses in a following folders '../Responses/Expected' and '../Responses/Mocked' relatively located to your controller test class.
+ * `FIXTURES_DIR` variable contains a path to folder with your data fixtures. By default if this variable isn't set it will search for `../DataFixtures/ORM/` relatively located to your test class . ApiTestCase throws RunTimeException if folder doesn't exist or there won't be any files to load.
  * `OPEN_ERROR_IN_BROWSER` is a flag which turns on displaying error in a browser window. The default value is false.
  * `OPEN_BROWSER_COMMAND` is a command which will be used to open browser with an exception.
  * `IS_DOCTRINE_ORM_SUPPORTED` is a flag which turns on doctrine support includes handy data fixtures loader and database purger.
  
 Usage
 -----
+
+In api test case we provide by default two separate cases the JsonApiTestCase and the XmlApiTestCase there is only few difference in data assertion and content type of client.   
+
+Json example
+============
+
 The most basic usage can be achieved with the following workflow:
 
 1. Start from defining your response for a certain request.
@@ -65,9 +73,9 @@ The most basic usage can be achieved with the following workflow:
 ```php
 namespace YourBundle\Tests\Controller\HelloWorldTest;
 
-use Lakion\ApiTestCase\ApiTestCase;
+use Lakion\ApiTestCase\JsonApiTestCase;
 
-class HelloWorldTest extends ApiTestCase
+class HelloWorldTest extends JsonApiTestCase
 {
     public function testGetHelloWorldResponse()
     {
@@ -165,6 +173,75 @@ It is also a really common case to communicate with some external API. But in te
       //...
 ```
 From this moment, first `getOutsideApiResponse` call will receive `array('WithMessage')` and any further call will cause an exception. To make maintaining of external API responses as easy as possible ApiTestCase provides a method to load data directly from json file `$this->getJsonResponseFixture('mocked_response')`. `mocked_response.json` file should be placed in a src/YourBundle/Tests/Responses/Mocked/ folder, or any other defined in phpunit.xml file.
+
+Test with database fixtures
+===========================
+Api test case is integrated with ``nelmio/alice``. Thanks to this you can easily load your fixtures when you need them. You have to define your fixtures and place it in proper directory.
+
+Here is some example how to define your fixtures and use case. For more information how to define your fixtures check [Alice documentation](https://github.com/nelmio/alice). 
+
+Let's start with defining resource.
+
+```php
+    class Product
+    {
+        private $id;
+        private $name;
+        private $price;
+    
+        // Proper setters and getters.
+    }
+```
+
+Now we are almost ready to go, few things we need to do. First one is defining mapping and second one is preparing your fixture.
+
+```yml
+    Lakion\ApiTestCase\Test\Entity\Product:
+        type: entity
+        table: test_product
+        id:
+            id:
+                type: integer
+                id: true
+                generator:
+                    strategy: AUTO
+        fields:
+            name:
+                type: string
+            price:
+                type: integer
+```
+
+```yml
+    Lakion\ApiTestCase\Test\Entity\Product:
+        product1:
+            name: 'Phone'
+            price: 200
+        product2:
+            name: 'Book'
+            price: 15
+        product3:
+            name: 'Mug'
+            price: 5
+```
+
+Ok so we got our data, now let's proceed with our testing case.
+
+```php
+//ProductControllerTest
+
+  public function testIndexAction()
+  {
+      // This method require subpath to locate specific fixture file in your DataFixtures/ORM directory.
+      $this->loadFixturesFromFile('product.yml');  
+      
+      // There is another method that allows you to load fixtures from directory.
+      $this->loadFixturesFromDirectory();
+      
+  // Ok you are ready to test responses.
+  
+```
+
 
 Sample project
 --------------
