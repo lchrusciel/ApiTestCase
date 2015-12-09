@@ -23,6 +23,7 @@ use Coduo\PHPMatcher\Factory\SimpleFactory;
  * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
  * @author Paweł Jędrzęjewski <pawel.jedrzejewski@lakion.com>
  * @author Michał Marcinkowski <michal.marcinkowski@lakion.com>
+ * @author Arkadiusz Krakowiak <arkadiusz.krakowiak@lakion.com>
  */
 abstract class ApiTestCase extends WebTestCase
 {
@@ -171,15 +172,20 @@ abstract class ApiTestCase extends WebTestCase
         )), true);
     }
 
-    protected function loadPlatformData()
+    /**
+     * @param string $source
+     */
+    protected function loadFixturesFrom($source)
     {
         $loader = new Loader();
 
-        $directory = $this->getFixturesFolder();
-        $files = $this->getFilesFromDirectory($directory);
+        $baseDirectory = $this->getFixturesFolder();
+        $source = $baseDirectory.'/'.$source;
+        $this->assertSourceExists($source);
+        $paths = $this->getFixturePathsFromSource($source);
 
-        foreach ($files as $file) {
-            $objects = $loader->load($directory.'/'.$file);
+        foreach ($paths as $path) {
+            $objects = $loader->load($path);
             $this->persistObjects($objects);
         }
 
@@ -228,9 +234,23 @@ abstract class ApiTestCase extends WebTestCase
         $calledClass =  get_called_class();
         $calledClassFolder = dirname((new \ReflectionClass($calledClass))->getFileName());
 
-        $this->folderExists($calledClassFolder);
+        $this->assertSourceExists($calledClassFolder);
 
         return $calledClassFolder;
+    }
+
+    /**
+     * @param string $source
+     *
+     * @return array
+     */
+    private function getFixturePathsFromSource($source)
+    {
+        if (!is_dir($source)) {
+            return array($source);
+        }
+
+        return $this->getFixturePathsFromDirectory($source);
     }
 
     /**
@@ -238,27 +258,47 @@ abstract class ApiTestCase extends WebTestCase
      *
      * @return array
      */
-    private function getFilesFromDirectory($directory)
+    private function getFixturePathsFromDirectory($directory)
     {
-        $this->folderExists($directory);
+        $filePaths = array();
+        $fileNames = $this->loadFileNamesFromDirectory($directory);
 
-        $files = scandir($directory);
-        $files = array_diff($files, array('..', '.'));
-        if (!$files) {
-            throw new \RuntimeException(sprintf('There is no files to load in folder %s', $directory));
+        foreach ($fileNames as $fileName) {
+            $filePath = $directory.'/'.$fileName;
+
+            if (!is_dir($filePath)) {
+                $filePaths[] = $filePath;
+            }
         }
 
-        return $files;
+        return $filePaths;
+    }
+
+    /**
+     * @param string $source
+     */
+    private function assertSourceExists($source)
+    {
+        if (!file_exists($source)) {
+            throw new \RuntimeException(sprintf('File %s does not exist', $directory));
+        }
     }
 
     /**
      * @param string $directory
+     *
+     * @return array
      */
-    private function folderExists($directory)
+    private function loadFileNamesFromDirectory($directory)
     {
-        if (!file_exists($directory)) {
-            throw new \RuntimeException(sprintf('Folder %s does not exist', $directory));
+        $fileNames = scandir($directory);
+        $fileNames = array_diff($fileNames, array('.', '..'));
+
+        if (empty($fileNames)) {
+            throw new \RuntimeException(sprintf('There is no files to load in folder %s', $directory));
         }
+
+        return $fileNames;
     }
 
     /**
