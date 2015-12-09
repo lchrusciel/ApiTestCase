@@ -82,7 +82,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     protected function assertResponseCode(Response $response, $statusCode)
     {
-        $this->assertEquals($statusCode, $response->getStatusCode());
+        $this->assertEquals($statusCode, $response->getStatusCode(), $response->getContent());
     }
 
     /**
