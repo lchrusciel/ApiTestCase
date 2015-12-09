@@ -36,6 +36,21 @@ abstract class ApiTestCase extends WebTestCase
      */
     protected $entityManager;
 
+    /**
+     * @var string
+     */
+    protected $expectedResponsesPath;
+
+    /**
+     * @var EntityManager
+     */
+    protected $mockedResponsesPath;
+
+    /**
+     * @var EntityManager
+     */
+    protected $dataFixturesPath;
+
     public function setUp()
     {
         $this->client = static::createClient();
@@ -201,7 +216,11 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getFixturesFolder()
     {
-        return (isset($_SERVER['FIXTURES_DIR'])) ? $this->getRootDir().$_SERVER['FIXTURES_DIR'] : $this->getCalledClassFolder().'/../DataFixtures/ORM';
+        if (null == $this->dataFixturesPath) {
+            $this->dataFixturesPath =  (isset($_SERVER['FIXTURES_DIR'])) ? $this->getRootDir().$_SERVER['FIXTURES_DIR'] : $this->getCalledClassFolder().'/../DataFixtures/ORM';
+        }
+
+        return $this->dataFixturesPath;
     }
 
     /**
@@ -209,7 +228,11 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getExpectedResponsesFolder()
     {
-        return (isset($_SERVER['EXPECTED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['EXPECTED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Expected';
+        if (null == $this->expectedResponsesPath) {
+            $this->expectedResponsesPath =  (isset($_SERVER['EXPECTED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['EXPECTED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Expected';
+        }
+
+        return $this->expectedResponsesPath;
     }
 
     /**
@@ -217,7 +240,11 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getMockedResponsesFolder()
     {
-        return (isset($_SERVER['MOCKED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['MOCKED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Mocked';
+        if (null == $this->mockedResponsesPath) {
+            $this->mockedResponsesPath =  (isset($_SERVER['MOCKED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['MOCKED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Mocked';
+        }
+
+        return $this->mockedResponsesPath;
     }
 
     /**
