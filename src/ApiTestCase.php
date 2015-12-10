@@ -67,11 +67,12 @@ abstract class ApiTestCase extends WebTestCase
 
         \Mockery::close();
         $this->client = null;
+        $this->purgeDatabase();
 
         parent::tearDown();
     }
 
-    protected function purgeDataBase()
+    protected function purgeDatabase()
     {
         $purger = new ORMPurger($this->entityManager);
         $purger->purge();
