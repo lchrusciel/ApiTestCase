@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Coduo\PHPMatcher\Factory\SimpleFactory;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
@@ -52,15 +53,35 @@ abstract class ApiTestCase extends WebTestCase
      */
     protected $dataFixturesPath;
 
+    /**
+     * @var Kernel
+     */
+    static protected $sharedKernel;
+
+    /**
+     * @beforeClass
+     */
+    public static function createSharedKernel()
+    {
+        static::$sharedKernel = static::createKernel();
+        static::$sharedKernel->boot();
+    }
+
     public function setUp()
     {
         $this->client = static::createClient();
-        $this->entityManager = $this->get('doctrine.orm.entity_manager');
+        if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
+            $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
+        }
     }
 
     public function tearDown()
     {
-        if (null !== $this->client) {
+        if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
+            $this->purgeDatabase();
+        }
+
+        if (null !== $this->client && null !== $this->client->getContainer()) {
             foreach ($this->client->getContainer()->getMockedServices() as $id => $service) {
                 $this->client->getContainer()->unmock($id);
             }
@@ -72,7 +93,7 @@ abstract class ApiTestCase extends WebTestCase
         parent::tearDown();
     }
 
-    protected function purgeDataBase()
+    protected function purgeDatabase()
     {
         $purger = new ORMPurger($this->entityManager);
         $purger->purge();
