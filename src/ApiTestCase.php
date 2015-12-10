@@ -42,12 +42,12 @@ abstract class ApiTestCase extends WebTestCase
     protected $expectedResponsesPath;
 
     /**
-     * @var EntityManager
+     * @var string
      */
     protected $mockedResponsesPath;
 
     /**
-     * @var EntityManager
+     * @var string
      */
     protected $dataFixturesPath;
 
@@ -216,7 +216,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getFixturesFolder()
     {
-        if (null == $this->dataFixturesPath) {
+        if (null === $this->dataFixturesPath) {
             $this->dataFixturesPath =  (isset($_SERVER['FIXTURES_DIR'])) ? $this->getRootDir().$_SERVER['FIXTURES_DIR'] : $this->getCalledClassFolder().'/../DataFixtures/ORM';
         }
 
@@ -228,7 +228,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getExpectedResponsesFolder()
     {
-        if (null == $this->expectedResponsesPath) {
+        if (null === $this->expectedResponsesPath) {
             $this->expectedResponsesPath =  (isset($_SERVER['EXPECTED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['EXPECTED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Expected';
         }
 
@@ -240,7 +240,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getMockedResponsesFolder()
     {
-        if (null == $this->mockedResponsesPath) {
+        if (null === $this->mockedResponsesPath) {
             $this->mockedResponsesPath =  (isset($_SERVER['MOCKED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['MOCKED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Mocked';
         }
 
