@@ -67,7 +67,10 @@ abstract class ApiTestCase extends WebTestCase
         static::$sharedKernel->boot();
     }
 
-    public function setUp()
+    /**
+     * @before
+     */
+    public function setUpClient()
     {
         $this->client = static::createClient();
         if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
@@ -75,11 +78,18 @@ abstract class ApiTestCase extends WebTestCase
         }
     }
 
-    public function tearDown()
+    /**
+     * @before
+     */
+    public function setUpEntityManager()
     {
         if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
-            $this->purgeDatabase();
+            $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
         }
+    }
+
+    public function tearDown()
+    {
 
         if (null !== $this->client && null !== $this->client->getContainer()) {
             foreach ($this->client->getContainer()->getMockedServices() as $id => $service) {
@@ -93,12 +103,17 @@ abstract class ApiTestCase extends WebTestCase
         parent::tearDown();
     }
 
+    /**
+     * @after
+     */
     protected function purgeDatabase()
     {
-        $purger = new ORMPurger($this->entityManager);
-        $purger->purge();
+        if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
+            $purger = new ORMPurger($this->entityManager);
+            $purger->purge();
 
-        $this->entityManager->clear();
+            $this->entityManager->clear();
+        }
     }
 
     /**
