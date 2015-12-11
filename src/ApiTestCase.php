@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Coduo\PHPMatcher\Factory\SimpleFactory;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
@@ -52,15 +53,41 @@ abstract class ApiTestCase extends WebTestCase
      */
     protected $dataFixturesPath;
 
-    public function setUp()
+    /**
+     * @var Kernel
+     */
+    static protected $sharedKernel;
+
+    /**
+     * @beforeClass
+     */
+    public static function createSharedKernel()
+    {
+        static::$sharedKernel = static::createKernel();
+        static::$sharedKernel->boot();
+    }
+
+    /**
+     * @before
+     */
+    public function setUpClient()
     {
         $this->client = static::createClient();
-        $this->entityManager = $this->get('doctrine.orm.entity_manager');
+    }
+
+    /**
+     * @before
+     */
+    public function setUpEntityManager()
+    {
+        if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
+            $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
+        }
     }
 
     public function tearDown()
     {
-        if (null !== $this->client) {
+        if (null !== $this->client && null !== $this->client->getContainer()) {
             foreach ($this->client->getContainer()->getMockedServices() as $id => $service) {
                 $this->client->getContainer()->unmock($id);
             }
@@ -72,12 +99,35 @@ abstract class ApiTestCase extends WebTestCase
         parent::tearDown();
     }
 
-    protected function purgeDataBase()
+    protected static function getKernelClass()
     {
-        $purger = new ORMPurger($this->entityManager);
-        $purger->purge();
+        if (!isset($_SERVER['KERNEL_CLASS'])) {
+            return parent::getKernelClass();
+        }
 
-        $this->entityManager->clear();
+        if (file_exists($_SERVER['KERNEL_CLASS'])) {
+            require_once $_SERVER['KERNEL_CLASS'];
+
+            return (new \SplFileInfo($_SERVER['KERNEL_CLASS']))->getBasename('.php');
+        }
+        if (file_exists(static::getPhpUnitXmlDir().DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS'])) {
+            require_once static::getPhpUnitXmlDir().DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS'];
+
+            return (new \SplFileInfo(static::getPhpUnitXmlDir().DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS']))->getBasename('.php');
+        }
+    }
+
+    /**
+     * @after
+     */
+    protected function purgeDatabase()
+    {
+        if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
+            $purger = new ORMPurger($this->entityManager);
+            $purger->purge();
+
+            $this->entityManager->clear();
+        }
     }
 
     /**
@@ -195,7 +245,7 @@ abstract class ApiTestCase extends WebTestCase
         $loader = new Loader();
 
         $baseDirectory = $this->getFixturesFolder();
-        $source = $baseDirectory.'/'.$source;
+        $source = $baseDirectory.DIRECTORY_SEPARATOR.$source;
         $this->assertSourceExists($source);
         $paths = $this->getFixturePathsFromSource($source);
 
@@ -291,7 +341,7 @@ abstract class ApiTestCase extends WebTestCase
         $fileNames = $this->loadFileNamesFromDirectory($directory);
 
         foreach ($fileNames as $fileName) {
-            $filePath = $directory.'/'.$fileName;
+            $filePath = $directory.DIRECTORY_SEPARATOR.$fileName;
 
             if (!is_dir($filePath)) {
                 $filePaths[] = $filePath;
@@ -307,7 +357,7 @@ abstract class ApiTestCase extends WebTestCase
     private function assertSourceExists($source)
     {
         if (!file_exists($source)) {
-            throw new \RuntimeException(sprintf('File %s does not exist', $directory));
+            throw new \RuntimeException(sprintf('File %s does not exist', $source));
         }
     }
 

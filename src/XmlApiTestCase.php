@@ -21,9 +21,11 @@ use Symfony\Component\HttpFoundation\Response;
  */
 abstract class XmlApiTestCase extends ApiTestCase
 {
-    public function setUp()
+    /**
+     * @before
+     */
+    public function setUpClient()
     {
-        parent::setUp();
         $this->client = static::createClient(array(), array('HTTP_ACCEPT' => MediaTypes::XML));
     }
 

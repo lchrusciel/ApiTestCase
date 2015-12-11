@@ -7,7 +7,8 @@
          colors="true"
 >
     <php>
-        <server name="KERNEL_DIR" value="/test/app/" />
+        <server name="KERNEL_CLASS" value="/test/app/AppKernel.php" />
         <server name="OPEN_ERROR_IN_BROWSER" value="true" />
+        <server name="IS_DOCTRINE_ORM_SUPPORTED" value="true" />
     </php>
 </phpunit>
