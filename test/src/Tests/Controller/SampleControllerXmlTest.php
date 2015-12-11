@@ -61,11 +61,12 @@ class SampleControllerXmlTest extends XmlApiTestCase
 
     public function testProductIndexResponse()
     {
-        $this->loadFixturesFrom('product.yml');
+        $this->loadFixturesFromSingleFile('product.yml');
 
         $this->client->request('GET', '/products/');
 
         $response = $this->client->getResponse();
+
         $this->assertResponse($response, 'get_products');
     }
 }
