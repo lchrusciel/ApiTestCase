@@ -36,6 +36,7 @@ To customize your test suite configuration you can add a few more options to php
 ```xml
 <php>
     <server name="KERNEL_DIR" value="/path/to/dir/with/kernel" />
+    <server name="KERNEL_CLASS" value="/path/to/kernel/class" />
     <server name="EXPECTED_RESPONSE_DIR" value="/path/to/expected/responses/" />
     <server name="MOCKED_RESPONSE_DIR" value="/path/to/mocked/responses/" />
     <server name="OPEN_ERROR_IN_BROWSER" value="true/false" />
@@ -44,6 +45,7 @@ To customize your test suite configuration you can add a few more options to php
 </php>
 ```
  * `KERNEL_DIR` variable contains a path to kernel of your project. If not set, WebTestCase will look for AppKernel in the folder where you have your phpunit.xml file.
+ * `KERNEL_CLASS` allows you to specify exactly which class in which folder should be used in order to setup the Kernel. 
  * `EXPECTED_RESPONSE_DIR` and `MOCKED_RESPONSE_DIR` variables contain paths to folders with expected and mocked responses. `EXPECTED_RESPONSE_DIR` is used when API result is compared with existing json file. `MOCKED_RESPONSE_DIR` should contains files with mocked responses from outside API's. Both variable can have same value but we recommend to keep it separated. If these values aren't set, ApiTestCase will try to guess location of responses. It will try to look for the responses in a following folders '../Responses/Expected' and '../Responses/Mocked' relatively located to your controller test class.
  * `OPEN_ERROR_IN_BROWSER` is a flag which turns on displaying error in a browser window. The default value is false.
  * `OPEN_BROWSER_COMMAND` is a command which will be used to open browser with an exception.

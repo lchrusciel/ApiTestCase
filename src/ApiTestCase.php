@@ -73,9 +73,6 @@ abstract class ApiTestCase extends WebTestCase
     public function setUpClient()
     {
         $this->client = static::createClient();
-        if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
-            $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
-        }
     }
 
     /**
@@ -90,7 +87,6 @@ abstract class ApiTestCase extends WebTestCase
 
     public function tearDown()
     {
-
         if (null !== $this->client && null !== $this->client->getContainer()) {
             foreach ($this->client->getContainer()->getMockedServices() as $id => $service) {
                 $this->client->getContainer()->unmock($id);
@@ -101,6 +97,24 @@ abstract class ApiTestCase extends WebTestCase
         $this->client = null;
 
         parent::tearDown();
+    }
+
+    protected static function getKernelClass()
+    {
+        if (!isset($_SERVER['KERNEL_CLASS'])) {
+            return parent::getKernelClass();
+        }
+
+        if (file_exists($_SERVER['KERNEL_CLASS'])) {
+            require_once $_SERVER['KERNEL_CLASS'];
+
+            return (new \SplFileInfo($_SERVER['KERNEL_CLASS']))->getBasename('.php');
+        }
+        if (file_exists(static::getPhpUnitXmlDir().DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS'])) {
+            require_once static::getPhpUnitXmlDir().DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS'];
+
+            return (new \SplFileInfo(static::getPhpUnitXmlDir().DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS']))->getBasename('.php');
+        }
     }
 
     /**
@@ -231,7 +245,7 @@ abstract class ApiTestCase extends WebTestCase
         $loader = new Loader();
 
         $baseDirectory = $this->getFixturesFolder();
-        $source = $baseDirectory.'/'.$source;
+        $source = $baseDirectory.DIRECTORY_SEPARATOR.$source;
         $this->assertSourceExists($source);
         $paths = $this->getFixturePathsFromSource($source);
 
@@ -327,7 +341,7 @@ abstract class ApiTestCase extends WebTestCase
         $fileNames = $this->loadFileNamesFromDirectory($directory);
 
         foreach ($fileNames as $fileName) {
-            $filePath = $directory.'/'.$fileName;
+            $filePath = $directory.DIRECTORY_SEPARATOR.$fileName;
 
             if (!is_dir($filePath)) {
                 $filePaths[] = $filePath;
@@ -343,7 +357,7 @@ abstract class ApiTestCase extends WebTestCase
     private function assertSourceExists($source)
     {
         if (!file_exists($source)) {
-            throw new \RuntimeException(sprintf('File %s does not exist', $directory));
+            throw new \RuntimeException(sprintf('File %s does not exist', $source));
         }
     }
 
