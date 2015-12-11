@@ -240,7 +240,7 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * @param string $source
      */
-    protected function loadFixturesFrom($source)
+    protected function loadFixturesFrom($source = '/')
     {
         $loader = new Loader();
 
