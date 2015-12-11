@@ -101,19 +101,19 @@ abstract class ApiTestCase extends WebTestCase
 
     protected static function getKernelClass()
     {
-        if (!isset($_SERVER['KERNEL_CLASS'])) {
+        if (!isset($_SERVER['KERNEL_CLASS_PATH'])) {
             return parent::getKernelClass();
         }
 
-        if (file_exists($_SERVER['KERNEL_CLASS'])) {
-            require_once $_SERVER['KERNEL_CLASS'];
+        if (file_exists($_SERVER['KERNEL_CLASS_PATH'])) {
+            require_once $_SERVER['KERNEL_CLASS_PATH'];
 
-            return (new \SplFileInfo($_SERVER['KERNEL_CLASS']))->getBasename('.php');
+            return (new \SplFileInfo($_SERVER['KERNEL_CLASS_PATH']))->getBasename('.php');
         }
-        if (file_exists(static::getPhpUnitXmlDir().DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS'])) {
-            require_once static::getPhpUnitXmlDir().DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS'];
+        if (file_exists(static::getPhpUnitXmlDir().\DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS_PATH'])) {
+            require_once static::getPhpUnitXmlDir().\DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS_PATH'];
 
-            return (new \SplFileInfo(static::getPhpUnitXmlDir().DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS']))->getBasename('.php');
+            return (new \SplFileInfo(static::getPhpUnitXmlDir().\DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS_PATH']))->getBasename('.php');
         }
     }
 
@@ -209,7 +209,7 @@ abstract class ApiTestCase extends WebTestCase
         if (!$response->isSuccessful()) {
             $openCommand = (isset($_SERVER['OPEN_BROWSER_COMMAND'])) ? $_SERVER['OPEN_BROWSER_COMMAND'] : 'open %s';
 
-            $filename = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.uniqid().'.html';
+            $filename = rtrim(sys_get_temp_dir(), \DIRECTORY_SEPARATOR).\DIRECTORY_SEPARATOR.uniqid().'.html';
             file_put_contents($filename, $response->getContent());
             system(sprintf($openCommand, escapeshellarg($filename)));
 
@@ -245,7 +245,7 @@ abstract class ApiTestCase extends WebTestCase
         $loader = new Loader();
 
         $baseDirectory = $this->getFixturesFolder();
-        $source = $baseDirectory.DIRECTORY_SEPARATOR.$source;
+        $source = $baseDirectory.\DIRECTORY_SEPARATOR.$source;
         $this->assertSourceExists($source);
         $paths = $this->getFixturePathsFromSource($source);
 
@@ -341,7 +341,7 @@ abstract class ApiTestCase extends WebTestCase
         $fileNames = $this->loadFileNamesFromDirectory($directory);
 
         foreach ($fileNames as $fileName) {
-            $filePath = $directory.DIRECTORY_SEPARATOR.$fileName;
+            $filePath = $directory.\DIRECTORY_SEPARATOR.$fileName;
 
             if (!is_dir($filePath)) {
                 $filePaths[] = $filePath;
