@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManager;
 use Nelmio\Alice\Fixtures\Loader;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
 use Coduo\PHPMatcher\Factory\SimpleFactory;
 use Symfony\Component\HttpKernel\Kernel;
@@ -240,21 +241,53 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * @param string $source
      */
-    protected function loadFixturesFrom($source = '/')
+    protected function loadFixturesFromDirectory($source = '')
     {
-        $loader = new Loader();
-
-        $baseDirectory = $this->getFixturesFolder();
-        $source = $baseDirectory.\DIRECTORY_SEPARATOR.$source;
+        $source = $this->getFixtureRealPath($source);
         $this->assertSourceExists($source);
-        $paths = $this->getFixturePathsFromSource($source);
 
-        foreach ($paths as $path) {
-            $objects = $loader->load($path);
+        $loader = new Loader();
+        $finder = new Finder();
+        $finder->files()->name('*.yml')->in($source);
+
+        if (0 === $finder->count()) {
+            throw new \RuntimeException(sprintf('There is no files to load in folder %s', $source));
+        }
+
+        foreach ($finder as $file) {
+            $objects = $loader->load($file->getRealPath());
             $this->persistObjects($objects);
         }
 
         $this->entityManager->flush();
+    }
+
+    /**
+     * @param string $source
+     */
+    protected function loadFixturesFromSingleFile($source)
+    {
+        $source = $this->getFixtureRealPath($source);
+        $this->assertSourceExists($source);
+
+        $loader = new Loader();
+
+        $objects = $loader->load($source);
+        $this->persistObjects($objects);
+
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param string $source
+     *
+     * @return string
+     */
+    private function getFixtureRealPath($source)
+    {
+        $baseDirectory = $this->getFixturesFolder();
+
+        return $baseDirectory.\DIRECTORY_SEPARATOR.$source;
     }
 
     /**
@@ -318,64 +351,12 @@ abstract class ApiTestCase extends WebTestCase
 
     /**
      * @param string $source
-     *
-     * @return array
-     */
-    private function getFixturePathsFromSource($source)
-    {
-        if (!is_dir($source)) {
-            return array($source);
-        }
-
-        return $this->getFixturePathsFromDirectory($source);
-    }
-
-    /**
-     * @param string $directory
-     *
-     * @return array
-     */
-    private function getFixturePathsFromDirectory($directory)
-    {
-        $filePaths = array();
-        $fileNames = $this->loadFileNamesFromDirectory($directory);
-
-        foreach ($fileNames as $fileName) {
-            $filePath = $directory.\DIRECTORY_SEPARATOR.$fileName;
-
-            if (!is_dir($filePath)) {
-                $filePaths[] = $filePath;
-            }
-        }
-
-        return $filePaths;
-    }
-
-    /**
-     * @param string $source
      */
     private function assertSourceExists($source)
     {
         if (!file_exists($source)) {
             throw new \RuntimeException(sprintf('File %s does not exist', $source));
         }
-    }
-
-    /**
-     * @param string $directory
-     *
-     * @return array
-     */
-    private function loadFileNamesFromDirectory($directory)
-    {
-        $fileNames = scandir($directory);
-        $fileNames = array_diff($fileNames, array('.', '..'));
-
-        if (empty($fileNames)) {
-            throw new \RuntimeException(sprintf('There is no files to load in folder %s', $directory));
-        }
-
-        return $fileNames;
     }
 
     /**
