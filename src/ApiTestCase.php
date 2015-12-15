@@ -79,10 +79,11 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * @before
      */
-    public function setUpEntityManager()
+    public function setUpDatabase()
     {
         if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
             $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
+            $this->purgeDatabase();
         }
     }
 
@@ -118,17 +119,12 @@ abstract class ApiTestCase extends WebTestCase
         }
     }
 
-    /**
-     * @after
-     */
     protected function purgeDatabase()
     {
-        if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
-            $purger = new ORMPurger($this->entityManager);
-            $purger->purge();
+        $purger = new ORMPurger($this->entityManager);
+        $purger->purge();
 
-            $this->entityManager->clear();
-        }
+        $this->entityManager->clear();
     }
 
     /**
