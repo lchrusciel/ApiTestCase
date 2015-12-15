@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "coduo/php-matcher": "^1.1",
+        "coduo/php-matcher": "dev-php7-support",
         "phpspec/php-diff": "^1.0",
         "phpunit/phpunit": "^4.8",
         "polishsymfonycommunity/symfony-mocker-container": "^1.0",
@@ -32,6 +32,16 @@
         "symfony/console": "^2.3|^3.0",
         "symfony/serializer": "^2.3|^3.0"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:lchrusciel/php-matcher.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:lchrusciel/php-to-string.git"
+        }
+    ],
     "config": {
         "bin-dir": "bin"
     },
@@ -40,5 +50,6 @@
             "Lakion\\ApiTestCase\\": "src/",
             "Lakion\\ApiTestCase\\Test\\": "test/src/"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
