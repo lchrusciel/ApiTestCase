@@ -261,7 +261,7 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * @param string $source
      */
-    protected function loadFixturesFromSingleFile($source)
+    protected function loadFixturesFromFile($source)
     {
         $source = $this->getFixtureRealPath($source);
         $this->assertSourceExists($source);
