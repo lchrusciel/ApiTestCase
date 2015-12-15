@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "coduo/php-matcher": "^1.1",
+        "coduo/php-matcher": "^2.1@dev",
         "phpspec/php-diff": "^1.0",
         "phpunit/phpunit": "^4.8",
         "polishsymfonycommunity/symfony-mocker-container": "^1.0",
