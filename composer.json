@@ -1,6 +1,7 @@
 {
     "name": "lakion/api-test-case",
     "description": "Perfect TestCase for JSON API TDD with Symfony.",
+    "keywords": ["TDD", "Symfony2", "TestCase", "PHPUnit", "doctrine", "api", "json", "xml"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -37,8 +38,17 @@
     },
     "autoload": {
         "psr-4": {
-            "Lakion\\ApiTestCase\\": "src/",
+            "Lakion\\ApiTestCase\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Lakion\\ApiTestCase\\Test\\": "test/src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.0-dev"
         }
     }
 }
