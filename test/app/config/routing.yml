@@ -15,3 +15,9 @@ app_product_index:
     methods: [GET]
     defaults:
         _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::productIndexAction"
+
+app_product_show:
+    path: /products/{id}
+    methods: [GET]
+    defaults:
+        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::showAction"
