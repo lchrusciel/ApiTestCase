@@ -139,18 +139,20 @@ With this in place, any string under key `message` will match the pattern. More 
 ```json
 [
     {
-        "id": @integer@,
+        "id": "@integer@",
         "name": "Star-Wars T-shirt",
         "sku": "SWTS",
         "price": 5500,
-        "sizes": @array@
+        "sizes": "@array@",
+        "created_at": "@string@.isDateTime()"
     },
     {
-        "id": @integer@,
+        "id": "@integer@",
         "name": "Han Solo Mug",
         "sku": "HSM",
         "price": 500,
-        "sizes": @array@
+        "sizes": "@array@",
+        "created_at": "@string@.isDateTime()"
     }
 ]
 ```
@@ -165,6 +167,7 @@ array(
         'sku' => 'SWTS',
         'price' => 5500,
         'sizes' => array('S', 'M', 'L'),
+        'created_at' => new \DateTime(),
     ),
     array(
         'id' => 2,
@@ -172,6 +175,7 @@ array(
         'sku' => 'HSM',
         'price' => 500,
         'sizes' => array('S', 'L'),
+        'created_at' => new \DateTime(),
     ),
 )
 ```
