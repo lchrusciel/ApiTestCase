@@ -14,9 +14,9 @@ namespace Lakion\ApiTestCase\Test\Service;
 /**
  * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
  */
-class DummyService
+class ThirdPartyApiClient
 {
-    public function getOutsideApiResponse()
+    public function getInventory()
     {
     }
 }

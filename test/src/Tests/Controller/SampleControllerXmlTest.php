@@ -45,28 +45,29 @@ class SampleControllerXmlTest extends XmlApiTestCase
         $this->assertResponse($response, 'hello_wild_card');
     }
 
-    public function testGetResponseFromMockedService()
+    public function testGetProductInventoryFromThirdPartyApi()
     {
-        $this->client->getContainer()->mock('app.service', 'Lakion\ApiTestCase\Test\Service\DummyService')
-            ->shouldReceive('getOutsideApiResponse')
+        $this->client->getContainer()->mock('app.third_party_api_client', 'Lakion\ApiTestCase\Test\Service\ThirdPartyApiClient')
+            ->shouldReceive('getInventory')
             ->once()
-            ->andReturn($this->getJsonResponseFixture('ambitious_action_mock'));
+            ->andReturn($this->getJsonResponseFixture('third_party_api_inventory'))
+        ;
 
-        $this->client->request('GET', '/service/');
+        $this->client->request('GET', '/use-third-party-api/');
 
         $response = $this->client->getResponse();
 
-        $this->assertResponse($response, 'ambitious_action_response');
+        $this->assertResponse($response, 'use_third_party_api');
     }
 
     public function testProductIndexResponse()
     {
-        $this->loadFixturesFromFile('product.yml');
+        $this->loadFixturesFromDirectory();
 
         $this->client->request('GET', '/products/');
 
         $response = $this->client->getResponse();
 
-        $this->assertResponse($response, 'get_products');
+        $this->assertResponse($response, 'product_index');
     }
 }

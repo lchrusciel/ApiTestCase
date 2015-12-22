@@ -1,21 +1,26 @@
 {
     "name": "lakion/api-test-case",
-    "description": "Perfect TestCase for JSON API TDD with Symfony.",
-    "keywords": ["TDD", "Symfony2", "TestCase", "PHPUnit", "doctrine", "api", "json", "xml"],
+    "description": "Perfect PHPUnit TestCase for JSON/XML API TDD with Symfony.",
+    "keywords": ["TDD", "Symfony2", "symfony", "TestCase", "PHPUnit", "doctrine", "api", "json", "xml"],
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name":     "Łukasz Chruściel",
-            "email":    "lukasz.chrusciel@lakion.com"
+            "name": "Łukasz Chruściel",
+            "email": "lukasz.chrusciel@lakion.com"
         },
         {
-            "name":     "Paweł Jędrzejewski",
-            "homepage": "http://pjedrzejewski.com"
+            "name": "Paweł Jędrzejewski",
+            "homepage": "http://pjedrzejewski.com",
+            "email": "pawel.jedrzejewski@lakion.com"
         },
         {
-            "name":     "Michał Marcinkowski",
-            "email":    "michal.marcinkowski@lakion.com"
+            "name": "Michał Marcinkowski",
+            "email": "michal.marcinkowski@lakion.com"
+        },
+        {
+            "name": "Arkadiusz Krakowiak",
+            "email": "arkadiusz.krakowiak@lakion.com"
         }
     ],
     "require": {

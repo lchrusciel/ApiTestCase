@@ -5,5 +5,5 @@ test/app/cache/*
 !test/app/cache/.gitkeep
 test/app/logs/*
 !test/app/logs/.gitkeep
+test/app/db.sqlite
 composer.lock
-test/app/config/parameters.php
