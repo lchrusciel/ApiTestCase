@@ -1,4 +1,5 @@
-# ApiTestCase
+ApiTestCase
+===========
 
 [![Build Status](https://travis-ci.org/Lakion/ApiTestCase.svg?branch=master)](https://travis-ci.org/Lakion/ApiTestCase)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Lakion/ApiTestCase/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Lakion/ApiTestCase/?branch=master)
@@ -49,8 +50,7 @@ Usage
 
 We provide two base classes for your test cases: JsonApiTestCase and the XmlApiTestCase. Choose one based on the format of the API you want to create.
 
-Json Example
-============
+### Json Example
 
 The basic TDD workflow is the following:
 
@@ -191,8 +191,7 @@ Again, this is extra useful when you work with APIs like Google Maps, Stripe etc
 
 From this moment, first `getInventory` method call will return the response defined in `third_party_api_inventory.json` file placed in a ``src/AppBundle/Tests/Responses/Mocked/`` folder, or any other location you have defined in ``phpunit.xml`` file.
 
-Testing With Database Fixtures
-==============================
+### Testing With Database Fixtures
 
 ApiTestCase is integrated with ``nelmio/alice``. Thanks to this nice library you can easily load your fixtures when you need them. You have to define your fixtures and place them in an appropriate directory.
 Here is some example how to define your fixtures and use case. For more information how to define your fixtures check [Alice's documentation](https://github.com/nelmio/alice). 
@@ -266,8 +265,7 @@ Sample Project
 
 In the ``test/`` directory, you can find sample Symfony2 project with minimal configuration required to use this library.
 
-Testing
--------
+### Testing
 
 In order to run our PHPUnit tests suite, execute following commands:
 
