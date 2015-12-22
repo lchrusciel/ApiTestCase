@@ -1,6 +1,7 @@
 # ApiTestCase
 
 [![Build Status](https://travis-ci.org/Lakion/ApiTestCase.svg?branch=master)](https://travis-ci.org/Lakion/ApiTestCase)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Lakion/ApiTestCase/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Lakion/ApiTestCase/?branch=master)
 
 **ApiTestCase** is a PHPUnit TestCase that will make your life as a Symfony2 API developer much easier. It extends basic [Symfony2](https://symfony.com/) WebTestCase with some cool features. 
 
