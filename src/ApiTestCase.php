@@ -11,6 +11,7 @@
 
 namespace Lakion\ApiTestCase;
 
+use Coduo\PHPMatcher\Factory\SimpleFactory;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Nelmio\Alice\Fixtures\Loader;
@@ -18,7 +19,6 @@ use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
-use Coduo\PHPMatcher\Factory\SimpleFactory;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**

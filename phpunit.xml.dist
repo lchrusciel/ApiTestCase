@@ -11,4 +11,10 @@
         <server name="OPEN_ERROR_IN_BROWSER" value="true" />
         <server name="IS_DOCTRINE_ORM_SUPPORTED" value="true" />
     </php>
+
+    <testsuites>
+        <testsuite name="ApiTestCase Test Suite">
+            <directory>./test/</directory>
+        </testsuite>
+    </testsuites>
 </phpunit>

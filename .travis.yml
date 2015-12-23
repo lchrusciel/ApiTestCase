@@ -18,7 +18,6 @@ env:
 
 before_script:
   - composer update --prefer-source PREFER_LOWEST
-  - cp test/app/config/parameters.php.dist test/app/config/parameters.php
   - test/app/console doctrine:database:create
   - test/app/console doctrine:schema:create
 

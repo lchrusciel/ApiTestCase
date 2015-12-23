@@ -2,16 +2,16 @@ app_hello_world:
     path: /
     methods: [GET]
     defaults:
-        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::basicAction"
+        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::helloWorldAction"
 
-app_ambitious_action:
-    path: /service/
+app_use_third_party_api:
+    path: /use-third-party-api/
     methods: [GET]
     defaults:
-        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::notSoBasicAction"
+        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::useThirdPartyApiAction"
 
 app_product_index:
     path: /products/
     methods: [GET]
     defaults:
-        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::indexAction"
+        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::productIndexAction"

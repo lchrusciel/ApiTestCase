@@ -31,7 +31,7 @@ class SampleController extends Controller
      *
      * @return JsonResponse|Response
      */
-    public function basicAction(Request $request)
+    public function helloWorldAction(Request $request)
     {
         $acceptFormat = $request->headers->get('Accept');
 
@@ -52,15 +52,15 @@ class SampleController extends Controller
      *
      * @return JsonResponse|Response
      */
-    public function notSoBasicAction(Request $request)
+    public function useThirdPartyApiAction(Request $request)
     {
         $acceptFormat = $request->headers->get('Accept');
+        $content = $this->get('app.third_party_api_client')->getInventory();
 
         if ('application/json' === $acceptFormat) {
-            return new JsonResponse($this->get('app.service')->getOutsideApiResponse());
+            return new JsonResponse($content);
         }
 
-        $content = $this->get('app.service')->getOutsideApiResponse();
         $content = sprintf('<?xml version="1.0" encoding="UTF-8"?><message>%s</message>', $content['message']);
 
         $response = new Response($content);
@@ -74,11 +74,9 @@ class SampleController extends Controller
      *
      * @return JsonResponse|Response
      */
-    public function indexAction(Request $request)
+    public function productIndexAction(Request $request)
     {
-        $encoders = array(new XmlEncoder(), new JsonEncoder());
-        $normalizers = array(new ObjectNormalizer());
-        $serializer = new Serializer($normalizers, $encoders);
+        $serializer = $this->createSerializer();
 
         $productRepository = $this->getDoctrine()->getRepository('ApiTestCase:Product');
         $products = $productRepository->findAll();
@@ -101,5 +99,17 @@ class SampleController extends Controller
 
             return $response;
         }
+    }
+
+    /**
+     * @return Serializer
+     */
+    private function createSerializer()
+    {
+        $encoders = array(new XmlEncoder(), new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+
+        return $serializer;
     }
 }

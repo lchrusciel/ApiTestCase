@@ -34,8 +34,6 @@ class AppKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->import($this->getRootDir().'/config/parameters.php');
-
         $loader->load(function ($container) {
             $container->loadFromExtension('framework', array(
                 'test' => null,
@@ -46,11 +44,10 @@ class AppKernel extends Kernel
             ));
             $container->loadFromExtension('doctrine', array(
                 'dbal' => array(
-                    'driver' => 'pdo_mysql',
-                    'dbname' => 'symfony_project',
-                    'user' => '%database.user%',
-                    'password' => '%database.password%',
-                    'server_version' => '5.6',
+                    'driver' => 'pdo_sqlite',
+                    'user' => 'root',
+                    'password' => '',
+                    'path' => '%kernel.root_dir%/db.sqlite',
                 ),
                 'orm' => array(
                     'auto_mapping' => false,
@@ -66,8 +63,8 @@ class AppKernel extends Kernel
                 ),
             ));
 
-            $container->setDefinition('app.service', new Definition(
-                'Lakion\ApiTestCase\Test\Service\DummyService'
+            $container->setDefinition('app.third_party_api_client', new Definition(
+                'Lakion\ApiTestCase\Test\Service\ThirdPartyApiClient'
             ));
         });
     }
