@@ -236,6 +236,8 @@ abstract class ApiTestCase extends WebTestCase
 
     /**
      * @param string $source
+     *
+     * @return array
      */
     protected function loadFixturesFromDirectory($source = '')
     {
@@ -250,16 +252,24 @@ abstract class ApiTestCase extends WebTestCase
             throw new \RuntimeException(sprintf('There is no files to load in folder %s', $source));
         }
 
+        $objects = [];
+
         foreach ($finder as $file) {
-            $objects = $loader->load($file->getRealPath());
-            $this->persistObjects($objects);
+            $objects[] = $loader->load($file->getRealPath());
         }
 
+        $objects = $objects ? call_user_func_array('array_merge', $objects) : [];
+
+        $this->persistObjects($objects);
         $this->entityManager->flush();
+
+        return $objects;
     }
 
     /**
      * @param string $source
+     *
+     * @return array
      */
     protected function loadFixturesFromFile($source)
     {
@@ -272,6 +282,8 @@ abstract class ApiTestCase extends WebTestCase
         $this->persistObjects($objects);
 
         $this->entityManager->flush();
+
+        return $objects;
     }
 
     /**

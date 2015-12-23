@@ -70,4 +70,15 @@ class SampleControllerXmlTest extends XmlApiTestCase
 
         $this->assertResponse($response, 'product_index');
     }
+
+    public function testProductShowResponse()
+    {
+        $objects = $this->loadFixturesFromDirectory();
+
+        $this->client->request('GET', '/products/' . $objects['product1']->getId());
+
+        $response = $this->client->getResponse();
+
+        $this->assertResponse($response, 'get_product');
+    }
 }
