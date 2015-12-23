@@ -130,7 +130,7 @@ With these patterns your expected response will look like this:
 
 ```json
 {
-    "message": @string@ 
+    "message": "@string@"
 }
 ```
 

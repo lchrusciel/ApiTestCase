@@ -7,3 +7,4 @@ test/app/logs/*
 !test/app/logs/.gitkeep
 test/app/db.sqlite
 composer.lock
+phpunit.xml
