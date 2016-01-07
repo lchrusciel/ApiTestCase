@@ -101,6 +101,9 @@ abstract class ApiTestCase extends WebTestCase
         parent::tearDown();
     }
 
+    /**
+     * @return string
+     */
     protected static function getKernelClass()
     {
         if (!isset($_SERVER['KERNEL_CLASS_PATH'])) {
@@ -112,10 +115,11 @@ abstract class ApiTestCase extends WebTestCase
 
             return (new \SplFileInfo($_SERVER['KERNEL_CLASS_PATH']))->getBasename('.php');
         }
-        if (file_exists(static::getPhpUnitXmlDir().\DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS_PATH'])) {
-            require_once static::getPhpUnitXmlDir().\DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS_PATH'];
 
-            return (new \SplFileInfo(static::getPhpUnitXmlDir().\DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS_PATH']))->getBasename('.php');
+        if (file_exists(static::getPhpUnitXmlDir().DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS_PATH'])) {
+            require_once static::getPhpUnitXmlDir().DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS_PATH'];
+
+            return (new \SplFileInfo(static::getPhpUnitXmlDir().DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS_PATH']))->getBasename('.php');
         }
     }
 
@@ -145,7 +149,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     protected function assertResponseCode(Response $response, $statusCode)
     {
-        $this->assertEquals($statusCode, $response->getStatusCode(), $response->getContent());
+        static::assertEquals($statusCode, $response->getStatusCode(), $response->getContent());
     }
 
     /**
@@ -154,7 +158,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     protected function assertHeader(Response $response, $contentType)
     {
-        $this->assertTrue(
+        static::assertTrue(
             $response->headers->contains('Content-Type', $contentType),
             $response->headers
         );
@@ -176,11 +180,9 @@ abstract class ApiTestCase extends WebTestCase
             $mimeType
         ));
 
-        $factory = new SimpleFactory();
-        $matcher = $factory->createMatcher();
+        $matcher = (new SimpleFactory())->createMatcher();
 
         $result = $matcher->match($actualResponse, $expectedResponse);
-
         if (!$result) {
             $difference = $matcher->getError();
             $difference = $difference.PHP_EOL;
@@ -190,27 +192,26 @@ abstract class ApiTestCase extends WebTestCase
 
             $diff = new \Diff($expectedResponse, $actualResponse, array());
 
-            $renderer = new \Diff_Renderer_Text_Unified();
-            $difference = $difference.$diff->render($renderer);
-            $this->fail($difference);
+            $difference .= $diff->render(new \Diff_Renderer_Text_Unified());
+            static::fail($difference);
         }
     }
 
     /**
      * @param Response $response
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     protected function showErrorInBrowserIfOccurred(Response $response)
     {
         if (!$response->isSuccessful()) {
-            $openCommand = (isset($_SERVER['OPEN_BROWSER_COMMAND'])) ? $_SERVER['OPEN_BROWSER_COMMAND'] : 'open %s';
+            $openCommand = isset($_SERVER['OPEN_BROWSER_COMMAND']) ? $_SERVER['OPEN_BROWSER_COMMAND'] : 'open %s';
 
             $filename = rtrim(sys_get_temp_dir(), \DIRECTORY_SEPARATOR).\DIRECTORY_SEPARATOR.uniqid().'.html';
             file_put_contents($filename, $response->getContent());
             system(sprintf($openCommand, escapeshellarg($filename)));
 
-            throw new \Exception('Internal server error.');
+            throw new \RuntimeException('Internal server error.');
         }
     }
 
@@ -220,8 +221,6 @@ abstract class ApiTestCase extends WebTestCase
      * @param string $filename
      *
      * @return array
-     *
-     * @throws \Exception
      */
     protected function getJsonResponseFixture($filename)
     {
@@ -238,13 +237,15 @@ abstract class ApiTestCase extends WebTestCase
      * @param string $source
      *
      * @return array
+     * 
+     * @throws \RuntimeException
      */
     protected function loadFixturesFromDirectory($source = '')
     {
         $source = $this->getFixtureRealPath($source);
+
         $this->assertSourceExists($source);
 
-        $loader = new Loader();
         $finder = new Finder();
         $finder->files()->name('*.yml')->in($source);
 
@@ -252,15 +253,18 @@ abstract class ApiTestCase extends WebTestCase
             throw new \RuntimeException(sprintf('There is no files to load in folder %s', $source));
         }
 
-        $objects = [];
+        $loader = new Loader();
 
+        $objects = [];
         foreach ($finder as $file) {
             $objects[] = $loader->load($file->getRealPath());
         }
 
         $objects = $objects ? call_user_func_array('array_merge', $objects) : [];
+        foreach ($objects as $object) {
+            $this->entityManager->persist($object);
+        }
 
-        $this->persistObjects($objects);
         $this->entityManager->flush();
 
         return $objects;
@@ -274,12 +278,13 @@ abstract class ApiTestCase extends WebTestCase
     protected function loadFixturesFromFile($source)
     {
         $source = $this->getFixtureRealPath($source);
+
         $this->assertSourceExists($source);
 
-        $loader = new Loader();
-
-        $objects = $loader->load($source);
-        $this->persistObjects($objects);
+        $objects = (new Loader())->load($source);
+        foreach ($objects as $object) {
+            $this->entityManager->persist($object);
+        }
 
         $this->entityManager->flush();
 
@@ -293,19 +298,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getFixtureRealPath($source)
     {
-        $baseDirectory = $this->getFixturesFolder();
-
-        return $baseDirectory.\DIRECTORY_SEPARATOR.$source;
-    }
-
-    /**
-     * @param array $objects
-     */
-    private function persistObjects(array $objects)
-    {
-        foreach ($objects as $object) {
-            $this->entityManager->persist($object);
-        }
+        return $this->getFixturesFolder().DIRECTORY_SEPARATOR.$source;
     }
 
     /**
@@ -314,7 +307,7 @@ abstract class ApiTestCase extends WebTestCase
     private function getFixturesFolder()
     {
         if (null === $this->dataFixturesPath) {
-            $this->dataFixturesPath =  (isset($_SERVER['FIXTURES_DIR'])) ? $this->getRootDir().$_SERVER['FIXTURES_DIR'] : $this->getCalledClassFolder().'/../DataFixtures/ORM';
+            $this->dataFixturesPath = isset($_SERVER['FIXTURES_DIR']) ? $this->getRootDir().$_SERVER['FIXTURES_DIR'] : $this->getCalledClassFolder().'/../DataFixtures/ORM';
         }
 
         return $this->dataFixturesPath;
@@ -326,7 +319,7 @@ abstract class ApiTestCase extends WebTestCase
     private function getExpectedResponsesFolder()
     {
         if (null === $this->expectedResponsesPath) {
-            $this->expectedResponsesPath =  (isset($_SERVER['EXPECTED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['EXPECTED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Expected';
+            $this->expectedResponsesPath = isset($_SERVER['EXPECTED_RESPONSE_DIR']) ? $this->getRootDir().$_SERVER['EXPECTED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Expected';
         }
 
         return $this->expectedResponsesPath;
@@ -338,7 +331,7 @@ abstract class ApiTestCase extends WebTestCase
     private function getMockedResponsesFolder()
     {
         if (null === $this->mockedResponsesPath) {
-            $this->mockedResponsesPath =  (isset($_SERVER['MOCKED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['MOCKED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Mocked';
+            $this->mockedResponsesPath = isset($_SERVER['MOCKED_RESPONSE_DIR']) ? $this->getRootDir().$_SERVER['MOCKED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Mocked';
         }
 
         return $this->mockedResponsesPath;
@@ -349,7 +342,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getCalledClassFolder()
     {
-        $calledClass =  get_called_class();
+        $calledClass = get_called_class();
         $calledClassFolder = dirname((new \ReflectionClass($calledClass))->getFileName());
 
         $this->assertSourceExists($calledClassFolder);
@@ -359,6 +352,8 @@ abstract class ApiTestCase extends WebTestCase
 
     /**
      * @param string $source
+     * 
+     * @throws \RuntimeException
      */
     private function assertSourceExists($source)
     {
