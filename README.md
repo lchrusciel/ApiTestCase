@@ -25,7 +25,7 @@ Installation
 Assuming you already have Composer installed globally:
 
 ```bash
-$ composer require --dev lakion/api-test-case
+$ composer require --dev lakion/api-test-case "^1.0@dev"
 ```
 
 Then you have to slightly change your Kernel logic to support SymfonyMockerContainer:
@@ -44,6 +44,14 @@ protected function getContainerBaseClass()
 ```
 
 And it's done! ApiTestCase is working with the default configuration.
+
+###### Notice
+
+Beware of too high minimum stabillity. This library depends also on dev version of PHP-Matcher. It is possible, that you can encounter an error if your minimum stabillity is too high. If so, use this command: 
+
+```bash
+$ composer require lakion/api-test-case "^1.0@dev" coduo/php-matcher "^2.1@dev" --dev
+```
  
 Usage
 -----
