@@ -60,6 +60,11 @@ abstract class ApiTestCase extends WebTestCase
     static protected $sharedKernel;
 
     /**
+     * bool
+     */
+    private $isDoctrineSupported = false;
+
+    /**
      * @beforeClass
      */
     public static function createSharedKernel()
@@ -81,7 +86,8 @@ abstract class ApiTestCase extends WebTestCase
      */
     public function setUpDatabase()
     {
-        if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
+        $this->isDoctrineSupported = isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED'];
+        if ($this->isDoctrineSupported) {
             $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
             $this->purgeDatabase();
         }
@@ -121,6 +127,10 @@ abstract class ApiTestCase extends WebTestCase
 
     protected function purgeDatabase()
     {
+        if (!$this->isDoctrineSupported) {
+            return;
+        }
+
         $purger = new ORMPurger($this->entityManager);
         $purger->purge();
 
