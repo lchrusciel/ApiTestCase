@@ -24,6 +24,8 @@
         }
     ],
     "require": {
+        "php": ">=5.5.9",
+
         "coduo/php-matcher": "^2.1@dev",
         "phpspec/php-diff": "^1.0",
         "phpunit/phpunit": "^4.8",
