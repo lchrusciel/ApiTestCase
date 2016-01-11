@@ -26,7 +26,7 @@ abstract class JsonApiTestCase extends ApiTestCase
      */
     public function setUpClient()
     {
-        $this->client = static::createClient(array(), array('HTTP_ACCEPT' => MediaTypes::JSON));
+        $this->client = static::createClient(array(), array('HTTP_ACCEPT' => static::JSON));
     }
 
     /**
@@ -35,10 +35,10 @@ abstract class JsonApiTestCase extends ApiTestCase
      * If statusCode is set, asserts that response has given status code.
      *
      * @param Response $response
-     * @param string|null $filename
+     * @param string   $filename
      * @param int|null $statusCode
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     protected function assertResponse(Response $response, $filename, $statusCode = 200)
     {
@@ -56,16 +56,14 @@ abstract class JsonApiTestCase extends ApiTestCase
      */
     private function assertJsonHeader(Response $response)
     {
-        parent::assertHeader($response, MediaTypes::JSON);
+        parent::assertHeader($response, static::JSON);
     }
 
     /**
      * Asserts that response has JSON content matching the one given in file.
      *
      * @param Response $response
-     * @param string $filename
-     *
-     * @throws \Exception
+     * @param string   $filename
      */
     private function assertJsonResponseContent(Response $response, $filename)
     {
