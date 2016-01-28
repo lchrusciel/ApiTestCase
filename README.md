@@ -278,7 +278,7 @@ In order to run our PHPUnit tests suite, execute following commands:
 $ composer install
 $ test/app/console doctrine:database:create
 $ test/app/console doctrine:schema:create
-$ bin/phpunit test/
+$ bin/phpunit
 ```
 
 Bug Tracking and Suggestions
