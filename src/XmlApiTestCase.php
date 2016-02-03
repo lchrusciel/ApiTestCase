@@ -26,15 +26,15 @@ abstract class XmlApiTestCase extends ApiTestCase
      */
     public function setUpClient()
     {
-        $this->client = static::createClient(array(), array('HTTP_ACCEPT' => MediaTypes::XML));
+        $this->client = static::createClient(array(), array('HTTP_ACCEPT' => static::XML));
     }
 
     /**
      * @param Response $response
-     * @param string $filename
-     * @param int $statusCode
+     * @param string   $filename
+     * @param int      $statusCode
      *
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     protected function assertResponse(Response $response, $filename, $statusCode = 200)
     {
@@ -52,14 +52,12 @@ abstract class XmlApiTestCase extends ApiTestCase
      */
     private function assertXmlHeader(Response $response)
     {
-        parent::assertHeader($response, MediaTypes::XML);
+        parent::assertHeader($response, static::XML);
     }
 
     /**
      * @param Response $actualResponse
-     * @param $filename
-     *
-     * @throws \Exception
+     * @param string   $filename
      */
     private function assertXmlResponseContent(Response $actualResponse, $filename)
     {
@@ -76,7 +74,7 @@ abstract class XmlApiTestCase extends ApiTestCase
         $domXmlDocument = new \DOMDocument('1.0');
         $domXmlDocument->preserveWhiteSpace = false;
         $domXmlDocument->formatOutput = true;
-        $domXmlDocument->loadXML(str_replace("\n", "", $actualResponse));
+        $domXmlDocument->loadXML(str_replace("\n", '', $actualResponse));
 
         return $domXmlDocument->saveXML();
     }
