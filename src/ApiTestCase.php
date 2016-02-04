@@ -50,6 +50,11 @@ abstract class ApiTestCase extends WebTestCase
     protected $mockedResponsesPath;
 
     /**
+     * @var Loader
+     */
+    protected $fixtureLoader;
+
+    /**
      * @var string
      */
     protected $dataFixturesPath;
@@ -85,6 +90,12 @@ abstract class ApiTestCase extends WebTestCase
             $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
             $this->purgeDatabase();
         }
+    }
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->fixtureLoader = new Loader();
     }
 
     public function tearDown()
@@ -141,7 +152,7 @@ abstract class ApiTestCase extends WebTestCase
 
     /**
      * @param Response $response
-     * @param int $statusCode
+     * @param int      $statusCode
      */
     protected function assertResponseCode(Response $response, $statusCode)
     {
@@ -150,7 +161,7 @@ abstract class ApiTestCase extends WebTestCase
 
     /**
      * @param Response $response
-     * @param string $contentType
+     * @param string   $contentType
      */
     protected function assertHeader(Response $response, $contentType)
     {
@@ -185,8 +196,8 @@ abstract class ApiTestCase extends WebTestCase
             $difference = $matcher->getError();
             $difference = $difference.PHP_EOL;
 
-            $expectedResponse = explode(PHP_EOL, (string) $expectedResponse);
-            $actualResponse = explode(PHP_EOL, (string) $actualResponse);
+            $expectedResponse = explode(PHP_EOL, (string)$expectedResponse);
+            $actualResponse = explode(PHP_EOL, (string)$actualResponse);
 
             $diff = new \Diff($expectedResponse, $actualResponse, array());
 
@@ -244,7 +255,6 @@ abstract class ApiTestCase extends WebTestCase
         $source = $this->getFixtureRealPath($source);
         $this->assertSourceExists($source);
 
-        $loader = new Loader();
         $finder = new Finder();
         $finder->files()->name('*.yml')->in($source);
 
@@ -255,7 +265,7 @@ abstract class ApiTestCase extends WebTestCase
         $objects = [];
 
         foreach ($finder as $file) {
-            $objects[] = $loader->load($file->getRealPath());
+            $objects[] = $this->fixtureLoader->load($file->getRealPath());
         }
 
         $objects = $objects ? call_user_func_array('array_merge', $objects) : [];
@@ -276,9 +286,7 @@ abstract class ApiTestCase extends WebTestCase
         $source = $this->getFixtureRealPath($source);
         $this->assertSourceExists($source);
 
-        $loader = new Loader();
-
-        $objects = $loader->load($source);
+        $objects = $this->fixtureLoader->load($source);
         $this->persistObjects($objects);
 
         $this->entityManager->flush();
@@ -314,7 +322,7 @@ abstract class ApiTestCase extends WebTestCase
     private function getFixturesFolder()
     {
         if (null === $this->dataFixturesPath) {
-            $this->dataFixturesPath =  (isset($_SERVER['FIXTURES_DIR'])) ? $this->getRootDir().$_SERVER['FIXTURES_DIR'] : $this->getCalledClassFolder().'/../DataFixtures/ORM';
+            $this->dataFixturesPath = (isset($_SERVER['FIXTURES_DIR'])) ? $this->getRootDir().$_SERVER['FIXTURES_DIR'] : $this->getCalledClassFolder().'/../DataFixtures/ORM';
         }
 
         return $this->dataFixturesPath;
@@ -326,7 +334,7 @@ abstract class ApiTestCase extends WebTestCase
     private function getExpectedResponsesFolder()
     {
         if (null === $this->expectedResponsesPath) {
-            $this->expectedResponsesPath =  (isset($_SERVER['EXPECTED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['EXPECTED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Expected';
+            $this->expectedResponsesPath = (isset($_SERVER['EXPECTED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['EXPECTED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Expected';
         }
 
         return $this->expectedResponsesPath;
@@ -338,7 +346,7 @@ abstract class ApiTestCase extends WebTestCase
     private function getMockedResponsesFolder()
     {
         if (null === $this->mockedResponsesPath) {
-            $this->mockedResponsesPath =  (isset($_SERVER['MOCKED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['MOCKED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Mocked';
+            $this->mockedResponsesPath = (isset($_SERVER['MOCKED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['MOCKED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Mocked';
         }
 
         return $this->mockedResponsesPath;
@@ -349,7 +357,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getCalledClassFolder()
     {
-        $calledClass =  get_called_class();
+        $calledClass = get_called_class();
         $calledClassFolder = dirname((new \ReflectionClass($calledClass))->getFileName());
 
         $this->assertSourceExists($calledClassFolder);
