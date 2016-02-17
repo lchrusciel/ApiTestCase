@@ -180,7 +180,7 @@ array(
 )
 ```
 
-It is also a really common case to communicate with some external API. But in test environment we want to be sure what we will receive from it. To check behaviour of our app with different responses from external API we can use [SymfonyMockerContainer](https://github.com/PolishSymfonyCommunity/SymfonyMockerContainer). This library allows to mock the third party API response, and asserts number of calls.
+It is also a really common case to communicate with some external API. But in test environment we want to be sure what we will receive from it. To check behavior of our app with different responses from external API we can use [SymfonyMockerContainer](https://github.com/PolishSymfonyCommunity/SymfonyMockerContainer). This library allows to mock the third party API response, and asserts number of calls.
 Again, this is extra useful when you work with APIs like Google Maps, Stripe etc. You can also mock response from other apps in your SOA project.
 
 ```php
