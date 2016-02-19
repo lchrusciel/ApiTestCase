@@ -28,7 +28,7 @@
 
         "coduo/php-matcher": "^2.0.0-rc",
         "phpspec/php-diff": "^1.0",
-        "phpunit/phpunit": "^4.8",
+        "phpunit/phpunit": "^4.8|^5.0",
         "polishsymfonycommunity/symfony-mocker-container": "^1.0",
         "symfony/framework-bundle": "^2.3|^3.0",
         "symfony/finder": "^2.3|^3.0",
