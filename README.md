@@ -33,10 +33,12 @@ Then you have to slightly change your Kernel logic to support SymfonyMockerConta
 ```php
 // app/AppKernel.php
 
+use \PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer;
+
 protected function getContainerBaseClass()
 {
     if ('test' === $this->environment) {
-        return '\PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer';
+        return MockerContainer::class;
     }
 
     return parent::getContainerBaseClass();
