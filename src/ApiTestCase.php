@@ -11,9 +11,11 @@
 
 namespace Lakion\ApiTestCase;
 
-use Coduo\PHPMatcher\Factory\SimpleFactory;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
+use Lakion\ApiTestCase\Matcher\DefaultMatcher;
+use Lakion\ApiTestCase\Matcher\ResponseContentMatcher;
+use Lakion\ApiTestCase\Loader\ResponseLoader;
 use Nelmio\Alice\Fixtures\Loader;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -60,6 +62,16 @@ abstract class ApiTestCase extends WebTestCase
     protected $dataFixturesPath;
 
     /**
+     * @var ResponseContentMatcher
+     */
+    protected $responseContentMatcher;
+
+    /**
+     * @var ResponseLoader
+     */
+    protected $responseLoader;
+
+    /**
      * @var Kernel
      */
     static protected $sharedKernel;
@@ -92,10 +104,33 @@ abstract class ApiTestCase extends WebTestCase
         }
     }
 
+    /**
+     * @before
+     */
+    public function setUpMatcher()
+    {
+        $this->responseContentMatcher = new ResponseContentMatcher(new DefaultMatcher());
+    }
+
+    /**
+     * @before
+     */
+    public function setUpResponseLoader()
+    {
+        $this->responseLoader = new ResponseLoader();
+    }
+
+    /**
+     * @before
+     */
+    public function setUpFixtureLoader()
+    {
+        $this->fixtureLoader = new Loader();
+    }
+
     public function setUp()
     {
         parent::setUp();
-        $this->fixtureLoader = new Loader();
     }
 
     public function tearDown()
@@ -178,32 +213,22 @@ abstract class ApiTestCase extends WebTestCase
      */
     protected function assertResponseContent($actualResponse, $filename, $mimeType)
     {
+        $this->assertResponseLoaderIsAvailable();
+        $this->assertResponseContentMatcherIsAvailable();
+
         $responseSource = $this->getExpectedResponsesFolder();
 
-        $expectedResponse = file_get_contents(sprintf(
+        $expectedResponse = $this->responseLoader->getResponseFromSource(sprintf(
             '%s/%s.%s',
             $responseSource,
             $filename,
             $mimeType
         ));
 
-        $factory = new SimpleFactory();
-        $matcher = $factory->createMatcher();
+        $this->responseContentMatcher->matchResponse($actualResponse, $expectedResponse);
 
-        $result = $matcher->match($actualResponse, $expectedResponse);
-
-        if (!$result) {
-            $difference = $matcher->getError();
-            $difference = $difference.PHP_EOL;
-
-            $expectedResponse = explode(PHP_EOL, (string)$expectedResponse);
-            $actualResponse = explode(PHP_EOL, (string)$actualResponse);
-
-            $diff = new \Diff($expectedResponse, $actualResponse, array());
-
-            $renderer = new \Diff_Renderer_Text_Unified();
-            $difference = $difference.$diff->render($renderer);
-            $this->fail($difference);
+        if ($this->responseContentMatcher->hasError()) {
+            $this->fail($this->responseContentMatcher->getDifference());
         }
     }
 
@@ -236,9 +261,11 @@ abstract class ApiTestCase extends WebTestCase
      */
     protected function getJsonResponseFixture($filename)
     {
+        $this->assertResponseLoaderIsAvailable();
+
         $responseSource = $this->getMockedResponsesFolder();
 
-        return json_decode(file_get_contents(sprintf(
+        return json_decode($this->responseLoader->getResponseFromSource(sprintf(
             '%s/%s.json',
             $responseSource,
             $filename
@@ -372,6 +399,26 @@ abstract class ApiTestCase extends WebTestCase
     {
         if (!file_exists($source)) {
             throw new \RuntimeException(sprintf('File %s does not exist', $source));
+        }
+    }
+
+    /**
+     * @throws \RuntimeException
+     */
+    private function assertResponseLoaderIsAvailable()
+    {
+        if (null === $this->responseLoader) {
+            throw new \RuntimeException('Something went wrong and response loader has not been set properly. If you have overridden setUpResponseLoader method, check it!');
+        }
+    }
+
+    /**
+     * @throws \RuntimeException
+     */
+    private function assertResponseContentMatcherIsAvailable()
+    {
+        if (null === $this->responseContentMatcher) {
+            throw new \RuntimeException('Something went wrong and response content matcher has not been set properly. If you have overridden setUpMatcher method, check it!');
         }
     }
 
