@@ -114,20 +114,28 @@ abstract class ApiTestCase extends WebTestCase
 
     protected static function getKernelClass()
     {
-        if (!isset($_SERVER['KERNEL_CLASS_PATH'])) {
-            return parent::getKernelClass();
+        if (isset($_SERVER['KERNEL_CLASS'])) {
+            return '\\' . ltrim($_SERVER['KERNEL_CLASS'], '\\');
         }
 
-        if (file_exists($_SERVER['KERNEL_CLASS_PATH'])) {
-            require_once $_SERVER['KERNEL_CLASS_PATH'];
+        if (isset($_SERVER['KERNEL_CLASS_PATH'])) {
+            $paths = [
+                $_SERVER['KERNEL_CLASS_PATH'],
+                static::getPhpUnitXmlDir() . DIRECTORY_SEPARATOR . $_SERVER['KERNEL_CLASS_PATH']
+            ];
 
-            return (new \SplFileInfo($_SERVER['KERNEL_CLASS_PATH']))->getBasename('.php');
-        }
-        if (file_exists(static::getPhpUnitXmlDir().\DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS_PATH'])) {
-            require_once static::getPhpUnitXmlDir().\DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS_PATH'];
+            foreach ($paths as $path) {
+                if (!file_exists($path)) {
+                    continue;
+                }
 
-            return (new \SplFileInfo(static::getPhpUnitXmlDir().\DIRECTORY_SEPARATOR.$_SERVER['KERNEL_CLASS_PATH']))->getBasename('.php');
+                require_once $path;
+
+                return '\\' . (new \SplFileInfo($path))->getBasename('.php');
+            }
         }
+
+        return parent::getKernelClass();
     }
 
     protected function purgeDatabase()
