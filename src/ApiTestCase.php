@@ -112,6 +112,9 @@ abstract class ApiTestCase extends WebTestCase
         parent::tearDown();
     }
 
+    /**
+     * @return string
+     */
     protected static function getKernelClass()
     {
         if (isset($_SERVER['KERNEL_CLASS'])) {
@@ -264,7 +267,7 @@ abstract class ApiTestCase extends WebTestCase
         $this->assertSourceExists($source);
 
         $finder = new Finder();
-        $finder->files()->name('*.yml')->in($source);
+        $finder->files()->name('*.yml')->in($source)->sortByName();
 
         if (0 === $finder->count()) {
             throw new \RuntimeException(sprintf('There is no files to load in folder %s', $source));
@@ -307,7 +310,7 @@ abstract class ApiTestCase extends WebTestCase
      *
      * @return string
      */
-    private function getFixtureRealPath($source)
+    protected function getFixtureRealPath($source)
     {
         $baseDirectory = $this->getFixturesFolder();
 
@@ -317,7 +320,7 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * @param array $objects
      */
-    private function persistObjects(array $objects)
+    protected function persistObjects(array $objects)
     {
         foreach ($objects as $object) {
             $this->entityManager->persist($object);
@@ -327,7 +330,7 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * @return string
      */
-    private function getFixturesFolder()
+    protected function getFixturesFolder()
     {
         if (null === $this->dataFixturesPath) {
             $this->dataFixturesPath = (isset($_SERVER['FIXTURES_DIR'])) ? $this->getRootDir().$_SERVER['FIXTURES_DIR'] : $this->getCalledClassFolder().'/../DataFixtures/ORM';
@@ -339,7 +342,7 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * @return string
      */
-    private function getExpectedResponsesFolder()
+    protected function getExpectedResponsesFolder()
     {
         if (null === $this->expectedResponsesPath) {
             $this->expectedResponsesPath = (isset($_SERVER['EXPECTED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['EXPECTED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Expected';
@@ -351,7 +354,7 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * @return string
      */
-    private function getMockedResponsesFolder()
+    protected function getMockedResponsesFolder()
     {
         if (null === $this->mockedResponsesPath) {
             $this->mockedResponsesPath = (isset($_SERVER['MOCKED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['MOCKED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Mocked';
@@ -363,7 +366,7 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * @return string
      */
-    private function getCalledClassFolder()
+    protected function getCalledClassFolder()
     {
         $calledClass = get_called_class();
         $calledClassFolder = dirname((new \ReflectionClass($calledClass))->getFileName());
@@ -375,8 +378,10 @@ abstract class ApiTestCase extends WebTestCase
 
     /**
      * @param string $source
+     *
+     * @throws \RuntimeException
      */
-    private function assertSourceExists($source)
+    protected function assertSourceExists($source)
     {
         if (!file_exists($source)) {
             throw new \RuntimeException(sprintf('File %s does not exist', $source));
@@ -386,7 +391,7 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * @return string
      */
-    private function getRootDir()
+    protected function getRootDir()
     {
         return $this->get('kernel')->getRootDir();
     }

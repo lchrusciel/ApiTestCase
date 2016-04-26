@@ -50,7 +50,7 @@ abstract class XmlApiTestCase extends ApiTestCase
     /**
      * @param Response $response
      */
-    private function assertXmlHeader(Response $response)
+    protected function assertXmlHeader(Response $response)
     {
         parent::assertHeader($response, MediaTypes::XML);
     }
@@ -61,7 +61,7 @@ abstract class XmlApiTestCase extends ApiTestCase
      *
      * @throws \Exception
      */
-    private function assertXmlResponseContent(Response $actualResponse, $filename)
+    protected function assertXmlResponseContent(Response $actualResponse, $filename)
     {
         parent::assertResponseContent($this->prettifyXml($actualResponse->getContent()), $filename, 'xml');
     }
@@ -71,7 +71,7 @@ abstract class XmlApiTestCase extends ApiTestCase
      *
      * @return string
      */
-    private function prettifyXml($actualResponse)
+    protected function prettifyXml($actualResponse)
     {
         $domXmlDocument = new \DOMDocument('1.0');
         $domXmlDocument->preserveWhiteSpace = false;
