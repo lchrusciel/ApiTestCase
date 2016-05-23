@@ -23,11 +23,11 @@ before_install:
   - composer self-update
 
 install:
-  - composer update --prefer-source $COMPOSER_OPTIONS
+  - composer update --prefer-dist $COMPOSER_OPTIONS
 
 before_script:
-  - test/app/console doctrine:database:create
-  - test/app/console doctrine:schema:create
+  - test/app/console doctrine:database:create -vvv
+  - test/app/console doctrine:schema:create -vvv
 
 script:
   - composer validate --strict
