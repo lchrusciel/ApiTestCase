@@ -14,7 +14,8 @@ namespace Lakion\ApiTestCase;
 use Coduo\PHPMatcher\Factory\SimpleFactory;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
-use Nelmio\Alice\Fixtures\Loader;
+use Nelmio\Alice\Fixtures;
+use Nelmio\Alice\Persister\Doctrine;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Finder\Finder;
@@ -50,7 +51,7 @@ abstract class ApiTestCase extends WebTestCase
     protected $mockedResponsesPath;
 
     /**
-     * @var Loader
+     * @var Fixtures
      */
     protected $fixtureLoader;
 
@@ -88,14 +89,9 @@ abstract class ApiTestCase extends WebTestCase
     {
         if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
             $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
+            $this->fixtureLoader = new Fixtures(new Doctrine($this->entityManager), $this->getFixtureProcessors());
             $this->purgeDatabase();
         }
-    }
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->fixtureLoader = new Loader();
     }
 
     public function tearDown()
@@ -110,6 +106,14 @@ abstract class ApiTestCase extends WebTestCase
         $this->client = null;
 
         parent::tearDown();
+    }
+
+    /**
+     * return ProcessorInterface[]
+     */
+    protected function getFixtureProcessors()
+    {
+        return [];
     }
 
     protected static function getKernelClass()
@@ -270,18 +274,12 @@ abstract class ApiTestCase extends WebTestCase
             throw new \RuntimeException(sprintf('There is no files to load in folder %s', $source));
         }
 
-        $objects = [];
-
+        $files = [];
         foreach ($finder as $file) {
-            $objects[] = $this->fixtureLoader->load($file->getRealPath());
+            $files[] = $file->getRealPath();
         }
 
-        $objects = $objects ? call_user_func_array('array_merge', $objects) : [];
-
-        $this->persistObjects($objects);
-        $this->entityManager->flush();
-
-        return $objects;
+        return $this->fixtureLoader->loadFiles($files);
     }
 
     /**
@@ -294,12 +292,7 @@ abstract class ApiTestCase extends WebTestCase
         $source = $this->getFixtureRealPath($source);
         $this->assertSourceExists($source);
 
-        $objects = $this->fixtureLoader->load($source);
-        $this->persistObjects($objects);
-
-        $this->entityManager->flush();
-
-        return $objects;
+        return $this->fixtureLoader->loadFiles($source);
     }
 
     /**
@@ -312,16 +305,6 @@ abstract class ApiTestCase extends WebTestCase
         $baseDirectory = $this->getFixturesFolder();
 
         return $baseDirectory.\DIRECTORY_SEPARATOR.$source;
-    }
-
-    /**
-     * @param array $objects
-     */
-    private function persistObjects(array $objects)
-    {
-        foreach ($objects as $object) {
-            $this->entityManager->persist($object);
-        }
     }
 
     /**
