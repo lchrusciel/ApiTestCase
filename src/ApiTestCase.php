@@ -89,7 +89,7 @@ abstract class ApiTestCase extends WebTestCase
     {
         if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
             $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
-            $this->fixtureLoader = new Fixtures(new Doctrine($this->entityManager), $this->getFixtureProcessors());
+            $this->fixtureLoader = new Fixtures(new Doctrine($this->entityManager), [], $this->getFixtureProcessors());
             $this->purgeDatabase();
         }
     }
