@@ -30,6 +30,14 @@ abstract class XmlApiTestCase extends ApiTestCase
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function buildMatcher()
+    {
+        return MatcherFactory::buildXmlMatcher();
+    }
+
+    /**
      * @param Response $response
      * @param string $filename
      * @param int $statusCode

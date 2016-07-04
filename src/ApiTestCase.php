@@ -11,7 +11,7 @@
 
 namespace Lakion\ApiTestCase;
 
-use Coduo\PHPMatcher\Factory\SimpleFactory;
+use Coduo\PHPMatcher\Matcher;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Nelmio\Alice\Fixtures;
@@ -111,6 +111,11 @@ abstract class ApiTestCase extends WebTestCase
     }
 
     /**
+     * @return Matcher
+     */
+    abstract protected function buildMatcher();
+
+    /**
      * return ProcessorInterface[]
      */
     protected function getFixtureProcessors()
@@ -195,7 +200,7 @@ abstract class ApiTestCase extends WebTestCase
         $actualResponse = trim($actualResponse);
         $expectedResponse = trim(file_get_contents(PathBuilder::build($responseSource, sprintf('%s.%s', $filename, $mimeType))));
 
-        $matcher = (new SimpleFactory())->createMatcher();
+        $matcher = $this->buildMatcher();
         $result = $matcher->match($actualResponse, $expectedResponse);
 
         if (!$result) {
