@@ -311,7 +311,7 @@ License can be found [here](https://github.com/Lakion/ApiTestCase/blob/master/LI
 Authors
 -------
 
-The bundle was originally created by:
+The library was originally created by:
 
 * Łukasz Chruściel <lukasz.chrusciel@lakion.com>, 
 * Michał Marcinkowski <michal.marcinkowski@lakion.com>
