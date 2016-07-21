@@ -41,11 +41,6 @@ abstract class ApiTestCase extends WebTestCase
     protected $client;
 
     /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-    /**
      * @var string
      */
     protected $expectedResponsesPath;
@@ -56,14 +51,19 @@ abstract class ApiTestCase extends WebTestCase
     protected $mockedResponsesPath;
 
     /**
-     * @var Fixtures
-     */
-    protected $fixtureLoader;
-
-    /**
      * @var string
      */
     protected $dataFixturesPath;
+
+    /**
+     * @var Fixtures
+     */
+    private $fixtureLoader;
+
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
 
     /**
      * @beforeClass
@@ -89,7 +89,8 @@ abstract class ApiTestCase extends WebTestCase
     {
         if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
             $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
-            $this->fixtureLoader = new Fixtures(new Doctrine($this->entityManager), [], $this->getFixtureProcessors());
+
+            $this->fixtureLoader = new Fixtures(new Doctrine($this->getEntityManager()), [], $this->getFixtureProcessors());
             $this->purgeDatabase();
         }
     }
@@ -142,10 +143,10 @@ abstract class ApiTestCase extends WebTestCase
 
     protected function purgeDatabase()
     {
-        $purger = new ORMPurger($this->entityManager);
+        $purger = new ORMPurger($this->getEntityManager());
         $purger->purge();
 
-        $this->entityManager->clear();
+        $this->getEntityManager()->clear();
     }
 
     /**
@@ -278,7 +279,7 @@ abstract class ApiTestCase extends WebTestCase
             $files[] = $file->getRealPath();
         }
 
-        return $this->fixtureLoader->loadFiles($files);
+        return $this->getFixtureLoader()->loadFiles($files);
     }
 
     /**
@@ -291,7 +292,31 @@ abstract class ApiTestCase extends WebTestCase
         $source = $this->getFixtureRealPath($source);
         $this->assertSourceExists($source);
 
-        return $this->fixtureLoader->loadFiles($source);
+        return $this->getFixtureLoader()->loadFiles($source);
+    }
+
+    /**
+     * @return Fixtures
+     */
+    protected function getFixtureLoader()
+    {
+        if (null === $this->fixtureLoader) {
+            throw new \RuntimeException('Please, set up a database before you will try to use a fixture loader');
+        }
+
+        return $this->fixtureLoader;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    protected function getEntityManager()
+    {
+        if (null === $this->entityManager || !$this->entityManager->getConnection()->isConnected()) {
+            static::markTestSkipped('Could not establish test database connection.');
+        }
+
+        return $this->entityManager;
     }
 
     /**
