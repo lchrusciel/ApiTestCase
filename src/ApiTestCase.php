@@ -31,6 +31,11 @@ use Symfony\Component\HttpKernel\Kernel;
 abstract class ApiTestCase extends WebTestCase
 {
     /**
+     * @var Kernel
+     */
+    protected static $sharedKernel;
+
+    /**
      * @var Client
      */
     protected $client;
@@ -59,11 +64,6 @@ abstract class ApiTestCase extends WebTestCase
      * @var string
      */
     protected $dataFixturesPath;
-
-    /**
-     * @var Kernel
-     */
-    static protected $sharedKernel;
 
     /**
      * @beforeClass
@@ -129,13 +129,11 @@ abstract class ApiTestCase extends WebTestCase
             ];
 
             foreach ($paths as $path) {
-                if (!file_exists($path)) {
-                    continue;
+                if (file_exists($path)) {
+                    require_once $path;
+
+                    return '\\' . (new \SplFileInfo($path))->getBasename('.php');
                 }
-
-                require_once $path;
-
-                return '\\' . (new \SplFileInfo($path))->getBasename('.php');
             }
         }
 
@@ -164,20 +162,20 @@ abstract class ApiTestCase extends WebTestCase
 
     /**
      * @param Response $response
-     * @param int      $statusCode
+     * @param int $statusCode
      */
     protected function assertResponseCode(Response $response, $statusCode)
     {
-        $this->assertEquals($statusCode, $response->getStatusCode(), $response->getContent());
+        self::assertEquals($statusCode, $response->getStatusCode(), $response->getContent());
     }
 
     /**
      * @param Response $response
-     * @param string   $contentType
+     * @param string $contentType
      */
     protected function assertHeader(Response $response, $contentType)
     {
-        $this->assertTrue(
+        self::assertTrue(
             $response->headers->contains('Content-Type', $contentType),
             $response->headers
         );
@@ -193,8 +191,9 @@ abstract class ApiTestCase extends WebTestCase
         $responseSource = $this->getExpectedResponsesFolder();
 
         $expectedResponse = file_get_contents(sprintf(
-            '%s/%s.%s',
+            '%s%s%s.%s',
             $responseSource,
+            DIRECTORY_SEPARATOR,
             $filename,
             $mimeType
         ));
@@ -206,16 +205,15 @@ abstract class ApiTestCase extends WebTestCase
 
         if (!$result) {
             $difference = $matcher->getError();
-            $difference = $difference.PHP_EOL;
+            $difference = $difference . PHP_EOL;
 
             $expectedResponse = explode(PHP_EOL, (string)$expectedResponse);
             $actualResponse = explode(PHP_EOL, (string)$actualResponse);
 
             $diff = new \Diff($expectedResponse, $actualResponse, array());
 
-            $renderer = new \Diff_Renderer_Text_Unified();
-            $difference = $difference.$diff->render($renderer);
-            $this->fail($difference);
+            $difference = $difference . $diff->render(new \Diff_Renderer_Text_Unified());
+            self::fail($difference);
         }
     }
 
@@ -227,9 +225,9 @@ abstract class ApiTestCase extends WebTestCase
     protected function showErrorInBrowserIfOccurred(Response $response)
     {
         if (!$response->isSuccessful()) {
-            $openCommand = (isset($_SERVER['OPEN_BROWSER_COMMAND'])) ? $_SERVER['OPEN_BROWSER_COMMAND'] : 'open %s';
+            $openCommand = isset($_SERVER['OPEN_BROWSER_COMMAND']) ? $_SERVER['OPEN_BROWSER_COMMAND'] : 'open %s';
 
-            $filename = rtrim(sys_get_temp_dir(), \DIRECTORY_SEPARATOR).\DIRECTORY_SEPARATOR.uniqid().'.html';
+            $filename = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . uniqid() . '.html';
             file_put_contents($filename, $response->getContent());
             system(sprintf($openCommand, escapeshellarg($filename)));
 
@@ -251,8 +249,9 @@ abstract class ApiTestCase extends WebTestCase
         $responseSource = $this->getMockedResponsesFolder();
 
         return json_decode(file_get_contents(sprintf(
-            '%s/%s.json',
+            '%s%s%s.json',
             $responseSource,
+            DIRECTORY_SEPARATOR,
             $filename
         )), true);
     }
@@ -304,7 +303,7 @@ abstract class ApiTestCase extends WebTestCase
     {
         $baseDirectory = $this->getFixturesFolder();
 
-        return $baseDirectory.\DIRECTORY_SEPARATOR.$source;
+        return $baseDirectory . DIRECTORY_SEPARATOR . $source;
     }
 
     /**
@@ -313,7 +312,7 @@ abstract class ApiTestCase extends WebTestCase
     private function getFixturesFolder()
     {
         if (null === $this->dataFixturesPath) {
-            $this->dataFixturesPath = (isset($_SERVER['FIXTURES_DIR'])) ? $this->getRootDir().$_SERVER['FIXTURES_DIR'] : $this->getCalledClassFolder().'/../DataFixtures/ORM';
+            $this->dataFixturesPath = isset($_SERVER['FIXTURES_DIR']) ? $this->getRootDir() . $_SERVER['FIXTURES_DIR'] : $this->getCalledClassFolder() . '/../DataFixtures/ORM';
         }
 
         return $this->dataFixturesPath;
@@ -325,7 +324,7 @@ abstract class ApiTestCase extends WebTestCase
     private function getExpectedResponsesFolder()
     {
         if (null === $this->expectedResponsesPath) {
-            $this->expectedResponsesPath = (isset($_SERVER['EXPECTED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['EXPECTED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Expected';
+            $this->expectedResponsesPath = isset($_SERVER['EXPECTED_RESPONSE_DIR']) ? $this->getRootDir() . $_SERVER['EXPECTED_RESPONSE_DIR'] : $this->getCalledClassFolder() . '/../Responses/Expected';
         }
 
         return $this->expectedResponsesPath;
@@ -337,7 +336,7 @@ abstract class ApiTestCase extends WebTestCase
     private function getMockedResponsesFolder()
     {
         if (null === $this->mockedResponsesPath) {
-            $this->mockedResponsesPath = (isset($_SERVER['MOCKED_RESPONSE_DIR'])) ? $this->getRootDir().$_SERVER['MOCKED_RESPONSE_DIR'] : $this->getCalledClassFolder().'/../Responses/Mocked';
+            $this->mockedResponsesPath = isset($_SERVER['MOCKED_RESPONSE_DIR']) ? $this->getRootDir() . $_SERVER['MOCKED_RESPONSE_DIR'] : $this->getCalledClassFolder() . '/../Responses/Mocked';
         }
 
         return $this->mockedResponsesPath;
