@@ -14,8 +14,15 @@ namespace Lakion\ApiTestCase;
 /**
  * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
  */
-class PathBuilder
+final class PathBuilder
 {
+    /**
+     * Hacky way to create a 'static' php class
+     */
+    private function __construct()
+    {
+    }
+
     /**
      * @param array ...$segments unlimited number of path segments
      *
