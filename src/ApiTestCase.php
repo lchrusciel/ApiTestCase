@@ -89,6 +89,7 @@ abstract class ApiTestCase extends WebTestCase
     {
         if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
             $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
+            $this->entityManager->getConnection()->connect();
 
             $this->fixtureLoader = new Fixtures(new Doctrine($this->getEntityManager()), [], $this->getFixtureProcessors());
             $this->purgeDatabase();
@@ -293,7 +294,7 @@ abstract class ApiTestCase extends WebTestCase
     protected function getEntityManager()
     {
         if (null === $this->entityManager || !$this->entityManager->getConnection()->isConnected()) {
-            static::markTestSkipped('Could not establish test database connection.');
+            static::fail('Could not establish test database connection.');
         }
 
         return $this->entityManager;
