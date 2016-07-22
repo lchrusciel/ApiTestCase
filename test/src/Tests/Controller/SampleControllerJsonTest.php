@@ -12,6 +12,7 @@
 namespace Lakion\ApiTestCase\Test\Tests\Controller;
 
 use Lakion\ApiTestCase\JsonApiTestCase;
+use PHPUnit_Framework_AssertionFailedError;
 
 /**
  * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
@@ -25,6 +26,18 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $response = $this->client->getResponse();
 
         $this->assertResponse($response, 'hello_world');
+    }
+
+    /**
+     * @expectedException PHPUnit_Framework_AssertionFailedError
+     */
+    public function testGetHelloWorldIncorrectResponse()
+    {
+        $this->client->request('GET', '/');
+
+        $response = $this->client->getResponse();
+
+        $this->assertResponse($response, 'incorrect_hello_world');
     }
 
     public function testGetHelloWorldWithMatcherResponse()
