@@ -191,13 +191,7 @@ abstract class ApiTestCase extends WebTestCase
     {
         $responseSource = $this->getExpectedResponsesFolder();
 
-        $expectedResponse = file_get_contents(sprintf(
-            '%s%s%s.%s',
-            $responseSource,
-            DIRECTORY_SEPARATOR,
-            $filename,
-            $mimeType
-        ));
+        $expectedResponse = file_get_contents(PathBuilder::build($responseSource, sprintf('%s.%s', $filename, $mimeType)));
 
         $factory = new SimpleFactory();
         $matcher = $factory->createMatcher();
@@ -228,7 +222,7 @@ abstract class ApiTestCase extends WebTestCase
         if (!$response->isSuccessful()) {
             $openCommand = isset($_SERVER['OPEN_BROWSER_COMMAND']) ? $_SERVER['OPEN_BROWSER_COMMAND'] : 'open %s';
 
-            $filename = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . uniqid() . '.html';
+            $filename = PathBuilder::build(rtrim(sys_get_temp_dir(), \DIRECTORY_SEPARATOR), uniqid() . '.html');
             file_put_contents($filename, $response->getContent());
             system(sprintf($openCommand, escapeshellarg($filename)));
 
@@ -249,12 +243,7 @@ abstract class ApiTestCase extends WebTestCase
     {
         $responseSource = $this->getMockedResponsesFolder();
 
-        return json_decode(file_get_contents(sprintf(
-            '%s%s%s.json',
-            $responseSource,
-            DIRECTORY_SEPARATOR,
-            $filename
-        )), true);
+        return json_decode(file_get_contents(PathBuilder::build($responseSource, $filename . '.json')), true);
     }
 
     /**
@@ -328,7 +317,7 @@ abstract class ApiTestCase extends WebTestCase
     {
         $baseDirectory = $this->getFixturesFolder();
 
-        return $baseDirectory . DIRECTORY_SEPARATOR . $source;
+        return PathBuilder::build($baseDirectory, $source);
     }
 
     /**
@@ -337,7 +326,9 @@ abstract class ApiTestCase extends WebTestCase
     private function getFixturesFolder()
     {
         if (null === $this->dataFixturesPath) {
-            $this->dataFixturesPath = isset($_SERVER['FIXTURES_DIR']) ? $this->getRootDir() . $_SERVER['FIXTURES_DIR'] : $this->getCalledClassFolder() . '/../DataFixtures/ORM';
+            $this->dataFixturesPath = isset($_SERVER['FIXTURES_DIR']) ?
+                PathBuilder::build($this->getRootDir(), $_SERVER['FIXTURES_DIR'] ) :
+                PathBuilder::build($this->getCalledClassFolder(), '..', 'DataFixtures', 'ORM');
         }
 
         return $this->dataFixturesPath;
@@ -349,7 +340,9 @@ abstract class ApiTestCase extends WebTestCase
     private function getExpectedResponsesFolder()
     {
         if (null === $this->expectedResponsesPath) {
-            $this->expectedResponsesPath = isset($_SERVER['EXPECTED_RESPONSE_DIR']) ? $this->getRootDir() . $_SERVER['EXPECTED_RESPONSE_DIR'] : $this->getCalledClassFolder() . '/../Responses/Expected';
+            $this->expectedResponsesPath = isset($_SERVER['EXPECTED_RESPONSE_DIR']) ?
+                PathBuilder::build($this->getRootDir(), $_SERVER['EXPECTED_RESPONSE_DIR']) :
+                PathBuilder::build($this->getCalledClassFolder(), '..', 'Responses', 'Expected');
         }
 
         return $this->expectedResponsesPath;
@@ -361,7 +354,9 @@ abstract class ApiTestCase extends WebTestCase
     private function getMockedResponsesFolder()
     {
         if (null === $this->mockedResponsesPath) {
-            $this->mockedResponsesPath = isset($_SERVER['MOCKED_RESPONSE_DIR']) ? $this->getRootDir() . $_SERVER['MOCKED_RESPONSE_DIR'] : $this->getCalledClassFolder() . '/../Responses/Mocked';
+            $this->mockedResponsesPath = isset($_SERVER['MOCKED_RESPONSE_DIR']) ?
+                PathBuilder::build($this->getRootDir(), $_SERVER['MOCKED_RESPONSE_DIR']) :
+                PathBuilder::build($this->getCalledClassFolder(), '..', 'Responses', 'Mocked');
         }
 
         return $this->mockedResponsesPath;
