@@ -195,7 +195,8 @@ abstract class ApiTestCase extends WebTestCase
         $actualResponse = trim($actualResponse);
         $expectedResponse = trim(file_get_contents(PathBuilder::build($responseSource, sprintf('%s.%s', $filename, $mimeType))));
 
-        $result = (new SimpleFactory())->createMatcher()->match($actualResponse, $expectedResponse);
+        $matcher = (new SimpleFactory())->createMatcher();
+        $result = $matcher->match($actualResponse, $expectedResponse);
 
         if (!$result) {
             $diff = new \Diff(explode(PHP_EOL, $expectedResponse), explode(PHP_EOL, $actualResponse), []);
