@@ -191,7 +191,8 @@ abstract class ApiTestCase extends WebTestCase
     {
         $responseSource = $this->getExpectedResponsesFolder();
 
-        $expectedResponse = file_get_contents(PathBuilder::build($responseSource, sprintf('%s.%s', $filename, $mimeType)));
+        $actualResponse = trim($actualResponse);
+        $expectedResponse = trim(file_get_contents(PathBuilder::build($responseSource, sprintf('%s.%s', $filename, $mimeType))));
 
         $factory = new SimpleFactory();
         $matcher = $factory->createMatcher();
