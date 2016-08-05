@@ -11,7 +11,9 @@
 
 namespace Lakion\ApiTestCase\Test\Controller;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Lakion\ApiTestCase\MediaTypes;
+use Lakion\ApiTestCase\Test\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -101,11 +103,31 @@ class SampleController extends Controller
 
     /**
      * @param Request $request
-     * @param mixed $data
      *
      * @return Response
      */
-    private function respond(Request $request, $data)
+    public function createAction(Request $request)
+    {
+        $product = new Product();
+        $product->setName($request->request->get('name'));
+        $product->setPrice($request->request->get('price'));
+
+        /** @var ObjectManager $productManager */
+        $productManager = $this->getDoctrine()->getManager();
+        $productManager->persist($product);
+        $productManager->flush();
+
+        return $this->respond($request, $product, Response::HTTP_CREATED);
+    }
+
+    /**
+     * @param Request $request
+     * @param mixed $data
+     * @param int $statusCode
+     *
+     * @return Response
+     */
+    private function respond(Request $request, $data, $statusCode = Response::HTTP_OK)
     {
         $serializer = $this->createSerializer();
         $acceptFormat = $request->headers->get('Accept');
@@ -113,7 +135,7 @@ class SampleController extends Controller
         if ('application/xml' === $acceptFormat) {
             $content = $serializer->serialize($data, 'xml');
 
-            $response = new Response($content);
+            $response = new Response($content, $statusCode);
             $response->headers->set('Content-Type', MediaTypes::XML);
 
             return $response;
@@ -121,7 +143,7 @@ class SampleController extends Controller
 
         if ('application/json' === $acceptFormat) {
             $content = $serializer->serialize($data, 'json');
-            $response = new Response($content);
+            $response = new Response($content, $statusCode);
             $response->headers->set('Content-Type', MediaTypes::JSON);
 
             return $response;

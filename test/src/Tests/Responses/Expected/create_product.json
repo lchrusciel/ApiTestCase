@@ -1,0 +1,5 @@
+{
+    "id": @integer@,
+    "name": "Star Wars T-Shirt",
+    "price": 1000
+}
