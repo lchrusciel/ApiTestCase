@@ -30,6 +30,14 @@ abstract class JsonApiTestCase extends ApiTestCase
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function buildMatcher()
+    {
+        return MatcherFactory::buildJsonMatcher();
+    }
+
+    /**
      * Asserts that response has JSON content.
      * If filename is set, asserts that response content matches the one in given file.
      * If statusCode is set, asserts that response has given status code.
