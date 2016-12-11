@@ -75,6 +75,20 @@ abstract class ApiTestCase extends WebTestCase
     }
 
     /**
+     * @afterClass
+     */
+    public static function ensureSharedKernelShutdown()
+    {
+        if (null !== static::$sharedKernel) {
+            $container = static::$sharedKernel->getContainer();
+            static::$sharedKernel->shutdown();
+            if ($container instanceof ResettableContainerInterface) {
+                $container->reset();
+            }
+        }
+    }
+
+    /**
      * @before
      */
     public function setUpClient()
@@ -106,6 +120,8 @@ abstract class ApiTestCase extends WebTestCase
 
         \Mockery::close();
         $this->client = null;
+        $this->entityManager = null;
+        $this->fixtureLoader = null;
 
         parent::tearDown();
     }
