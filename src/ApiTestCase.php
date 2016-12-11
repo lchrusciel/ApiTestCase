@@ -21,6 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\DependencyInjection\ResettableContainerInterface;
 
 /**
  * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
