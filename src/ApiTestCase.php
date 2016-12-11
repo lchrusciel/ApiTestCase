@@ -75,6 +75,20 @@ abstract class ApiTestCase extends WebTestCase
     }
 
     /**
+     * @afterClass
+     */
+    public static function ensureSharedKernelShutdown()
+    {
+        if (null !== static::$sharedKernel) {
+            $container = static::$sharedKernel->getContainer();
+            static::$sharedKernel->shutdown();
+            if ($container instanceof ResettableContainerInterface) {
+                $container->reset();
+            }
+        }
+    }
+
+    /**
      * @before
      */
     public function setUpClient()
