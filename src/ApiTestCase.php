@@ -71,7 +71,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     public static function createSharedKernel()
     {
-        static::$sharedKernel = static::createKernel();
+        static::$sharedKernel = static::createKernel(['debug' => false]);
         static::$sharedKernel->boot();
     }
 
@@ -94,7 +94,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     public function setUpClient()
     {
-        $this->client = static::createClient();
+        $this->client = static::createClient(['debug' => false]);
     }
 
     /**
