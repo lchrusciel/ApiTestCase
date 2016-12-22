@@ -17,5 +17,6 @@ namespace Lakion\ApiTestCase;
 final class MediaTypes
 {
     const JSON = 'application/json';
+    const JSONLD = 'application/json+ld';
     const XML = 'application/xml';
 }
