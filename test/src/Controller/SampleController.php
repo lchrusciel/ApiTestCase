@@ -12,7 +12,6 @@
 namespace Lakion\ApiTestCase\Test\Controller;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Lakion\ApiTestCase\MediaTypes;
 use Lakion\ApiTestCase\Test\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -44,7 +43,7 @@ class SampleController extends Controller
         $content = '<?xml version="1.0" encoding="UTF-8"?><greetings>Hello world!</greetings>';
 
         $response = new Response($content);
-        $response->headers->set('Content-Type', MediaTypes::XML);
+        $response->headers->set('Content-Type', 'application/xml');
 
         return $response;
     }
@@ -66,7 +65,7 @@ class SampleController extends Controller
         $content = sprintf('<?xml version="1.0" encoding="UTF-8"?><message>%s</message>', $content['message']);
 
         $response = new Response($content);
-        $response->headers->set('Content-Type', MediaTypes::XML);
+        $response->headers->set('Content-Type', 'application/xml');
 
         return $response;
     }
@@ -136,7 +135,7 @@ class SampleController extends Controller
             $content = $serializer->serialize($data, 'xml');
 
             $response = new Response($content, $statusCode);
-            $response->headers->set('Content-Type', MediaTypes::XML);
+            $response->headers->set('Content-Type', 'application/xml');
 
             return $response;
         }
@@ -144,7 +143,7 @@ class SampleController extends Controller
         if ('application/json' === $acceptFormat) {
             $content = $serializer->serialize($data, 'json');
             $response = new Response($content, $statusCode);
-            $response->headers->set('Content-Type', MediaTypes::JSON);
+            $response->headers->set('Content-Type', 'application/json');
 
             return $response;
         }

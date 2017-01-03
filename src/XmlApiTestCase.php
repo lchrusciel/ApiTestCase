@@ -26,7 +26,7 @@ abstract class XmlApiTestCase extends ApiTestCase
      */
     public function setUpClient()
     {
-        $this->client = static::createClient(array(), array('HTTP_ACCEPT' => MediaTypes::XML));
+        $this->client = static::createClient(array(), array('HTTP_ACCEPT' => 'application/xml'));
     }
 
     /**
@@ -60,7 +60,7 @@ abstract class XmlApiTestCase extends ApiTestCase
      */
     private function assertXmlHeader(Response $response)
     {
-        parent::assertHeader($response, MediaTypes::XML);
+        parent::assertHeader($response, 'application/xml');
     }
 
     /**
