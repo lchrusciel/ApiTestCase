@@ -26,7 +26,7 @@ abstract class JsonApiTestCase extends ApiTestCase
      */
     public function setUpClient()
     {
-        $this->client = static::createClient(array(), array('HTTP_ACCEPT' => MediaTypes::JSON));
+        $this->client = static::createClient(array(), array('HTTP_ACCEPT' => 'application/json'));
     }
 
     /**
@@ -64,7 +64,7 @@ abstract class JsonApiTestCase extends ApiTestCase
      */
     private function assertJsonHeader(Response $response)
     {
-        parent::assertHeader($response, MediaTypes::JSON);
+        parent::assertHeader($response, 'application/json');
     }
 
     /**
