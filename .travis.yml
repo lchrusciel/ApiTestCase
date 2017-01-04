@@ -3,32 +3,32 @@ language: php
 sudo: false
 
 cache:
-  directories:
-    - bin
-    - vendor
+    directories:
+        - bin
+        - vendor
 
 php:
-  - 7.0
-  - 5.6
+    - 7.1
+    - 7.0
+    - 5.6
+    - hhvm
 
-env:
-  matrix:
-    - COMPOSER_OPTIONS="--prefer-lowest"
-    - COMPOSER_OPTIONS=""
+matrix:
+    fast_finish: true
+    allow_failures:
+        - php: hhvm
 
 before_install:
-  - phpenv config-rm xdebug.ini
-
-  - composer self-update
+    - phpenv config-rm xdebug.ini || true
 
 install:
-  - composer update --prefer-dist $COMPOSER_OPTIONS
+    - composer update --prefer-dist
 
 before_script:
-  - test/app/console doctrine:database:create -vvv
-  - test/app/console doctrine:schema:create -vvv
+    - test/app/console doctrine:database:create -vvv
+    - test/app/console doctrine:schema:create -vvv
 
 script:
-  - composer validate --strict
+    - composer validate --strict
 
-  - bin/phpunit
+    - bin/phpunit

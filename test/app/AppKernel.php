@@ -47,7 +47,7 @@ class AppKernel extends Kernel
                     'driver' => 'pdo_sqlite',
                     'user' => 'root',
                     'password' => '',
-                    'path' => '%kernel.root_dir%/db.sqlite',
+                    'path' => '%kernel.cache_dir%/db.sqlite',
                 ),
                 'orm' => array(
                     'auto_mapping' => false,
