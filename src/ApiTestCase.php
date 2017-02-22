@@ -236,8 +236,9 @@ abstract class ApiTestCase extends WebTestCase
     {
         if (!$response->isSuccessful()) {
             $openCommand = isset($_SERVER['OPEN_BROWSER_COMMAND']) ? $_SERVER['OPEN_BROWSER_COMMAND'] : 'open %s';
-
-            $filename = PathBuilder::build(rtrim(sys_get_temp_dir(), \DIRECTORY_SEPARATOR), uniqid() . '.html');
+            $tmpDir = isset($_SERVER['TMP_DIR']) ? $_SERVER['TMP_DIR'] : sys_get_temp_dir();
+            
+            $filename = PathBuilder::build(rtrim($tmpDir, \DIRECTORY_SEPARATOR), uniqid() . '.html');
             file_put_contents($filename, $response->getContent());
             system(sprintf($openCommand, escapeshellarg($filename)));
 
