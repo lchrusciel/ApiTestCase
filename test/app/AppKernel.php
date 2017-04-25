@@ -26,6 +26,7 @@ class AppKernel extends Kernel
         return array(
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle(),
         );
     }
 
@@ -60,8 +61,31 @@ class AppKernel extends Kernel
                             'type' => 'yml',
                         ),
                     ),
-                ),
+                )
             ));
+
+            $container->loadFromExtension('doctrine_mongodb', array(
+                'connections' => array(
+                    'default' => array(
+                        'server' => ' mongodb://localhost:27017',
+                    )
+                ),
+                'document_managers' => array(
+                    'default' => array(
+                        'auto_mapping' => false,
+                        'mappings' => array(
+                            'Lakion\ApiTestCase' => array(
+                                'dir' => '%kernel.root_dir%/config/doctrine',
+                                'prefix' => 'Lakion\ApiTestCase\Test\Entity',
+                                'alias' => 'ApiTestCase',
+                                'is_bundle' => false,
+                                'type' => 'yml',
+                            ),
+                        ),
+                    )
+                )
+            ));
+
 
             $container->setDefinition('app.third_party_api_client', new Definition(
                 'Lakion\ApiTestCase\Test\Service\ThirdPartyApiClient'

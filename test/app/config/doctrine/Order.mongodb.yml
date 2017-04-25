@@ -1,0 +1,14 @@
+Lakion\ApiTestCase\Test\Document\Order:
+    db: test_db
+    collection: test_order
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        code:
+            type: string
+        price:
+            type: integer

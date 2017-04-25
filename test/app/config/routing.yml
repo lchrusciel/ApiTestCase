@@ -27,3 +27,5 @@ app_product_show:
     methods: [GET]
     defaults:
         _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::showAction"
+
+

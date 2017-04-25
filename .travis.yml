@@ -25,7 +25,7 @@ before_install:
     - phpenv config-rm xdebug.ini || true
 
 install:
-    - composer update --prefer-dist
+    - composer update --prefer-dist --ignore-platform-reqs
 
 before_script:
     - test/app/console doctrine:database:create -vvv
@@ -35,3 +35,4 @@ script:
     - composer validate --strict
 
     - bin/phpunit
+

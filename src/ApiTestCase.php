@@ -118,7 +118,7 @@ abstract class ApiTestCase extends WebTestCase
         }
 
         if (isset($_SERVER['IS_DOCTRINE_ODM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ODM_SUPPORTED']) {
-            $this->documentManager = static::$sharedKernel->getContainer()->get('doctrine.mongodb.odm.document_manager');
+            $this->documentManager = static::$sharedKernel->getContainer()->get('doctrine.odm.mongodb.document_manager');
             $this->documentManager->getConnection()->connect();
             $fixtureLoaders[] = new Fixtures(new Doctrine($this->getDocumentManager()), [], $this->getFixtureProcessors());
         }
