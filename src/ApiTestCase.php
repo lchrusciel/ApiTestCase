@@ -12,7 +12,9 @@
 namespace Lakion\ApiTestCase;
 
 use Coduo\PHPMatcher\Matcher;
+use Doctrine\Common\DataFixtures\Purger\MongoDBPurger;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ORM\EntityManager;
 use Nelmio\Alice\Fixtures;
 use Nelmio\Alice\Persister\Doctrine;
@@ -57,7 +59,7 @@ abstract class ApiTestCase extends WebTestCase
     protected $dataFixturesPath;
 
     /**
-     * @var Fixtures
+     * @var CompositeFixtureLoader
      */
     private $fixtureLoader;
 
@@ -65,6 +67,11 @@ abstract class ApiTestCase extends WebTestCase
      * @var EntityManager
      */
     private $entityManager;
+
+    /**
+     * @var DocumentManager
+     */
+    private $documentManager;
 
     /**
      * @beforeClass
@@ -102,11 +109,22 @@ abstract class ApiTestCase extends WebTestCase
      */
     public function setUpDatabase()
     {
+        $fixtureLoaders = [];
+
         if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
             $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
             $this->entityManager->getConnection()->connect();
+            $fixtureLoaders[] = new Fixtures(new Doctrine($this->getEntityManager()), [], $this->getFixtureProcessors());
+        }
 
-            $this->fixtureLoader = new Fixtures(new Doctrine($this->getEntityManager()), [], $this->getFixtureProcessors());
+        if (isset($_SERVER['IS_DOCTRINE_ODM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ODM_SUPPORTED']) {
+            $this->documentManager = static::$sharedKernel->getContainer()->get('doctrine.mongodb.odm.document_manager');
+            $this->documentManager->getConnection()->connect();
+            $fixtureLoaders[] = new Fixtures(new Doctrine($this->getDocumentManager()), [], $this->getFixtureProcessors());
+        }
+
+        if($fixtureLoaders) {
+            $this->fixtureLoader = new CompositeFixtureLoader($fixtureLoaders);
             $this->purgeDatabase();
         }
     }
@@ -166,10 +184,14 @@ abstract class ApiTestCase extends WebTestCase
 
     protected function purgeDatabase()
     {
-        $purger = new ORMPurger($this->getEntityManager());
-        $purger->purge();
+        $purger = new CompositeObjectPurger([
+            new ORMPurger($this->getEntityManager()),
+            new MongoDBPurger($this->getDocumentManager())
+        ]);
 
+        $purger->purge();
         $this->getEntityManager()->clear();
+        $this->getDocumentManager()->clear();
     }
 
     /**
@@ -300,7 +322,7 @@ abstract class ApiTestCase extends WebTestCase
     }
 
     /**
-     * @return Fixtures
+     * @return CompositeFixtureLoader
      */
     protected function getFixtureLoader()
     {
@@ -321,6 +343,18 @@ abstract class ApiTestCase extends WebTestCase
         }
 
         return $this->entityManager;
+    }
+
+    /**
+     * @return DocumentManager
+     */
+    protected function getDocumentManager()
+    {
+        if (null === $this->documentManager || !$this->documentManager->getConnection()->isConnected()) {
+            static::fail('Could not establish test nosql database connection.');
+        }
+
+        return $this->documentManager;
     }
 
     /**
