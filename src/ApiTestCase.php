@@ -104,6 +104,16 @@ abstract class ApiTestCase extends WebTestCase
         $this->client = static::createClient(['debug' => false]);
     }
 
+    private function isOrmSupported()
+    {
+        return isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED'];
+    }
+
+    private function isOdmSupported()
+    {
+        return isset($_SERVER['IS_DOCTRINE_ODM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ODM_SUPPORTED'];
+    }
+
     /**
      * @before
      */
@@ -111,19 +121,19 @@ abstract class ApiTestCase extends WebTestCase
     {
         $fixtureLoaders = [];
 
-        if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
+        if($this->isOrmSupported()) {
             $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
             $this->entityManager->getConnection()->connect();
             $fixtureLoaders[] = new Fixtures(new Doctrine($this->getEntityManager()), [], $this->getFixtureProcessors());
         }
 
-        if (isset($_SERVER['IS_DOCTRINE_ODM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ODM_SUPPORTED']) {
+        if ($this->isOdmSupported()) {
             $this->documentManager = static::$sharedKernel->getContainer()->get('doctrine.odm.mongodb.document_manager');
             $this->documentManager->getConnection()->connect();
             $fixtureLoaders[] = new Fixtures(new Doctrine($this->getDocumentManager()), [], $this->getFixtureProcessors());
         }
 
-        if($fixtureLoaders) {
+        if(!empty($fixtureLoaders)) {
             $this->fixtureLoader = new CompositeFixtureLoader($fixtureLoaders);
             $this->purgeDatabase();
         }
@@ -190,8 +200,14 @@ abstract class ApiTestCase extends WebTestCase
         ]);
 
         $purger->purge();
-        $this->getEntityManager()->clear();
-        $this->getDocumentManager()->clear();
+
+        if ($this->isOrmSupported()) {
+            $this->getEntityManager()->clear();
+        }
+
+        if ($this->isOdmSupported()) {
+            $this->getDocumentManager()->clear();
+        }
     }
 
     /**

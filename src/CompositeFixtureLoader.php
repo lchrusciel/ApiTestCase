@@ -13,7 +13,7 @@ class CompositeFixtureLoader
     }
 
     /**
-     * @param       $files
+     * @param array|string $files
      * @param array $options
      *
      * @return array

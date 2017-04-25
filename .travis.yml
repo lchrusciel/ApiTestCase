@@ -35,4 +35,3 @@ script:
     - composer validate --strict
 
     - bin/phpunit
-

@@ -76,7 +76,7 @@ class AppKernel extends Kernel
                         'mappings' => array(
                             'Lakion\ApiTestCase' => array(
                                 'dir' => '%kernel.root_dir%/config/doctrine',
-                                'prefix' => 'Lakion\ApiTestCase\Test\Entity',
+                                'prefix' => 'Lakion\ApiTestCase\Test\Document',
                                 'alias' => 'ApiTestCase',
                                 'is_bundle' => false,
                                 'type' => 'yml',
