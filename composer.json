@@ -36,7 +36,10 @@
         "polishsymfonycommunity/symfony-mocker-container": "^1.0",
         "symfony/browser-kit": "^3.2",
         "symfony/finder": "^3.2",
-        "symfony/framework-bundle": "^3.2"
+        "symfony/framework-bundle": "^3.2",
+        "alcaeus/mongo-php-adapter": "1.0.*",
+        "doctrine/mongodb-odm": "^1.0",
+        "doctrine/mongodb-odm-bundle": "^3.0"
     },
     "require-dev": {
         "symfony/serializer": "^3.2"

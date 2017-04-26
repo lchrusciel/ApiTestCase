@@ -1,0 +1,12 @@
+Lakion\ApiTestCase\Test\Document\Order:
+    db: test_db
+    collection: test_order
+    id:
+        type: string
+        id: true
+        strategy: IDENTITY
+    fields:
+        code:
+            type: string
+        price:
+            type: integer
