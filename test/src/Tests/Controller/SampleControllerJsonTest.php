@@ -12,7 +12,7 @@
 namespace Lakion\ApiTestCase\Test\Tests\Controller;
 
 use Lakion\ApiTestCase\JsonApiTestCase;
-use PHPUnit_Framework_AssertionFailedError;
+use PHPUnit\Framework\AssertionFailedError;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -30,7 +30,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_AssertionFailedError
+     * @expectedException \PHPUnit\Framework\AssertionFailedError
      */
     public function testGetHelloWorldIncorrectResponse()
     {

@@ -12,7 +12,6 @@
 namespace Lakion\ApiTestCase\Test\Tests\Controller;
 
 use Lakion\ApiTestCase\XmlApiTestCase;
-use PHPUnit_Framework_AssertionFailedError;
 
 /**
  * @author Arkadiusz Krakowiak <arkadiusz.krakowiak@lakion.com>
@@ -29,7 +28,7 @@ class SampleControllerXmlTest extends XmlApiTestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_AssertionFailedError
+     * @expectedException \PHPUnit\Framework\AssertionFailedError
      */
     public function testGetHelloWorldIncorrectResponse()
     {
