@@ -221,10 +221,10 @@ To load fixtures for the test, you need to define a simple ``YAML`` file in ``sr
 ```yml
     Lakion\ApiTestCase\Test\Entity\Book:
         book1:
-            name: "Lord of The Rings"
+            title: "Lord of The Rings"
             author: "J. R. R. Tolkien"
         book2:
-            name: "Game of Thrones"
+            title: "Game of Thrones"
             price: "George R. R. Martin"
 ```
 
