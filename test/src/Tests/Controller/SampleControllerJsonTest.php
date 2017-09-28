@@ -12,7 +12,6 @@
 namespace Lakion\ApiTestCase\Test\Tests\Controller;
 
 use Lakion\ApiTestCase\JsonApiTestCase;
-use PHPUnit\Framework\AssertionFailedError;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
