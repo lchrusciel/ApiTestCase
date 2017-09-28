@@ -1,3 +1,5 @@
 {
-    "message": "Hello ApiTestCase World!"
+    "message": "Hello ApiTestCase World!",
+    "unicode": "€ ¥ 💰",
+    "path": "/p/a/t/h"
 }
