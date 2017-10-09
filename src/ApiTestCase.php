@@ -166,9 +166,10 @@ abstract class ApiTestCase extends WebTestCase
         return parent::getKernelClass();
     }
 
-    protected function purgeDatabase()
+    protected function purgeDatabase($mode=2)
     {
         $purger = new ORMPurger($this->getEntityManager());
+        $purger->setPurgeMode($mode);
         $purger->purge();
 
         $this->getEntityManager()->clear();
@@ -303,7 +304,24 @@ abstract class ApiTestCase extends WebTestCase
         $source = $this->getFixtureRealPath($source);
         $this->assertSourceExists($source);
 
-        return $this->getFixtureLoader()->loadFiles($source);
+        $file[] = $source;
+        return $this->getFixtureLoader()->load($file);
+    }
+
+    /**
+     * @param string[] $source
+     *
+     * @return array
+     */
+    protected function loadFixturesFromFiles($sources)
+    {
+        foreach ($sources as $source) {
+            $path = $this->getFixtureRealPath($source);
+            $paths[] = $path;
+            $this->assertSourceExists($path);
+        }
+
+        return $this->getFixtureLoader()->load($paths);
     }
 
     /**
