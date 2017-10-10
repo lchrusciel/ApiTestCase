@@ -14,7 +14,7 @@ namespace Lakion\ApiTestCase;
 use Coduo\PHPMatcher\Matcher;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
-use Nelmio\Alice\Fixtures;
+use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\Persister\Doctrine;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -57,7 +57,7 @@ abstract class ApiTestCase extends WebTestCase
     protected $dataFixturesPath;
 
     /**
-     * @var Fixtures
+     * @var NativeLoader
      */
     private $fixtureLoader;
 
@@ -106,7 +106,9 @@ abstract class ApiTestCase extends WebTestCase
             $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
             $this->entityManager->getConnection()->connect();
 
-            $this->fixtureLoader = new Fixtures(new Doctrine($this->getEntityManager()), [], $this->getFixtureProcessors());
+//             $this->fixtureLoader = new Fixtures(new Doctrine($this->getEntityManager()), [], $this->getFixtureProcessors());
+            $this->fixtureLoader = static::$sharedKernel->getContainer()->get('fidry_alice_data_fixtures.doctrine.persister_loader');
+
             $this->purgeDatabase();
         }
     }
@@ -164,9 +166,10 @@ abstract class ApiTestCase extends WebTestCase
         return parent::getKernelClass();
     }
 
-    protected function purgeDatabase()
+    protected function purgeDatabase($mode=2)
     {
         $purger = new ORMPurger($this->getEntityManager());
+        $purger->setPurgeMode($mode);
         $purger->purge();
 
         $this->getEntityManager()->clear();
@@ -181,7 +184,11 @@ abstract class ApiTestCase extends WebTestCase
      */
     protected function get($id)
     {
-        return $this->client->getContainer()->get($id);
+        if (null === $this->client) {
+            throw new \RuntimeException('Please, set up the client before you will try to load a service from the container');
+        }
+
+        return static::$kernel->getContainer()->get($id);
     }
 
     /**
@@ -284,7 +291,7 @@ abstract class ApiTestCase extends WebTestCase
             $files[] = $file->getRealPath();
         }
 
-        return $this->getFixtureLoader()->loadFiles($files);
+        return $this->getFixtureLoader()->load($files);
     }
 
     /**
@@ -297,7 +304,24 @@ abstract class ApiTestCase extends WebTestCase
         $source = $this->getFixtureRealPath($source);
         $this->assertSourceExists($source);
 
-        return $this->getFixtureLoader()->loadFiles($source);
+        $file[] = $source;
+        return $this->getFixtureLoader()->load($file);
+    }
+
+    /**
+     * @param string[] $source
+     *
+     * @return array
+     */
+    protected function loadFixturesFromFiles($sources)
+    {
+        foreach ($sources as $source) {
+            $path = $this->getFixtureRealPath($source);
+            $paths[] = $path;
+            $this->assertSourceExists($path);
+        }
+
+        return $this->getFixtureLoader()->load($paths);
     }
 
     /**
