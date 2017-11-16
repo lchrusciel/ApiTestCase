@@ -14,8 +14,7 @@ namespace Lakion\ApiTestCase;
 use Coduo\PHPMatcher\Matcher;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
-use Nelmio\Alice\Fixtures;
-use Nelmio\Alice\Persister\Doctrine;
+use Fidry\AliceDataFixtures\LoaderInterface;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Finder\Finder;
@@ -57,7 +56,7 @@ abstract class ApiTestCase extends WebTestCase
     protected $dataFixturesPath;
 
     /**
-     * @var Fixtures
+     * @var LoaderInterface
      */
     private $fixtureLoader;
 
@@ -106,7 +105,8 @@ abstract class ApiTestCase extends WebTestCase
             $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
             $this->entityManager->getConnection()->connect();
 
-            $this->fixtureLoader = new Fixtures(new Doctrine($this->getEntityManager()), [], $this->getFixtureProcessors());
+            $this->fixtureLoader = static::$sharedKernel->getContainer()->get('fidry_alice_data_fixtures.loader.doctrine');
+
             $this->purgeDatabase();
         }
     }
@@ -284,7 +284,7 @@ abstract class ApiTestCase extends WebTestCase
             $files[] = $file->getRealPath();
         }
 
-        return $this->getFixtureLoader()->loadFiles($files);
+        return $this->getFixtureLoader()->load($files);
     }
 
     /**
@@ -297,11 +297,11 @@ abstract class ApiTestCase extends WebTestCase
         $source = $this->getFixtureRealPath($source);
         $this->assertSourceExists($source);
 
-        return $this->getFixtureLoader()->loadFiles($source);
+        return $this->getFixtureLoader()->load([$source]);
     }
 
     /**
-     * @return Fixtures
+     * @return LoaderInterface
      */
     protected function getFixtureLoader()
     {

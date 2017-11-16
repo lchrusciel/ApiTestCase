@@ -36,7 +36,8 @@
         "polishsymfonycommunity/symfony-mocker-container": "^1.0",
         "symfony/browser-kit": "^3.2",
         "symfony/finder": "^3.2",
-        "symfony/framework-bundle": "^3.2"
+        "symfony/framework-bundle": "^3.2",
+        "theofidry/alice-data-fixtures": "^1.0@RC"
     },
     "require-dev": {
         "symfony/serializer": "^3.2"
@@ -58,5 +59,6 @@
         "branch-alias": {
             "dev-master": "2.0-dev"
         }
-    }
+    },
+    "minimum-stability": "beta"
 }
