@@ -60,5 +60,5 @@
             "dev-master": "2.0-dev"
         }
     },
-    "minimum-stability": "beta"
+    "minimum-stability": "rc"
 }
