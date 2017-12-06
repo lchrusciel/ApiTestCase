@@ -249,8 +249,6 @@ To customize your test suite configuration you can add a few more options to php
 ```xml
 <php>
     <server name="KERNEL_CLASS" value="Acme\Kernel" />
-    <server name="KERNEL_CLASS_PATH" value="/path/to/kernel/class" />
-    <server name="KERNEL_DIR" value="/path/to/dir/with/kernel" />
     <server name="EXPECTED_RESPONSE_DIR" value="/path/to/expected/responses/" />
     <server name="MOCKED_RESPONSE_DIR" value="/path/to/mocked/responses/" />
     <server name="FIXTURES_DIR" value="/path/to/DataFixtures/ORM/" />
@@ -262,8 +260,6 @@ To customize your test suite configuration you can add a few more options to php
 ```
 
  * `KERNEL_CLASS` allows you to specify exactly which class should be used in order to setup the Kernel. 
- * `KERNEL_CLASS_PATH` allows you to specify exactly which file should be used in order to setup the Kernel (kernel should be in the global namespace). 
- * `KERNEL_DIR` variable contains a path to directory containing the kernel of your project. If not set, WebTestCase will look for AppKernel in the folder where you have your phpunit.xml file.
  * `EXPECTED_RESPONSE_DIR` and `MOCKED_RESPONSE_DIR` variables contain paths to folders with expected and mocked responses. `EXPECTED_RESPONSE_DIR` is used when API result is compared with existing json file. `MOCKED_RESPONSE_DIR` should contains files with mocked responses from outside API's. Both variable can have same value but we recommend to keep it separated. If these values aren't set, ApiTestCase will try to guess location of responses. It will try to look for the responses in a following folders '../Responses/Expected' and '../Responses/Mocked' relatively located to your controller test class.
  * `FIXTURES_DIR` variable contains a path to folder with your data fixtures. By default if this variable isn't set it will search for `../DataFixtures/ORM/` relatively located to your test class . ApiTestCase throws RunTimeException if folder doesn't exist or there won't be any files to load.
  * `OPEN_ERROR_IN_BROWSER` is a flag which turns on displaying error in a browser window. The default value is false.

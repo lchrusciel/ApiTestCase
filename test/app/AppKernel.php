@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
  */
 
+namespace Lakion\ApiTestCase\Test\App;
+
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Definition;
@@ -24,8 +28,8 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         return array(
-            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new FrameworkBundle(),
+            new DoctrineBundle(),
         );
     }
 
