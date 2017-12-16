@@ -12,6 +12,7 @@
 namespace Lakion\ApiTestCase\Test\App;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Lakion\ApiTestCase\Test\Service\ThirdPartyApiClient;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -67,9 +68,10 @@ class AppKernel extends Kernel
                 ),
             ));
 
-            $container->setDefinition('app.third_party_api_client', new Definition(
-                'Lakion\ApiTestCase\Test\Service\ThirdPartyApiClient'
-            ));
+            $apiClientDefinition = new Definition(ThirdPartyApiClient::class);
+            $apiClientDefinition->setPublic(true);
+
+            $container->setDefinition('app.third_party_api_client', $apiClientDefinition);
         });
     }
 
