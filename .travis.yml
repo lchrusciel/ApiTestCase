@@ -26,8 +26,7 @@ install:
     - composer update --prefer-dist $PREFER_LOWEST
 
 before_script:
-    - test/app/console doctrine:database:create -vvv
-    - test/app/console doctrine:schema:create -vvv
+    - test/app/console doctrine:schema:update --force -vvv
 
 script:
     - composer validate --strict
