@@ -203,7 +203,40 @@ From this moment, first `getInventory` method call will return the response defi
 ApiTestCase is integrated with ``nelmio/alice``. Thanks to this nice library you can easily load your fixtures when you need them. You have to define your fixtures and place them in an appropriate directory.
 Here is some example how to define your fixtures and use case. For more information how to define your fixtures check [Alice's documentation](https://github.com/nelmio/alice). 
 
-Let's say you have a mapped Doctrine entity called Book in your application: 
+In order to use Alice with Doctrine, you should enable two additional bundles:
+
+**Symfony 4.0+**
+
+```php
+// config/bundles.php
+return [
+    // ...
+    
+    Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle::class => ['test' => true],
+    Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle::class => ['test' => true],
+];
+```
+
+**Symfony 3**
+
+```php
+// app/AppKernel.php
+class AppKernel extends Kernel
+{
+    public function registerBundles()
+    {
+        // ...
+
+        if ('test' === $this->getEnvironment()) {
+            new Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle(),
+            new Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle(),
+        }
+    }
+}
+
+```
+
+Now, let's say you have a mapped Doctrine entity called Book in your application: 
 
 ```php
     class Book 
