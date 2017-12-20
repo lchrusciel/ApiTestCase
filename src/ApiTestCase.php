@@ -146,21 +146,6 @@ abstract class ApiTestCase extends WebTestCase
             return '\\' . ltrim($_SERVER['KERNEL_CLASS'], '\\');
         }
 
-        if (isset($_SERVER['KERNEL_CLASS_PATH'])) {
-            $paths = [
-                $_SERVER['KERNEL_CLASS_PATH'],
-                static::getPhpUnitXmlDir() . DIRECTORY_SEPARATOR . $_SERVER['KERNEL_CLASS_PATH']
-            ];
-
-            foreach ($paths as $path) {
-                if (file_exists($path)) {
-                    require_once $path;
-
-                    return '\\' . (new \SplFileInfo($path))->getBasename('.php');
-                }
-            }
-        }
-
         return parent::getKernelClass();
     }
 

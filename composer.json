@@ -34,12 +34,12 @@
         "phpspec/php-diff": "^1.1",
         "phpunit/phpunit": "^6.0",
         "polishsymfonycommunity/symfony-mocker-container": "^1.0",
-        "symfony/browser-kit": "^3.2",
-        "symfony/finder": "^3.2",
-        "symfony/framework-bundle": "^3.2"
+        "symfony/browser-kit": "^3.2|^4.0",
+        "symfony/finder": "^3.2|^4.0",
+        "symfony/framework-bundle": "^3.3|^4.0"
     },
     "require-dev": {
-        "symfony/serializer": "^3.2"
+        "symfony/serializer": "^3.2|^4.0"
     },
     "config": {
         "bin-dir": "bin"
@@ -51,7 +51,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Lakion\\ApiTestCase\\Test\\": "test/src/"
+            "Lakion\\ApiTestCase\\Test\\": "test/src/",
+            "Lakion\\ApiTestCase\\Test\\App\\": "test/app/"
         }
     },
     "extra": {

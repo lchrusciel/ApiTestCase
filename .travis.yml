@@ -11,6 +11,11 @@ php:
     - 7.1
     - 7.0
 
+env:
+    matrix:
+        - PREFER_LOWEST="--prefer-lowest"
+        - PREFER_LOWEST=""
+
 matrix:
     fast_finish: true
 
@@ -18,11 +23,10 @@ before_install:
     - phpenv config-rm xdebug.ini || true
 
 install:
-    - composer update --prefer-dist
+    - composer update --prefer-dist $PREFER_LOWEST
 
 before_script:
-    - test/app/console doctrine:database:create -vvv
-    - test/app/console doctrine:schema:create -vvv
+    - test/app/console doctrine:schema:update --force -vvv
 
 script:
     - composer validate --strict

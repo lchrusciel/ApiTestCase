@@ -9,6 +9,11 @@
  * file that was distributed with this source code.
  */
 
+namespace Lakion\ApiTestCase\Test\App;
+
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Lakion\ApiTestCase\Test\Service\ThirdPartyApiClient;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Definition;
@@ -24,8 +29,8 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         return array(
-            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new FrameworkBundle(),
+            new DoctrineBundle(),
         );
     }
 
@@ -63,9 +68,10 @@ class AppKernel extends Kernel
                 ),
             ));
 
-            $container->setDefinition('app.third_party_api_client', new Definition(
-                'Lakion\ApiTestCase\Test\Service\ThirdPartyApiClient'
-            ));
+            $apiClientDefinition = new Definition(ThirdPartyApiClient::class);
+            $apiClientDefinition->setPublic(true);
+
+            $container->setDefinition('app.third_party_api_client', $apiClientDefinition);
         });
     }
 
