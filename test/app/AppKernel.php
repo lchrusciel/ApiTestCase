@@ -12,7 +12,9 @@
 namespace Lakion\ApiTestCase\Test\App;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle;
 use Lakion\ApiTestCase\Test\Service\ThirdPartyApiClient;
+use Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -31,6 +33,8 @@ class AppKernel extends Kernel
         return array(
             new FrameworkBundle(),
             new DoctrineBundle(),
+            new NelmioAliceBundle(),
+            new FidryAliceDataFixturesBundle(),
         );
     }
 
