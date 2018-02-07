@@ -32,14 +32,3 @@ script:
     - composer validate --strict
 
     - bin/phpunit
-
-jobs:
-    include:
-        -   stage: Test PHPUnit 7
-            php: 7.1
-
-            install:
-                - composer require phpunit/phpunit:dev-master phpunit/php-code-coverage:dev-master phpunit/php-timer:dev-master phpunit/php-token-stream:dev-master phpunit/phpunit-mock-objects:dev-master --no-interaction --update-with-all-dependencies --prefer-dist
-
-            script:
-                - bin/phpunit
