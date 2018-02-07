@@ -1,3 +1,5 @@
 {
-    "message": @string@
+    "message": @string@,
+    "unicode": @string@,
+    "path": @string@
 }

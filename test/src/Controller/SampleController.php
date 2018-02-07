@@ -37,7 +37,11 @@ class SampleController extends Controller
         $acceptFormat = $request->headers->get('Accept');
 
         if ('application/json' === $acceptFormat) {
-            return new JsonResponse(['message' => 'Hello ApiTestCase World!']);
+            return new JsonResponse([
+                'message' => 'Hello ApiTestCase World!',
+                'unicode' => '€ ¥ 💰',
+                'path' => '/p/a/t/h'
+            ]);
         }
 
         $content = '<?xml version="1.0" encoding="UTF-8"?><greetings>Hello world!</greetings>';

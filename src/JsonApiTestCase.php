@@ -87,6 +87,6 @@ abstract class JsonApiTestCase extends ApiTestCase
      */
     private function prettifyJson($content)
     {
-        return json_encode(json_decode($content), JSON_PRETTY_PRINT);
+        return json_encode(json_decode($content), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 }

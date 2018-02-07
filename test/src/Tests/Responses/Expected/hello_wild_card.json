@@ -1,3 +1,5 @@
 {
-    "message": @wildcard@
+    "message": @wildcard@,
+    "unicode": @wildcard@,
+    "path": @wildcard@
 }
