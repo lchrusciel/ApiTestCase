@@ -26,7 +26,7 @@
     "require": {
         "php": "^7.1",
 
-        "coduo/php-matcher": "^2.1",
+        "coduo/php-matcher": "^2.3|^3.0",
         "doctrine/data-fixtures": "^1.2",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/orm": "^2.5",
