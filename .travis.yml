@@ -4,26 +4,44 @@ sudo: false
 
 cache:
     directories:
-        - bin
-        - vendor
+        - ~/.composer/cache/files
 
 php:
-    - 7.2
     - 7.1
+    - 7.2
 
 env:
-    matrix:
-        - PREFER_LOWEST=""
-        - PREFER_LOWEST="--prefer-lowest"
-
-matrix:
-    fast_finish: true
+    - SYMFONY_VERSION=3.4.*
+    - PHPUNIT_VERSION=^6.0
+    - CODUO_VERSION=^2.3
+    - MOST_RECENT=true
 
 before_install:
     - phpenv config-rm xdebug.ini || true
 
 install:
-    - composer update --prefer-dist $PREFER_LOWEST
+    - |
+        if [ ! -z "${SYMFONY_VERSION}" ]
+        then
+            composer require "symfony/browser-kit:${SYMFONY_VERSION}" --no-update --no-scripts --prefer-dist
+            composer require "symfony/finder:${SYMFONY_VERSION}" --no-update --no-scripts --prefer-dist
+            composer require "symfony/framework-bundle:${SYMFONY_VERSION}" --no-update --no-scripts --prefer-dist
+            composer require --dev "symfony/serializer:${SYMFONY_VERSION}" --no-update --no-scripts --prefer-dist
+        fi
+
+    - |
+        if [ ! -z "${PHPUNIT_VERSION}" ]
+        then
+            composer require --dev "phpunit/phpunit:${PHPUNIT_VERSION}" --no-update --no-scripts --prefer-dist
+        fi
+
+    - |
+        if [ ! -z "${CODUO_VERSION}" ]
+        then
+            composer require "coduo/php-matcher:${CODUO_VERSION}" --no-update --no-scripts --prefer-dist
+        fi
+
+    - composer update --prefer-dist
 
 before_script:
     - test/app/console doctrine:schema:update --force -vvv

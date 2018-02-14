@@ -85,9 +85,9 @@ class MatcherFactory
             new Matcher\NullMatcher(),
             new Matcher\StringMatcher($parser),
             new Matcher\IntegerMatcher($parser),
-            new Matcher\BooleanMatcher(),
+            new Matcher\BooleanMatcher($parser),
             new Matcher\DoubleMatcher($parser),
-            new Matcher\NumberMatcher(),
+            new Matcher\NumberMatcher($parser),
             new Matcher\ScalarMatcher(),
             new Matcher\WildcardMatcher()
         ));
