@@ -87,6 +87,11 @@ abstract class JsonApiTestCase extends ApiTestCase
      */
     private function prettifyJson($content)
     {
-        return json_encode(json_decode($content), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $jsonFlags = JSON_PRETTY_PRINT;
+        if (!isset($_SERVER['ESCAPE_JSON']) || true !== $_SERVER['ESCAPE_JSON']) {
+            $jsonFlags = $jsonFlags | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
+        }
+
+        return json_encode(json_decode($content), $jsonFlags);
     }
 }

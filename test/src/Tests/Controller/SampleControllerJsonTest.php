@@ -28,6 +28,17 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'hello_world');
     }
 
+    public function testGetHelloWorldResponseWithEscapedUnicode()
+    {
+        $_SERVER['ESCAPE_JSON'] = true;
+
+        $this->client->request('GET', '/');
+
+        $response = $this->client->getResponse();
+
+        $this->assertResponse($response, 'hello_world_escaped');
+    }
+
     /**
      * @expectedException \PHPUnit\Framework\AssertionFailedError
      */
