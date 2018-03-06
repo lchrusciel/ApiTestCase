@@ -289,6 +289,7 @@ To customize your test suite configuration you can add a few more options to php
     <server name="OPEN_BROWSER_COMMAND" value="open %s" />
     <server name="IS_DOCTRINE_ORM_SUPPORTED" value="true/false" />
     <server name="TMP_DIR" value="/tmp/path/to/temporary/folder/" />
+    <server name="ESCAPE_JSON" value="true/false" />
 </php>
 ```
 
@@ -299,6 +300,7 @@ To customize your test suite configuration you can add a few more options to php
  * `OPEN_BROWSER_COMMAND` is a command which will be used to open browser with an exception.
  * `IS_DOCTRINE_ORM_SUPPORTED` is a flag which turns on doctrine support includes handy data fixtures loader and database purger.
  * `TMP_DIR` variable contains a path to temporary folder, where the log files will be stored.
+ * `ESCAPE_JSON` is a flag which turns on escaping (unicode characters and slashes) of your JSON output before comparing it to expected data. The default value is false. This flag only exists for backwards compatibility with previous versions of ApiTestCase (when turned on) and will be removed in a future version.
  
 Sample Project
 --------------
