@@ -7,3 +7,10 @@
   NOTE: This flag exists for temporary BC between v2 and v3 and will be removed in v4. v4 will not escape JSON output.
 
 * A variable `KERNEL_CLASS_PATH` has been changed to `KERNEL_CLASS`
+
+* Default fixtures loader in Alice has been changed to PurgerLoader. To [not purge database after each fixtures loading](https://github.com/Sylius/Sylius/pull/9266) configure default purge mode.
+
+```yml
+fidry_alice_data_fixtures:
+    default_purge_mode: no_purge
+```
