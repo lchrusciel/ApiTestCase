@@ -286,6 +286,25 @@ abstract class ApiTestCase extends WebTestCase
     }
 
     /**
+     * @param array $sources
+     *
+     * @return array
+     */
+    protected function loadFixturesFromFiles(array $sources)
+    {
+        $realPaths = array();
+
+        foreach ($sources as $source) {
+            $source = $this->getFixtureRealPath($source);
+            $this->assertSourceExists($source);
+
+            $realPaths[] = $source;
+        }
+
+        return $this->getFixtureLoader()->load($realPaths);
+    }
+
+    /**
      * @return LoaderInterface
      */
     protected function getFixtureLoader()

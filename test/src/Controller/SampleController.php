@@ -92,6 +92,19 @@ class SampleController extends Controller
      *
      * @return JsonResponse|Response
      */
+    public function categoryIndexAction(Request $request)
+    {
+        $categoryRepository = $this->getDoctrine()->getRepository('ApiTestCase:Category');
+        $categories = $categoryRepository->findAll();
+
+        return $this->respond($request, $categories);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse|Response
+     */
     public function showAction(Request $request)
     {
         $productRepository = $this->getDoctrine()->getRepository('ApiTestCase:Product');
