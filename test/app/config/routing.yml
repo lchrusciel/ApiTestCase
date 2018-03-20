@@ -16,6 +16,12 @@ app_product_index:
     defaults:
         _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::productIndexAction"
 
+app_category_index:
+    path: /categories/
+    methods: [GET]
+    defaults:
+        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::categoryIndexAction"
+
 app_product_create:
     path: /products/
     methods: [POST]
