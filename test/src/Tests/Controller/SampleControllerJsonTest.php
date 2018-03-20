@@ -97,7 +97,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
 
     public function testCategoryIndexResponse()
     {
-        $this->loadFixturesFromDirectory();
+        $this->loadFixturesFromFiles(['product.yml', 'category.yml']);
 
         $this->client->request('GET', '/categories/');
 

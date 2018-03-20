@@ -15,7 +15,7 @@ Lakion\ApiTestCase\Test\Entity\Category:
             targetEntity: Lakion\ApiTestCase\Test\Entity\Product
             cascade: ["all"]
             joinTable:
-                name: gus_category_products
+                name: app_category_products
                 joinColumns:
                     category_id:
                         referencedColumnName: id

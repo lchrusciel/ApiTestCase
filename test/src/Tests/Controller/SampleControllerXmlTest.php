@@ -85,7 +85,7 @@ class SampleControllerXmlTest extends XmlApiTestCase
 
     public function testCategoriesIndexResponse()
     {
-        $this->loadFixturesFromDirectory();
+        $this->loadFixturesFromFiles(['product.yml', 'category.yml']);
 
         $this->client->request('GET', '/categories/');
 
