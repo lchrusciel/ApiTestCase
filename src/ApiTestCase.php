@@ -184,8 +184,9 @@ abstract class ApiTestCase extends WebTestCase
      */
     protected function assertHeader(Response $response, $contentType)
     {
-        self::assertTrue(
-            $response->headers->contains('Content-Type', $contentType),
+        self::assertContains(
+            $contentType,
+            $response->headers->get('Content-Type'),
             $response->headers
         );
     }

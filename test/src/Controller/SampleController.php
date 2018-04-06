@@ -21,6 +21,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Webmozart\Assert\Assert;
 
 /**
  * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
@@ -36,11 +37,13 @@ class SampleController extends Controller
     {
         $acceptFormat = $request->headers->get('Accept');
 
-        if ('application/json' === $acceptFormat) {
+        if (false !== strpos($acceptFormat, 'application/json')) {
             return new JsonResponse([
                 'message' => 'Hello ApiTestCase World!',
                 'unicode' => '€ ¥ 💰',
                 'path' => '/p/a/t/h'
+            ], 200, [
+                'Content-Type' => $acceptFormat
             ]);
         }
 
