@@ -42,6 +42,9 @@
     "require-dev": {
         "symfony/serializer": "^3.4|^4.0"
     },
+    "conflict": {
+        "symfony/dependency-injection": "^4.1"
+    },
     "config": {
         "bin-dir": "bin"
     },
