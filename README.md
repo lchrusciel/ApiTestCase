@@ -4,7 +4,7 @@ ApiTestCase
 [![Build Status](https://travis-ci.org/Lakion/ApiTestCase.svg?branch=master)](https://travis-ci.org/Lakion/ApiTestCase)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Lakion/ApiTestCase/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Lakion/ApiTestCase/?branch=master)
 
-**ApiTestCase** is a PHPUnit TestCase that will make your life as a Symfony2 API developer much easier. It extends basic [Symfony2](https://symfony.com/) WebTestCase with some cool features. 
+**ApiTestCase** is a PHPUnit TestCase that will make your life as a Symfony API developer much easier. It extends basic [Symfony](https://symfony.com/) WebTestCase with some cool features. 
 
 Thanks to [PHP-Matcher](https://github.com/coduo/php-matcher) you can, according to its readme, "write expected json responses like a gangster". We definitely agree.
 
@@ -305,7 +305,7 @@ To customize your test suite configuration you can add a few more options to php
 Sample Project
 --------------
 
-In the ``test/`` directory, you can find sample Symfony2 project with minimal configuration required to use this library.
+In the ``test/`` directory, you can find sample Symfony project with minimal configuration required to use this library.
 
 ### Testing
 
