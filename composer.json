@@ -43,7 +43,7 @@
         "symfony/serializer": "^3.4|^4.0"
     },
     "conflict": {
-        "symfony/dependency-injection": "^4.1"
+        "symfony/dependency-injection": "^4.1.0"
     },
     "config": {
         "bin-dir": "bin"
