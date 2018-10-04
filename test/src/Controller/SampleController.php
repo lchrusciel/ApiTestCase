@@ -37,7 +37,10 @@ class SampleController extends Controller
     {
         $acceptFormat = $request->headers->get('Accept');
 
-        if (false !== strpos($acceptFormat, 'application/json')) {
+        if (
+            false !== strpos($acceptFormat, 'application')
+            && false !== strpos($acceptFormat, 'json')
+        ) {
             return new JsonResponse([
                 'message' => 'Hello ApiTestCase World!',
                 'unicode' => '€ ¥ 💰',
