@@ -45,9 +45,6 @@
     "conflict": {
         "symfony/dependency-injection": "4.1.0"
     },
-    "config": {
-        "bin-dir": "bin"
-    },
     "autoload": {
         "psr-4": {
             "Lakion\\ApiTestCase\\": "src/"
