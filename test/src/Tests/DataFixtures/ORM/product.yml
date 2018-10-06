@@ -1,4 +1,4 @@
-Lakion\ApiTestCase\Test\Entity\Product:
+ApiTestCase\Test\Entity\Product:
     product1:
         name: 'Phone'
         price: 200

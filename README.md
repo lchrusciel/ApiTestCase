@@ -1,8 +1,8 @@
 ApiTestCase
 ===========
 
-[![Build Status](https://travis-ci.org/Lakion/ApiTestCase.svg?branch=master)](https://travis-ci.org/Lakion/ApiTestCase)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Lakion/ApiTestCase/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Lakion/ApiTestCase/?branch=master)
+[![Build Status](https://travis-ci.org/lchrusciel/ApiTestCase.svg?branch=master)](https://travis-ci.org/lchrusciel/ApiTestCase)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/lchrusciel/ApiTestCase/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/lchrusciel/ApiTestCase/?branch=master)
 
 **ApiTestCase** is a PHPUnit TestCase that will make your life as a Symfony API developer much easier. It extends basic [Symfony](https://symfony.com/) WebTestCase with some cool features. 
 
@@ -25,7 +25,7 @@ Installation
 Assuming you already have Composer installed globally:
 
 ```bash
-$ composer require --dev lakion/api-test-case
+$ composer require --dev lchrusciel/api-test-case
 ```
 
 Then you have to slightly change your Kernel logic to support SymfonyMockerContainer:
@@ -68,7 +68,7 @@ Let's see a simple example! Write the following test:
 
 namespace AppBundle\Tests\Controller\HelloWorldTest;
 
-use Lakion\ApiTestCase\JsonApiTestCase;
+use ApiTestCase\JsonApiTestCase;
 
 class HelloWorldTest extends JsonApiTestCase
 {
@@ -188,7 +188,7 @@ Again, this is extra useful when you work with APIs like Google Maps, Stripe etc
 ```php
     public function testGetResponseFromMockedService()
     {
-        $this->client->getContainer()->mock('app.third_party_api_client', 'Lakion\ApiTestCase\Test\Service\ThirdPartyApiClient')
+        $this->client->getContainer()->mock('app.third_party_api_client', 'ApiTestCase\Test\Service\ThirdPartyApiClient')
             ->shouldReceive('getInventory')
             ->once()
             ->andReturn($this->getJsonResponseFixture('third_party_api_inventory'))
@@ -252,7 +252,7 @@ Now, let's say you have a mapped Doctrine entity called Book in your application
 To load fixtures for the test, you need to define a simple ``YAML`` file in ``src/AppBundle/Tests/DataFixtures/ORM/books.yml``:
 
 ```yml
-    Lakion\ApiTestCase\Test\Entity\Book:
+    ApiTestCase\Test\Entity\Book:
         book1:
             title: "Lord of The Rings"
             author: "J. R. R. Tolkien"
@@ -321,7 +321,7 @@ $ bin/phpunit
 Bug Tracking and Suggestions
 ----------------------------
 
-If you have found a bug or have a great idea for improvement, please [open an issue on this repository](https://github.com/Lakion/ApiTestCase/issues/new).
+If you have found a bug or have a great idea for improvement, please [open an issue on this repository](https://github.com/lchrusciel/ApiTestCase/issues/new).
 
 Versioning
 ----------
@@ -339,7 +339,7 @@ For more information on SemVer, please visit [semver.org website](http://semver.
 MIT License
 -----------
 
-License can be found [here](https://github.com/Lakion/ApiTestCase/blob/master/LICENSE).
+License can be found [here](https://github.com/lchrusciel/ApiTestCase/blob/master/LICENSE).
 
 Authors
 -------
@@ -351,4 +351,4 @@ The library was originally created by:
 * [Paweł Jędrzejewski](https://github.com/pjedrzejewski)
 * [Arkadiusz Krakowiak](https://github.com/Arminek)
 
-See the list of [contributors](https://github.com/Lakion/ApiTestCase/graphs/contributors).
+See the list of [contributors](https://github.com/lchrusciel/ApiTestCase/graphs/contributors).

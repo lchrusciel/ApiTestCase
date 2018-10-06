@@ -1,4 +1,4 @@
-Lakion\ApiTestCase\Test\Entity\Category:
+ApiTestCase\Test\Entity\Category:
     type: entity
     table: test_category
     id:
@@ -12,7 +12,7 @@ Lakion\ApiTestCase\Test\Entity\Category:
             type: string
     manyToMany:
         products:
-            targetEntity: Lakion\ApiTestCase\Test\Entity\Product
+            targetEntity: ApiTestCase\Test\Entity\Product
             cascade: ["all"]
             joinTable:
                 name: app_category_products
