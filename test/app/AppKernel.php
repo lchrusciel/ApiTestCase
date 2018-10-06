@@ -3,17 +3,17 @@
 /*
  * This file is part of the ApiTestCase package.
  *
- * (c) Lakion
+ * (c) Łukasz Chruściel
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Lakion\ApiTestCase\Test\App;
+namespace ApiTestCase\Test\App;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle;
-use Lakion\ApiTestCase\Test\Service\ThirdPartyApiClient;
+use ApiTestCase\Test\Service\ThirdPartyApiClient;
 use Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\HttpKernel\Kernel;
@@ -61,9 +61,9 @@ class AppKernel extends Kernel
                 'orm' => array(
                     'auto_mapping' => false,
                     'mappings' => array(
-                        'Lakion\ApiTestCase' => array(
+                        'ApiTestCase' => array(
                             'dir' => '%kernel.root_dir%/config/doctrine',
-                            'prefix' => 'Lakion\ApiTestCase\Test\Entity',
+                            'prefix' => 'ApiTestCase\Test\Entity',
                             'alias' => 'ApiTestCase',
                             'is_bundle' => false,
                             'type' => 'yml',

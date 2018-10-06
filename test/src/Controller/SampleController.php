@@ -3,16 +3,16 @@
 /*
  * This file is part of the ApiTestCase package.
  *
- * (c) Lakion
+ * (c) Łukasz Chruściel
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Lakion\ApiTestCase\Test\Controller;
+namespace ApiTestCase\Test\Controller;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Lakion\ApiTestCase\Test\Entity\Product;
+use ApiTestCase\Test\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

@@ -1,4 +1,4 @@
-Lakion\ApiTestCase\Test\Entity\Category:
+ApiTestCase\Test\Entity\Category:
     category:
         name: General
         products: ['@product1', '@product2', '@product3']

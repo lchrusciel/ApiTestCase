@@ -1,4 +1,4 @@
-Lakion\ApiTestCase\Test\Entity\Product:
+ApiTestCase\Test\Entity\Product:
     type: entity
     table: test_product
     id:

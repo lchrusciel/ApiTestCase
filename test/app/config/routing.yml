@@ -2,34 +2,34 @@ app_hello_world:
     path: /
     methods: [GET]
     defaults:
-        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::helloWorldAction"
+        _controller: "ApiTestCase\\Test\\Controller\\SampleController::helloWorldAction"
 
 app_use_third_party_api:
     path: /use-third-party-api/
     methods: [GET]
     defaults:
-        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::useThirdPartyApiAction"
+        _controller: "ApiTestCase\\Test\\Controller\\SampleController::useThirdPartyApiAction"
 
 app_product_index:
     path: /products/
     methods: [GET]
     defaults:
-        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::productIndexAction"
+        _controller: "ApiTestCase\\Test\\Controller\\SampleController::productIndexAction"
 
 app_category_index:
     path: /categories/
     methods: [GET]
     defaults:
-        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::categoryIndexAction"
+        _controller: "ApiTestCase\\Test\\Controller\\SampleController::categoryIndexAction"
 
 app_product_create:
     path: /products/
     methods: [POST]
     defaults:
-        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::createAction"
+        _controller: "ApiTestCase\\Test\\Controller\\SampleController::createAction"
 
 app_product_show:
     path: /products/{id}
     methods: [GET]
     defaults:
-        _controller: "Lakion\\ApiTestCase\\Test\\Controller\\SampleController::showAction"
+        _controller: "ApiTestCase\\Test\\Controller\\SampleController::showAction"

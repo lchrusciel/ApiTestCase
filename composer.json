@@ -1,5 +1,5 @@
 {
-    "name": "lakion/api-test-case",
+    "name": "lchrusciel/api-test-case",
     "description": "Perfect PHPUnit TestCase for JSON/XML API TDD with Symfony.",
     "keywords": ["TDD", "Symfony", "PHPUnit", "Doctrine", "API", "JSON", "XML"],
     "type": "library",
@@ -7,12 +7,12 @@
     "authors": [
         {
             "name": "Łukasz Chruściel",
-            "email": "lukasz.chrusciel@lakion.com"
+            "email": "lchrusciel@gmail.com"
         },
         {
             "name": "Paweł Jędrzejewski",
             "homepage": "http://pjedrzejewski.com",
-            "email": "pawel.jedrzejewski@lakion.com"
+            "email": "me@pjedrzejewski.com"
         },
         {
             "name": "Michał Marcinkowski",
@@ -20,7 +20,7 @@
         },
         {
             "name": "Arkadiusz Krakowiak",
-            "email": "arkadiusz.krakowiak@lakion.com"
+            "email": "arkadiusz.k.e@gmail.com"
         }
     ],
     "require": {
@@ -50,13 +50,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Lakion\\ApiTestCase\\": "src/"
+            "ApiTestCase\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Lakion\\ApiTestCase\\Test\\": "test/src/",
-            "Lakion\\ApiTestCase\\Test\\App\\": "test/app/"
+            "ApiTestCase\\Test\\": "test/src/",
+            "ApiTestCase\\Test\\App\\": "test/app/"
         }
     },
     "extra": {

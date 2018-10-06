@@ -3,15 +3,15 @@
 /*
  * This file is part of the ApiTestCase package.
  *
- * (c) Lakion
+ * (c) Łukasz Chruściel
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Lakion\ApiTestCase\Test\Tests\Controller;
+namespace ApiTestCase\Test\Tests\Controller;
 
-use Lakion\ApiTestCase\XmlApiTestCase;
+use ApiTestCase\XmlApiTestCase;
 
 /**
  * @author Arkadiusz Krakowiak <arkadiusz.krakowiak@lakion.com>
@@ -59,7 +59,7 @@ class SampleControllerXmlTest extends XmlApiTestCase
 
     public function testGetProductInventoryFromThirdPartyApi()
     {
-        $this->client->getContainer()->mock('app.third_party_api_client', 'Lakion\ApiTestCase\Test\Service\ThirdPartyApiClient')
+        $this->client->getContainer()->mock('app.third_party_api_client', 'ApiTestCase\Test\Service\ThirdPartyApiClient')
             ->shouldReceive('getInventory')
             ->once()
             ->andReturn($this->getJsonResponseFixture('third_party_api_inventory'))
