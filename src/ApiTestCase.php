@@ -22,12 +22,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\DependencyInjection\ResettableContainerInterface;
 
-/**
- * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
- * @author Paweł Jędrzęjewski <pawel.jedrzejewski@lakion.com>
- * @author Michał Marcinkowski <michal.marcinkowski@lakion.com>
- * @author Arkadiusz Krakowiak <arkadiusz.krakowiak@lakion.com>
- */
 abstract class ApiTestCase extends WebTestCase
 {
     /**

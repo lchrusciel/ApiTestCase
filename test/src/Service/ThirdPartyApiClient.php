@@ -11,9 +11,6 @@
 
 namespace Lakion\ApiTestCase\Test\Service;
 
-/**
- * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
- */
 class ThirdPartyApiClient
 {
     public function getInventory()

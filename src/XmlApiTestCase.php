@@ -13,12 +13,6 @@ namespace Lakion\ApiTestCase;
 
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
- * @author Paweł Jędrzęjewski <pawel.jedrzejewski@lakion.com>
- * @author Michał Marcinkowski <michal.marcinkowski@lakion.com>
- * @author Arkadiusz Krakowiak <arkadiusz.krakowiak@lakion.com>
- */
 abstract class XmlApiTestCase extends ApiTestCase
 {
     /**
