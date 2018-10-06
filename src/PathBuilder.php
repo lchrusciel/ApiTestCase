@@ -11,9 +11,6 @@
 
 namespace Lakion\ApiTestCase;
 
-/**
- * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
- */
 final class PathBuilder
 {
     /**
