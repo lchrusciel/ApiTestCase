@@ -346,9 +346,9 @@ Authors
 
 The library was originally created by:
 
-* Łukasz Chruściel <lukasz.chrusciel@lakion.com>, 
-* Michał Marcinkowski <michal.marcinkowski@lakion.com>
-* Paweł Jędrzejewski <pawel.jedrzejewski@lakion.com>
-* Arkadiusz Krakowiak <arkadiusz.krakowiak@lakion.com>
+* [Łukasz Chruściel](https://github.com/lchrusciel) 
+* [Michał Marcinkowski](https://github.com/michalmarcinkowski)
+* [Paweł Jędrzejewski](https://github.com/pjedrzejewski)
+* [Arkadiusz Krakowiak](https://github.com/Arminek)
 
 See the list of [contributors](https://github.com/Lakion/ApiTestCase/graphs/contributors).
