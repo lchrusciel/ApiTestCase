@@ -352,3 +352,6 @@ The library was originally created by:
 * [Arkadiusz Krakowiak](https://github.com/Arminek)
 
 See the list of [contributors](https://github.com/lchrusciel/ApiTestCase/graphs/contributors).
+at [Lakion](http://github.com/Lakion/) company under [https://github.com/Lakion/ApiTestCase](https://github.com/Lakion/ApiTestCase) repository.
+
+See the list of [contributors](https://github.com/lchrusciel/ApiTestCase/graphs/contributors).
