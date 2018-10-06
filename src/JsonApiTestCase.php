@@ -64,7 +64,8 @@ abstract class JsonApiTestCase extends ApiTestCase
      */
     protected function assertJsonHeader(Response $response)
     {
-        parent::assertHeader($response, 'application/json');
+        parent::assertHeader($response, 'application');
+        parent::assertHeader($response, 'json');
     }
 
     /**

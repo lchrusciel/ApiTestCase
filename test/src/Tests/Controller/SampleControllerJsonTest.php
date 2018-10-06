@@ -37,6 +37,15 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'hello_world');
     }
 
+    public function testGetHelloWorldResponseWithProblemOnContentType()
+    {
+        $this->client->request('GET', '/', [], [], ['HTTP_ACCEPT' => 'application/problem+json; charset=utf-8']);
+
+        $response = $this->client->getResponse();
+
+        $this->assertResponse($response, 'hello_world');
+    }
+
     public function testGetHelloWorldResponseWithEscapedUnicode()
     {
         $_SERVER['ESCAPE_JSON'] = true;
