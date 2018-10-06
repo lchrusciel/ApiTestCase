@@ -40,11 +40,18 @@
         "theofidry/alice-data-fixtures": "^1.0"
     },
     "require-dev": {
-        "polishsymfonycommunity/symfony-mocker-container": "^1.0",
-        "symfony/serializer": "^3.4|^4.0",
         "phpstan/phpstan": "^0.11.12",
         "phpstan/phpstan-strict-rules": "^0.11.1",
-        "phpstan/phpstan-webmozart-assert": "^0.11.2"
+        "phpstan/phpstan-webmozart-assert": "^0.11.2",
+        "sylius-labs/coding-standard": "^2.0",
+    },
+    "scripts": {
+        "fix": [
+            "vendor/bin/ecs check --ansi --no-progress-bar src test/src --fix"
+        ],
+        "analyse": [
+            "vendor/bin/ecs check --ansi --no-progress-bar src test/src"
+        ]
     },
     "conflict": {
         "symfony/dependency-injection": "4.1.0"
