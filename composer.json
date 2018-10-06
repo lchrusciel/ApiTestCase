@@ -45,9 +45,6 @@
     "conflict": {
         "symfony/dependency-injection": "4.1.0"
     },
-    "config": {
-        "bin-dir": "bin"
-    },
     "autoload": {
         "psr-4": {
             "ApiTestCase\\": "src/"
@@ -61,7 +58,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.0-dev"
+            "dev-master": "4.0-dev"
         }
     }
 }

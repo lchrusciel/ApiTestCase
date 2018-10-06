@@ -49,4 +49,4 @@ before_script:
 script:
     - composer validate --strict
 
-    - bin/phpunit
+    - vendor/bin/phpunit
