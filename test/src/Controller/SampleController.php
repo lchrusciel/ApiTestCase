@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the ApiTestCase package.
  *
@@ -11,8 +13,8 @@
 
 namespace ApiTestCase\Test\Controller;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use ApiTestCase\Test\Entity\Product;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +23,6 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Webmozart\Assert\Assert;
 
 class SampleController extends Controller
 {
@@ -41,9 +42,9 @@ class SampleController extends Controller
             return new JsonResponse([
                 'message' => 'Hello ApiTestCase World!',
                 'unicode' => '€ ¥ 💰',
-                'path' => '/p/a/t/h'
+                'path' => '/p/a/t/h',
             ], 200, [
-                'Content-Type' => $acceptFormat
+                'Content-Type' => $acceptFormat,
             ]);
         }
 
@@ -175,8 +176,8 @@ class SampleController extends Controller
      */
     private function createSerializer()
     {
-        $encoders = array(new XmlEncoder(), new JsonEncoder());
-        $normalizers = array(new ObjectNormalizer());
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
 
         return $serializer;

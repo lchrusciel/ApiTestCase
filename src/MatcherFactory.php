@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the ApiTestCase package.
  *
@@ -12,6 +14,7 @@
 namespace ApiTestCase;
 
 use Coduo\PHPMatcher\Factory;
+use Coduo\PHPMatcher\Lexer;
 use Coduo\PHPMatcher\Matcher;
 
 class MatcherFactory extends Factory\SimpleFactory

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the ApiTestCase package.
  *
@@ -253,8 +255,8 @@ abstract class ApiTestCase extends WebTestCase
     protected function showErrorInBrowserIfOccurred(Response $response)
     {
         if (!$response->isSuccessful()) {
-            $openCommand = isset($_SERVER['OPEN_BROWSER_COMMAND']) ? $_SERVER['OPEN_BROWSER_COMMAND'] : 'open %s';
-            $tmpDir = isset($_SERVER['TMP_DIR']) ? $_SERVER['TMP_DIR'] : sys_get_temp_dir();
+            $openCommand = $_SERVER['OPEN_BROWSER_COMMAND'] ?? 'open %s';
+            $tmpDir = $_SERVER['TMP_DIR'] ?? sys_get_temp_dir();
 
             $filename = PathBuilder::build(rtrim($tmpDir, \DIRECTORY_SEPARATOR), uniqid() . '.html');
             file_put_contents($filename, $response->getContent());
@@ -328,7 +330,7 @@ abstract class ApiTestCase extends WebTestCase
      */
     protected function loadFixturesFromFiles(array $sources)
     {
-        $realPaths = array();
+        $realPaths = [];
 
         foreach ($sources as $source) {
             $source = $this->getFixtureRealPath($source);

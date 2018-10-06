@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the ApiTestCase package.
  *
@@ -20,7 +22,7 @@ abstract class JsonApiTestCase extends ApiTestCase
      */
     public function setUpClient()
     {
-        $this->client = static::createClient(array(), array('HTTP_ACCEPT' => 'application/json'));
+        $this->client = static::createClient([], ['HTTP_ACCEPT' => 'application/json']);
     }
 
     /**

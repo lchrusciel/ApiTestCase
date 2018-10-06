@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the ApiTestCase package.
  *
@@ -20,7 +22,7 @@ abstract class XmlApiTestCase extends ApiTestCase
      */
     public function setUpClient()
     {
-        $this->client = static::createClient(array(), array('HTTP_ACCEPT' => 'application/xml'));
+        $this->client = static::createClient([], ['HTTP_ACCEPT' => 'application/xml']);
     }
 
     /**
@@ -78,7 +80,7 @@ abstract class XmlApiTestCase extends ApiTestCase
         $domXmlDocument = new \DOMDocument('1.0');
         $domXmlDocument->preserveWhiteSpace = false;
         $domXmlDocument->formatOutput = true;
-        $domXmlDocument->loadXML(str_replace("\n", "", $actualResponse));
+        $domXmlDocument->loadXML(str_replace("\n", '', $actualResponse));
 
         return $domXmlDocument->saveXML();
     }
