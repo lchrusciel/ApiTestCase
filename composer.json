@@ -43,7 +43,8 @@
         "phpstan/phpstan": "^0.11.12",
         "phpstan/phpstan-strict-rules": "^0.11.1",
         "phpstan/phpstan-webmozart-assert": "^0.11.2",
-        "sylius-labs/coding-standard": "^2.0",
+        "symfony/serializer": "^3.4|^4.0",
+        "sylius-labs/coding-standard": "^3.0"
     },
     "scripts": {
         "fix": [

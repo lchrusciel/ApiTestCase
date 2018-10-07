@@ -27,8 +27,6 @@ use Symfony\Component\Serializer\Serializer;
 class SampleController extends Controller
 {
     /**
-     * @param Request $request
-     *
      * @return JsonResponse|Response
      */
     public function helloWorldAction(Request $request)
@@ -57,8 +55,6 @@ class SampleController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return JsonResponse|Response
      */
     public function useThirdPartyApiAction(Request $request)
@@ -79,8 +75,6 @@ class SampleController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return JsonResponse|Response
      */
     public function productIndexAction(Request $request)
@@ -92,8 +86,6 @@ class SampleController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return JsonResponse|Response
      */
     public function categoryIndexAction(Request $request)
@@ -105,8 +97,6 @@ class SampleController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @return JsonResponse|Response
      */
     public function showAction(Request $request)
@@ -121,12 +111,7 @@ class SampleController extends Controller
         return $this->respond($request, $product);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function createAction(Request $request)
+    public function createAction(Request $request): Response
     {
         $product = new Product();
         $product->setName($request->request->get('name'));
@@ -141,14 +126,7 @@ class SampleController extends Controller
         return $this->respond($request, $product, Response::HTTP_CREATED);
     }
 
-    /**
-     * @param Request $request
-     * @param mixed $data
-     * @param int $statusCode
-     *
-     * @return Response
-     */
-    private function respond(Request $request, $data, $statusCode = Response::HTTP_OK)
+    private function respond(Request $request, $data, int $statusCode = Response::HTTP_OK): Response
     {
         $serializer = $this->createSerializer();
         $acceptFormat = $request->headers->get('Accept');
@@ -171,15 +149,11 @@ class SampleController extends Controller
         }
     }
 
-    /**
-     * @return Serializer
-     */
-    private function createSerializer()
+    private function createSerializer(): Serializer
     {
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
 
-        return $serializer;
+        return new Serializer($normalizers, $encoders);
     }
 }

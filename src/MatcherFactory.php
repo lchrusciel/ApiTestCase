@@ -19,28 +19,17 @@ use Coduo\PHPMatcher\Matcher;
 
 class MatcherFactory extends Factory\SimpleFactory
 {
-    /**
-     * @return Matcher
-     */
-    public function buildXmlMatcher()
+    public function buildXmlMatcher(): Matcher
     {
         return $this->buildMatcher(Matcher\XmlMatcher::class);
     }
 
-    /**
-     * @return Matcher
-     */
-    public function buildJsonMatcher()
+    public function buildJsonMatcher(): Matcher
     {
         return $this->buildMatcher(Matcher\JsonMatcher::class);
     }
 
-    /**
-     * @param string $matcherClass
-     *
-     * @return Matcher
-     */
-    protected function buildMatcher($matcherClass)
+    protected function buildMatcher(string $matcherClass): Matcher
     {
         $orMatcher = $this->buildOrMatcher();
         $chainMatcher = new Matcher\ChainMatcher(array(

@@ -18,19 +18,13 @@ use Doctrine\Common\Collections\Collection;
 
 class Category
 {
-    /**
-     * @var mixed
-     */
+    /** @var int|null */
     private $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name;
 
-    /**
-     * @var Collection|Product[]
-     */
+    /** @var Collection|Product[] */
     private $products;
 
     public function __construct()
@@ -38,42 +32,27 @@ class Category
         $this->products = new ArrayCollection();
     }
 
-    /**
-     * @return mixed
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @param Product $product
-     */
-    public function addProduct(Product $product)
+    public function addProduct(Product $product): void
     {
         $this->products->add($product);
     }
 
-    /**
-     * @param Product $product
-     */
-    public function removeProduct(Product $product)
+    public function removeProduct(Product $product): void
     {
         $this->products->removeElement($product);
     }

@@ -22,13 +22,8 @@ final class PathBuilder
     {
     }
 
-    /**
-     * @param array ...$segments unlimited number of path segments
-     *
-     * @return string
-     */
-    public static function build(...$segments)
+    public static function build(string ...$segments): string
     {
-        return implode(DIRECTORY_SEPARATOR, $segments);
+        return implode(\DIRECTORY_SEPARATOR, $segments);
     }
 }

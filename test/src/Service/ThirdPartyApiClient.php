@@ -15,7 +15,8 @@ namespace ApiTestCase\Test\Service;
 
 class ThirdPartyApiClient
 {
-    public function getInventory()
+    public function getInventory(): ?array
     {
+        return null;
     }
 }
