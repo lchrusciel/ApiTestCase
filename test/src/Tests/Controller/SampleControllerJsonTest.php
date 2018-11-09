@@ -14,9 +14,6 @@ namespace ApiTestCase\Test\Tests\Controller;
 use ApiTestCase\JsonApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @author Łukasz Chruściel <lukasz.chrusciel@lakion.com>
- */
 class SampleControllerJsonTest extends JsonApiTestCase
 {
     public function testGetHelloWorldResponse()

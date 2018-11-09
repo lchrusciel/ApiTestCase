@@ -13,9 +13,6 @@ namespace ApiTestCase\Test\Tests\Controller;
 
 use ApiTestCase\XmlApiTestCase;
 
-/**
- * @author Arkadiusz Krakowiak <arkadiusz.krakowiak@lakion.com>
- */
 class SampleControllerXmlTest extends XmlApiTestCase
 {
     public function testGetHelloWorldResponse()

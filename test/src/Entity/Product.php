@@ -11,9 +11,6 @@
 
 namespace ApiTestCase\Test\Entity;
 
-/**
- * @author Arkadiusz Krakowiak <arkadiusz.krakowiak@lakion.com>
- */
 class Product
 {
     /**

@@ -14,9 +14,6 @@ namespace ApiTestCase\Test\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-/**
- * @author Mateusz Zalewski <mateusz.p.zalewski@gmail.com>
- */
 class Category
 {
     /**
