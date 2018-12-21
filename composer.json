@@ -45,6 +45,9 @@
     "conflict": {
         "symfony/dependency-injection": "4.1.0"
     },
+    "replace": {
+        "lakion/api-test-case": "self.version"
+    },
     "autoload": {
         "psr-4": {
             "ApiTestCase\\": "src/"
