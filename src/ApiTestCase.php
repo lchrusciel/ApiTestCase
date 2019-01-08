@@ -107,7 +107,10 @@ abstract class ApiTestCase extends WebTestCase
 
     public function tearDown()
     {
-        if (null !== $this->client && null !== $this->client->getContainer()) {
+        if (null !== $this->client &&
+            null !== $this->client->getContainer() &&
+            $this->client->getContainer() instanceof MockContainerInterface
+        ) {
             foreach ($this->client->getContainer()->getMockedServices() as $id => $service) {
                 $this->client->getContainer()->unmock($id);
             }
