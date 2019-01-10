@@ -39,6 +39,7 @@
         "theofidry/alice-data-fixtures": "^1.0"
     },
     "require-dev": {
+        "polishsymfonycommunity/symfony-mocker-container": "^1.0",
         "symfony/serializer": "^3.4|^4.0"
     },
     "conflict": {
@@ -46,6 +47,9 @@
     },
     "replace": {
         "lakion/api-test-case": "self.version"
+    },
+    "suggest": {
+        "polishsymfonycommunity/symfony-mocker-container": "For mocking container services and external APIs"
     },
     "autoload": {
         "psr-4": {
