@@ -1,5 +1,10 @@
 # ApiTestCase upgrade instructions
 
+## Upgrading from v3 to v4
+
+* Change namespace from `Lakion\ApiTestCase` to `ApiTestCase``
+* If you are using `polishsymfonycommunity/symfony-mocker-container`, you need to whitelist it as your requirement
+
 ## Upgrading from v2 to v3
 
 * JSON output is not escaped any more when comparing it to expected data. Turn on `ESCAPE_JSON` flag in your test configuration retain previous behaviour.
