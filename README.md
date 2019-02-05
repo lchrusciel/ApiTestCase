@@ -8,8 +8,6 @@ ApiTestCase
 
 Thanks to [PHP-Matcher](https://github.com/coduo/php-matcher) you can, according to its readme, "write expected json responses like a gangster". We definitely agree.
 
-[SymfonyMockerContainer](https://github.com/PolishSymfonyCommunity/SymfonyMockerContainer) makes it super easy to mock services, which is great if you work on an application that communicates with other APIs, for example: Google Maps API.
-
 It also uses [Alice](https://github.com/nelmio/alice) for easy Doctrine fixtures loading.
 
 Features:
@@ -26,23 +24,6 @@ Assuming you already have Composer installed globally:
 
 ```bash
 $ composer require --dev lchrusciel/api-test-case
-```
-
-Then you have to slightly change your Kernel logic to support SymfonyMockerContainer:
-
-```php
-// app/AppKernel.php
-
-use \PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer;
-
-protected function getContainerBaseClass()
-{
-    if ('test' === $this->environment) {
-        return MockerContainer::class;
-    }
-
-    return parent::getContainerBaseClass();
-}
 ```
 
 And it's done! ApiTestCase is working with the default configuration.
@@ -182,22 +163,6 @@ array(
 )
 ```
 
-It is also a really common case to communicate with some external API. But in test environment we want to be sure what we will receive from it. To check behaviour of our app with different responses from external API we can use [SymfonyMockerContainer](https://github.com/PolishSymfonyCommunity/SymfonyMockerContainer). This library allows to mock the third party API response, and asserts number of calls.
-Again, this is extra useful when you work with APIs like Google Maps, Stripe etc. You can also mock response from other apps in your SOA project.
-
-```php
-    public function testGetResponseFromMockedService()
-    {
-        $this->client->getContainer()->mock('app.third_party_api_client', 'ApiTestCase\Test\Service\ThirdPartyApiClient')
-            ->shouldReceive('getInventory')
-            ->once()
-            ->andReturn($this->getJsonResponseFixture('third_party_api_inventory'))
-        ;
-    }
-```
-
-From this moment, first `getInventory` method call will return the response defined in `third_party_api_inventory.json` file placed in a ``src/AppBundle/Tests/Responses/Mocked/`` folder, or any other location you have defined in ``phpunit.xml`` file.
-
 ### Testing With Database Fixtures
 
 ApiTestCase is integrated with ``nelmio/alice``. Thanks to this nice library you can easily load your fixtures when you need them. You have to define your fixtures and place them in an appropriate directory.
@@ -273,6 +238,43 @@ Finally, to use these fixtures in a test, just call a proper method:
         $this->loadFixturesFromDirectory('big_library');
     }
 ```
+
+### Additional features
+
+You may also add `polishsymfonycommunity/symfony-mocker-container` library to project and take advantage of mocking external API callse. 
+
+First, you have to slightly change your Kernel logic to support SymfonyMockerContainer:
+
+```php
+// app/AppKernel.php
+
+use \PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer;
+
+protected function getContainerBaseClass()
+{
+    if ('test' === $this->environment) {
+        return MockerContainer::class;
+    }
+
+    return parent::getContainerBaseClass();
+}
+```
+
+And you are good to test endpoints, which communicate with some external API in a meantime. To check behaviour of our app with different responses from external API we can use [SymfonyMockerContainer](https://github.com/PolishSymfonyCommunity/SymfonyMockerContainer). This library allows to mock the third party API response, and asserts number of calls.
+This is extra useful when you work with APIs like Google Maps, Stripe etc. You can also mock response from other apps in your SOA project.
+
+```php
+    public function testGetResponseFromMockedService()
+    {
+        $this->client->getContainer()->mock('app.third_party_api_client', 'ApiTestCase\Test\Service\ThirdPartyApiClient')
+            ->shouldReceive('getInventory')
+            ->once()
+            ->andReturn($this->getJsonResponseFixture('third_party_api_inventory'))
+        ;
+    }
+```
+
+From this moment, first `getInventory` method call will return the response defined in `third_party_api_inventory.json` file placed in a ``src/AppBundle/Tests/Responses/Mocked/`` folder, or any other location you have defined in ``phpunit.xml`` file.
 
 Configuration Reference
 -----------------------
