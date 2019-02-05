@@ -12,6 +12,7 @@
 namespace ApiTestCase\Test\Tests\Controller;
 
 use ApiTestCase\XmlApiTestCase;
+use PHPUnit\Framework\AssertionFailedError;
 
 class SampleControllerXmlTest extends XmlApiTestCase
 {
@@ -24,11 +25,10 @@ class SampleControllerXmlTest extends XmlApiTestCase
         $this->assertResponse($response, 'hello_world');
     }
 
-    /**
-     * @expectedException \PHPUnit\Framework\AssertionFailedError
-     */
     public function testGetHelloWorldIncorrectResponse()
     {
+        $this->expectException(AssertionFailedError::class);
+
         $this->client->request('GET', '/');
 
         $response = $this->client->getResponse();

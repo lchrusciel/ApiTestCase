@@ -13,6 +13,7 @@ php:
 env:
     - SYMFONY_VERSION=3.4.*
     - PHPUNIT_VERSION=^6.0
+    - PHPUNIT_VERSION=^7.0
     - CODUO_VERSION=^2.3
     - MOST_RECENT=true
 

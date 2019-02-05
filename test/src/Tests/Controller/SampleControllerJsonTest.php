@@ -12,6 +12,7 @@
 namespace ApiTestCase\Test\Tests\Controller;
 
 use ApiTestCase\JsonApiTestCase;
+use PHPUnit\Framework\AssertionFailedError;
 use Symfony\Component\HttpFoundation\Response;
 
 class SampleControllerJsonTest extends JsonApiTestCase
@@ -54,11 +55,10 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'hello_world_escaped');
     }
 
-    /**
-     * @expectedException \PHPUnit\Framework\AssertionFailedError
-     */
     public function testGetHelloWorldIncorrectResponse()
     {
+        $this->expectException(AssertionFailedError::class);
+
         $this->client->request('GET', '/');
 
         $response = $this->client->getResponse();

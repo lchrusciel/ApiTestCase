@@ -11,12 +11,12 @@
 
 namespace ApiTestCase;
 
+use ApiTestCase\Symfony\WebTestCase;
 use Coduo\PHPMatcher\Matcher;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Symfony\Bundle\FrameworkBundle\Client;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Kernel;
@@ -105,7 +105,7 @@ abstract class ApiTestCase extends WebTestCase
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (null !== $this->client && null !== $this->client->getContainer()) {
             foreach ($this->client->getContainer()->getMockedServices() as $id => $service) {
@@ -178,11 +178,19 @@ abstract class ApiTestCase extends WebTestCase
      */
     protected function assertHeader(Response $response, $contentType)
     {
-        self::assertContains(
-            $contentType,
-            $response->headers->get('Content-Type'),
-            $response->headers
-        );
+        if (method_exists(self::class, 'assertStringContainsString')) {
+            self::assertStringContainsString(
+                $contentType,
+                $response->headers->get('Content-Type'),
+                $response->headers
+            );
+        } else {
+            self::assertContains(
+                $contentType,
+                $response->headers->get('Content-Type'),
+                $response->headers
+            );
+        }
     }
 
     /**
@@ -217,7 +225,7 @@ abstract class ApiTestCase extends WebTestCase
         if (!$response->isSuccessful()) {
             $openCommand = isset($_SERVER['OPEN_BROWSER_COMMAND']) ? $_SERVER['OPEN_BROWSER_COMMAND'] : 'open %s';
             $tmpDir = isset($_SERVER['TMP_DIR']) ? $_SERVER['TMP_DIR'] : sys_get_temp_dir();
-            
+
             $filename = PathBuilder::build(rtrim($tmpDir, \DIRECTORY_SEPARATOR), uniqid() . '.html');
             file_put_contents($filename, $response->getContent());
             system(sprintf($openCommand, escapeshellarg($filename)));
