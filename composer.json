@@ -45,9 +45,6 @@
     "conflict": {
         "symfony/dependency-injection": "4.1.0"
     },
-    "replace": {
-        "lakion/api-test-case": "self.version"
-    },
     "suggest": {
         "polishsymfonycommunity/symfony-mocker-container": "For mocking container services and external APIs"
     },
@@ -64,7 +61,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "4.0-dev"
+            "dev-master": "5.0-dev"
         }
     }
 }
