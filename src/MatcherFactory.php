@@ -89,7 +89,8 @@ class MatcherFactory
             new Matcher\DoubleMatcher($parser),
             new Matcher\NumberMatcher($parser),
             new Matcher\ScalarMatcher(),
-            new Matcher\WildcardMatcher()
+            new Matcher\WildcardMatcher(),
+            new Matcher\UuidMatcher($parser),
         ));
     }
 
