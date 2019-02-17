@@ -50,6 +50,11 @@ abstract class ApiTestCase extends WebTestCase
     protected $dataFixturesPath;
 
     /**
+     * @var MatcherFactory
+     */
+    protected $matcherFactory;
+
+    /**
      * @var LoaderInterface
      */
     private $fixtureLoader;
@@ -58,6 +63,13 @@ abstract class ApiTestCase extends WebTestCase
      * @var EntityManager
      */
     private $entityManager;
+
+    public function __construct(?string $name = null, array $data = [], string $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+
+        $this->matcherFactory = new MatcherFactory();
+    }
 
     /**
      * @beforeClass

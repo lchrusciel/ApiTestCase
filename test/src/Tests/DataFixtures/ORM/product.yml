@@ -2,9 +2,12 @@ ApiTestCase\Test\Entity\Product:
     product1:
         name: 'Phone'
         price: 200
+        uuid: '89e05515-1268-4f84-8efc-890137957af8'
     product2:
         name: 'Book'
         price: 15
+        uuid: '3df8852e-76e4-4e76-8fbb-5f73f6260036'
     product3:
         name: 'Mug'
         price: 5
+        uuid: '058db5c6-e1da-40ef-ab53-9c100397a578'

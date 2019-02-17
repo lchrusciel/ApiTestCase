@@ -130,6 +130,7 @@ class SampleController extends Controller
         $product = new Product();
         $product->setName($request->request->get('name'));
         $product->setPrice($request->request->get('price'));
+        $product->setUuid($request->request->get('uuid'));
 
         /** @var ObjectManager $productManager */
         $productManager = $this->getDoctrine()->getManager();

@@ -12,26 +12,24 @@
 namespace ApiTestCase;
 
 use Coduo\PHPMatcher\Factory;
-use Coduo\PHPMatcher\Lexer;
 use Coduo\PHPMatcher\Matcher;
-use Coduo\PHPMatcher\Parser;
 
-class MatcherFactory
+class MatcherFactory extends Factory\SimpleFactory
 {
     /**
      * @return Matcher
      */
-    public static function buildXmlMatcher()
+    public function buildXmlMatcher()
     {
-        return self::buildMatcher(Matcher\XmlMatcher::class);
+        return $this->buildMatcher(Matcher\XmlMatcher::class);
     }
 
     /**
      * @return Matcher
      */
-    public static function buildJsonMatcher()
+    public function buildJsonMatcher()
     {
-        return self::buildMatcher(Matcher\JsonMatcher::class);
+        return $this->buildMatcher(Matcher\JsonMatcher::class);
     }
 
     /**
@@ -39,66 +37,13 @@ class MatcherFactory
      *
      * @return Matcher
      */
-    protected static function buildMatcher($matcherClass)
+    protected function buildMatcher($matcherClass)
     {
-        $orMatcher = self::buildOrMatcher();
+        $orMatcher = $this->buildOrMatcher();
         $chainMatcher = new Matcher\ChainMatcher(array(
             new $matcherClass($orMatcher),
         ));
 
         return new Matcher($chainMatcher);
-    }
-
-    /**
-     * @return Matcher\ChainMatcher
-     */
-    protected static function buildOrMatcher()
-    {
-        $scalarMatchers = self::buildScalarMatchers();
-        $orMatcher = new Matcher\OrMatcher($scalarMatchers);
-        $arrayMatcher = new Matcher\ArrayMatcher(
-            new Matcher\ChainMatcher(array(
-                $orMatcher,
-                $scalarMatchers
-            )),
-            self::buildParser()
-        );
-
-        $chainMatcher = new Matcher\ChainMatcher(array(
-            $orMatcher,
-            $arrayMatcher,
-        ));
-
-        return $chainMatcher;
-    }
-
-    /**
-     * @return Matcher\ChainMatcher
-     */
-    protected static function buildScalarMatchers()
-    {
-        $parser = self::buildParser();
-
-        return new Matcher\ChainMatcher(array(
-            new Matcher\CallbackMatcher(),
-            new Matcher\ExpressionMatcher(),
-            new Matcher\NullMatcher(),
-            new Matcher\StringMatcher($parser),
-            new Matcher\IntegerMatcher($parser),
-            new Matcher\BooleanMatcher($parser),
-            new Matcher\DoubleMatcher($parser),
-            new Matcher\NumberMatcher($parser),
-            new Matcher\ScalarMatcher(),
-            new Matcher\WildcardMatcher(),
-            new Matcher\UuidMatcher($parser),
-        ));
-    }
-
-    /**
-     * @return Parser
-     */
-    protected static function buildParser()
-    {
-        return new Parser(new Lexer(), new Parser\ExpanderInitializer());
     }
 }
