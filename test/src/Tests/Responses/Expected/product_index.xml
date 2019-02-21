@@ -4,15 +4,18 @@
     <id>@string@</id>
     <name>Phone</name>
     <price>200</price>
+    <uuid>@uuid@</uuid>
   </item>
   <item key="1">
     <id>@string@</id>
     <name>Book</name>
     <price>15</price>
+    <uuid>@uuid@</uuid>
   </item>
   <item key="2">
     <id>@string@</id>
     <name>Mug</name>
     <price>5</price>
+    <uuid>@uuid@</uuid>
   </item>
 </response>

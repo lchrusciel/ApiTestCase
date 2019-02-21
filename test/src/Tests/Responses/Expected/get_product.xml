@@ -3,4 +3,5 @@
   <id>@string@</id>
   <name>Phone</name>
   <price>200</price>
+  <uuid>@uuid@</uuid>
 </response>

@@ -2,16 +2,19 @@
     {
         "id": @integer@,
         "name": "Phone",
-        "price": 200
+        "price": 200,
+        "uuid": @uuid@
     },
     {
         "id": @integer@,
         "name": "Book",
-        "price": 15
+        "price": 15,
+        "uuid":  @uuid@
     },
     {
         "id": @integer@,
         "name": "Mug",
-        "price": 5
+        "price": 5,
+        "uuid":  @uuid@
     }
 ]

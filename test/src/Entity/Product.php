@@ -29,6 +29,11 @@ class Product
     private $price;
 
     /**
+     * @var string
+     */
+    private $uuid;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -66,5 +71,21 @@ class Product
     public function setPrice($price)
     {
         $this->price = $price;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * @param string $uuid
+     */
+    public function setUuid($uuid)
+    {
+        $this->uuid = $uuid;
     }
 }

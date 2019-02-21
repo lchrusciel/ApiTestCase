@@ -12,3 +12,5 @@ ApiTestCase\Test\Entity\Product:
             type: string
         price:
             type: integer
+        uuid:
+            type: string

@@ -138,7 +138,8 @@ class SampleControllerJsonTest extends JsonApiTestCase
 <<<EOT
         {
             "name": "Star Wars T-Shirt",
-            "price": 1000
+            "price": 1000,
+            "uuid": "d914ffec-5ad0-4b52-b465-46b10e2548e7"
         }
 EOT;
 

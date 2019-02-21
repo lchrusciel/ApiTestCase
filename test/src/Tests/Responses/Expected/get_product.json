@@ -1,5 +1,6 @@
 {
     "id": @integer@,
     "name": "Phone",
-    "price": 200
+    "price": 200,
+    "uuid": @uuid@
 }
