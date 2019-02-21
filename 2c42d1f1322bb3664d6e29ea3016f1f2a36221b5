@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by lchrusciel at 2019-02-17T14:16:18Z
+
+Hey Michael! Thanks for your contribution. Of course no, we should add it. Can you add some test for that? Just extend one of the models and some hardcoded UUID.
+
+---------------------------------------------------------------------------
+
+by MichaelKubovic at 2019-02-17T23:08:44Z
+
+I've added uuid to Product model and also refactored MatcherFactory to rely on SimpleFactory.
+
+---------------------------------------------------------------------------
+
+by lchrusciel at 2019-02-21T14:58:09Z
+
+Thank you, Michael! :tada:
