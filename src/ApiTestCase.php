@@ -114,9 +114,10 @@ abstract class ApiTestCase extends WebTestCase
             foreach ($this->client->getContainer()->getMockedServices() as $id => $service) {
                 $this->client->getContainer()->unmock($id);
             }
+
+            \Mockery::close();
         }
 
-        \Mockery::close();
         $this->client = null;
         $this->entityManager = null;
         $this->fixtureLoader = null;
