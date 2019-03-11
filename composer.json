@@ -32,10 +32,10 @@
         "doctrine/orm": "^2.5",
         "nelmio/alice": "^3.1",
         "phpspec/php-diff": "^1.1",
-        "phpunit/phpunit": "^6.0|^7.0|^8.0",
         "symfony/browser-kit": "^3.4|^4.0",
         "symfony/finder": "^3.4|^4.0",
         "symfony/framework-bundle": "^3.4|^4.0",
+        "symfony/phpunit-bridge": "^3.4|^4.0",
         "theofidry/alice-data-fixtures": "^1.0"
     },
     "require-dev": {
