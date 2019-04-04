@@ -117,7 +117,7 @@ abstract class ApiTestCase extends WebTestCase
         }
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         if (null !== $this->client &&
             null !== $this->client->getContainer() &&
