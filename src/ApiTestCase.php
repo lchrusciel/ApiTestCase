@@ -366,7 +366,7 @@ abstract class ApiTestCase extends WebTestCase
     {
         if (null === $this->dataFixturesPath) {
             $this->dataFixturesPath = isset($_SERVER['FIXTURES_DIR']) ?
-                PathBuilder::build($this->getRootDir(), $_SERVER['FIXTURES_DIR'] ) :
+                PathBuilder::build($this->getRootDir(), $_SERVER['FIXTURES_DIR']) :
                 PathBuilder::build($this->getCalledClassFolder(), '..', 'DataFixtures', 'ORM');
         }
 
@@ -429,6 +429,6 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getRootDir()
     {
-        return $this->get('kernel')->getRootDir();
+        return $this->get('kernel')->getProjectDir();
     }
 }
