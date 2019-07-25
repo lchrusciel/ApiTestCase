@@ -59,21 +59,21 @@ abstract class XmlApiTestCase extends ApiTestCase
 
     /**
      * @param Response $actualResponse
-     * @param $filename
+     * @param string $filename
      *
      * @throws \Exception
      */
-    protected function assertXmlResponseContent(Response $actualResponse, $filename)
+    protected function assertXmlResponseContent(Response $actualResponse, string $filename)
     {
         parent::assertResponseContent($this->prettifyXml($actualResponse->getContent()), $filename, 'xml');
     }
 
     /**
-     * @param $actualResponse
+     * @param string $actualResponse
      *
      * @return string
      */
-    protected function prettifyXml($actualResponse)
+    protected function prettifyXml(string $actualResponse)
     {
         $domXmlDocument = new \DOMDocument('1.0');
         $domXmlDocument->preserveWhiteSpace = false;

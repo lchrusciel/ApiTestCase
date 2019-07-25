@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Service\ResetInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * KernelTestCase is the base class for tests needing a Kernel.
@@ -31,7 +32,7 @@ abstract class KernelTestCase extends TestCase
     protected static $kernel;
 
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|null
      */
     protected static $container;
 
@@ -67,7 +68,13 @@ abstract class KernelTestCase extends TestCase
         static::$kernel->boot();
 
         $container = static::$kernel->getContainer();
-        static::$container = $container->has('test.service_container') ? $container->get('test.service_container') : $container;
+        Assert::notNull($container);
+
+        if($container->has('test.service_container')) {
+            /** @var ContainerInterface $container */
+            $container = $container->get('test.service_container');
+        }
+        static::$container = $container;
 
         return static::$kernel;
     }
