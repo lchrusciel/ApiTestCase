@@ -427,7 +427,7 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * @return string
      */
-    private function getRootDir()
+     private function getProjectDir()
     {
         return $this->get('kernel')->getProjectDir();
     }
