@@ -387,7 +387,7 @@ abstract class ApiTestCase extends WebTestCase
     {
         if (null === $this->dataFixturesPath) {
             $this->dataFixturesPath = isset($_SERVER['FIXTURES_DIR']) ?
-                PathBuilder::build($this->getRootDir(), $_SERVER['FIXTURES_DIR']) :
+                PathBuilder::build($this->getProjectDir(), $_SERVER['FIXTURES_DIR']) :
                 PathBuilder::build($this->getCalledClassFolder(), '..', 'DataFixtures', 'ORM');
         }
 
@@ -401,7 +401,7 @@ abstract class ApiTestCase extends WebTestCase
     {
         if (null === $this->expectedResponsesPath) {
             $this->expectedResponsesPath = isset($_SERVER['EXPECTED_RESPONSE_DIR']) ?
-                PathBuilder::build($this->getRootDir(), $_SERVER['EXPECTED_RESPONSE_DIR']) :
+                PathBuilder::build($this->getProjectDir(), $_SERVER['EXPECTED_RESPONSE_DIR']) :
                 PathBuilder::build($this->getCalledClassFolder(), '..', 'Responses', 'Expected');
         }
 
@@ -415,7 +415,7 @@ abstract class ApiTestCase extends WebTestCase
     {
         if (null === $this->mockedResponsesPath) {
             $this->mockedResponsesPath = isset($_SERVER['MOCKED_RESPONSE_DIR']) ?
-                PathBuilder::build($this->getRootDir(), $_SERVER['MOCKED_RESPONSE_DIR']) :
+                PathBuilder::build($this->getProjectDir(), $_SERVER['MOCKED_RESPONSE_DIR']) :
                 PathBuilder::build($this->getCalledClassFolder(), '..', 'Responses', 'Mocked');
         }
 
@@ -451,11 +451,13 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * @return string
      */
-    private function getRootDir()
+    private function getProjectDir()
     {
-        /** @var KernelInterface $kernel
+        /**
+         * @var KernelInterface $kernel
          */
         $kernel = $this->get('kernel');
-        return $kernel->getRootDir();
+
+        return $kernel->getProjectDir();
     }
 }
