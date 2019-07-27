@@ -51,4 +51,4 @@ script:
     - composer validate --strict
     - composer analyse
 
-    - vendor/bin/phpunit
+    - vendor/bin/simple-phpunit
