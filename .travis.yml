@@ -50,4 +50,4 @@ before_script:
 script:
     - composer validate --strict
 
-    - vendor/bin/phpunit
+    - vendor/bin/simple-phpunit
