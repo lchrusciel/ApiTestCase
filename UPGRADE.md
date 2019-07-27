@@ -1,5 +1,9 @@
 # ApiTestCase upgrade instructions
 
+## Upgrading from v4 to v5
+
+* Path resolution for `FIXTURES_DIR`, `EXPECTED_RESPONSE_DIR` and `MOCKED_RESPONSE_DIR` should be adjusted to reflect a relative position according to project root dir. 
+
 ## Upgrading from v3 to v4
 
 * Change namespace from `Lakion\ApiTestCase` to `ApiTestCase``
