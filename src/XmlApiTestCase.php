@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the ApiTestCase package.
  *
@@ -11,6 +13,7 @@
 
 namespace ApiTestCase;
 
+use Coduo\PHPMatcher\Matcher;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class XmlApiTestCase extends ApiTestCase
@@ -18,27 +21,23 @@ abstract class XmlApiTestCase extends ApiTestCase
     /**
      * @before
      */
-    public function setUpClient()
+    public function setUpClient(): void
     {
-        $this->client = static::createClient(array(), array('HTTP_ACCEPT' => 'application/xml'));
+        $this->client = static::createClient([], ['HTTP_ACCEPT' => 'application/xml']);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function buildMatcher()
+    protected function buildMatcher(): Matcher
     {
         return $this->matcherFactory->buildXmlMatcher();
     }
 
     /**
-     * @param Response $response
-     * @param string $filename
-     * @param int $statusCode
-     *
      * @throws \Exception
      */
-    protected function assertResponse(Response $response, $filename, $statusCode = 200)
+    protected function assertResponse(Response $response, string $filename, int $statusCode = 200): void
     {
         if (isset($_SERVER['OPEN_ERROR_IN_BROWSER']) && true === $_SERVER['OPEN_ERROR_IN_BROWSER']) {
             $this->showErrorInBrowserIfOccurred($response);
@@ -49,36 +48,25 @@ abstract class XmlApiTestCase extends ApiTestCase
         $this->assertXmlResponseContent($response, $filename);
     }
 
-    /**
-     * @param Response $response
-     */
-    protected function assertXmlHeader(Response $response)
+    protected function assertXmlHeader(Response $response): void
     {
         parent::assertHeader($response, 'application/xml');
     }
 
     /**
-     * @param Response $actualResponse
-     * @param string $filename
-     *
      * @throws \Exception
      */
-    protected function assertXmlResponseContent(Response $actualResponse, string $filename)
+    protected function assertXmlResponseContent(Response $actualResponse, string $filename): void
     {
         parent::assertResponseContent($this->prettifyXml($actualResponse->getContent()), $filename, 'xml');
     }
 
-    /**
-     * @param string $actualResponse
-     *
-     * @return string
-     */
-    protected function prettifyXml(string $actualResponse)
+    protected function prettifyXml(string $actualResponse): string
     {
         $domXmlDocument = new \DOMDocument('1.0');
         $domXmlDocument->preserveWhiteSpace = false;
         $domXmlDocument->formatOutput = true;
-        $domXmlDocument->loadXML(str_replace("\n", "", $actualResponse));
+        $domXmlDocument->loadXML(str_replace("\n", '', $actualResponse));
 
         return $domXmlDocument->saveXML();
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the ApiTestCase package.
  *
@@ -17,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SampleControllerJsonTest extends JsonApiTestCase
 {
-    public function testGetHelloWorldResponse()
+    public function testGetHelloWorldResponse(): void
     {
         $this->client->request('GET', '/');
 
@@ -26,7 +28,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'hello_world');
     }
 
-    public function testGetHelloWorldResponseWithCharsetOnContentType()
+    public function testGetHelloWorldResponseWithCharsetOnContentType(): void
     {
         $this->client->request('GET', '/', [], [], ['HTTP_ACCEPT' => 'application/json; charset=utf-8']);
 
@@ -35,7 +37,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'hello_world');
     }
 
-    public function testGetHelloWorldResponseWithProblemOnContentType()
+    public function testGetHelloWorldResponseWithProblemOnContentType(): void
     {
         $this->client->request('GET', '/', [], [], ['HTTP_ACCEPT' => 'application/problem+json; charset=utf-8']);
 
@@ -44,7 +46,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'hello_world');
     }
 
-    public function testGetHelloWorldResponseWithEscapedUnicode()
+    public function testGetHelloWorldResponseWithEscapedUnicode(): void
     {
         $_SERVER['ESCAPE_JSON'] = true;
 
@@ -55,7 +57,10 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'hello_world_escaped');
     }
 
-    public function testGetHelloWorldIncorrectResponse()
+    /**
+     * @expectedException \PHPUnit\Framework\AssertionFailedError
+     */
+    public function testGetHelloWorldIncorrectResponse(): void
     {
         $this->expectException(AssertionFailedError::class);
 
@@ -66,7 +71,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'incorrect_hello_world');
     }
 
-    public function testGetHelloWorldWithMatcherResponse()
+    public function testGetHelloWorldWithMatcherResponse(): void
     {
         $this->client->request('GET', '/');
 
@@ -75,7 +80,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'hello_matcher_world');
     }
 
-    public function testGetHelloWorldWithWildCardResponse()
+    public function testGetHelloWorldWithWildCardResponse(): void
     {
         $this->client->request('GET', '/');
 
@@ -84,7 +89,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'hello_wild_card');
     }
 
-    public function testGetProductInventoryFromThirdPartyApi()
+    public function testGetProductInventoryFromThirdPartyApi(): void
     {
         $this->client->getContainer()->mock('app.third_party_api_client', 'ApiTestCase\Test\Service\ThirdPartyApiClient')
             ->shouldReceive('getInventory')
@@ -99,7 +104,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'use_third_party_api');
     }
 
-    public function testProductIndexResponse()
+    public function testProductIndexResponse(): void
     {
         $this->loadFixturesFromDirectory();
 
@@ -110,7 +115,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'product_index');
     }
 
-    public function testCategoryIndexResponse()
+    public function testCategoryIndexResponse(): void
     {
         $this->loadFixturesFromFiles(['product.yml', 'category.yml']);
 
@@ -121,7 +126,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'category_index');
     }
 
-    public function testProductShowResponse()
+    public function testProductShowResponse(): void
     {
         $objects = $this->loadFixturesFromDirectory();
 
@@ -132,7 +137,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'get_product');
     }
 
-    public function testProductCreateResponse()
+    public function testProductCreateResponse(): void
     {
         $data =
 <<<EOT

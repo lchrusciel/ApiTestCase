@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the ApiTestCase package.
  *
@@ -13,7 +15,8 @@ namespace ApiTestCase\Test\Service;
 
 class ThirdPartyApiClient
 {
-    public function getInventory()
+    public function getInventory(): ?array
     {
+        return null;
     }
 }

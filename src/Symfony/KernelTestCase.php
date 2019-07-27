@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony package.
  *
@@ -19,21 +21,15 @@ use Webmozart\Assert\Assert;
 
 /**
  * KernelTestCase is the base class for tests needing a Kernel.
- *
- * @author Fabien Potencier <fabien@symfony.com>
  */
 abstract class KernelTestCase extends TestCase
 {
     protected static $class;
 
-    /**
-     * @var KernelInterface
-     */
+    /** @var KernelInterface */
     protected static $kernel;
 
-    /**
-     * @var ContainerInterface|null
-     */
+    /** @var ContainerInterface|null */
     protected static $container;
 
     /**
@@ -42,7 +38,7 @@ abstract class KernelTestCase extends TestCase
      * @throws \RuntimeException
      * @throws \LogicException
      */
-    protected static function getKernelClass()
+    protected static function getKernelClass(): string
     {
         if (!isset($_SERVER['KERNEL_CLASS']) && !isset($_ENV['KERNEL_CLASS'])) {
             throw new \LogicException(sprintf('You must set the KERNEL_CLASS environment variable to the fully-qualified class name of your Kernel in phpunit.xml / phpunit.xml.dist or override the %1$s::createKernel() or %1$s::getKernelClass() method.', static::class));
@@ -60,7 +56,7 @@ abstract class KernelTestCase extends TestCase
      *
      * @return KernelInterface A KernelInterface instance
      */
-    protected static function bootKernel(array $options = [])
+    protected static function bootKernel(array $options = []): KernelInterface
     {
         static::ensureKernelShutdown();
 
@@ -70,7 +66,7 @@ abstract class KernelTestCase extends TestCase
         $container = static::$kernel->getContainer();
         Assert::notNull($container);
 
-        if($container->has('test.service_container')) {
+        if ($container->has('test.service_container')) {
             /** @var ContainerInterface $container */
             $container = $container->get('test.service_container');
         }
@@ -89,7 +85,7 @@ abstract class KernelTestCase extends TestCase
      *
      * @return KernelInterface A KernelInterface instance
      */
-    protected static function createKernel(array $options = [])
+    protected static function createKernel(array $options = []): KernelInterface
     {
         if (null === static::$class) {
             static::$class = static::getKernelClass();
@@ -121,7 +117,7 @@ abstract class KernelTestCase extends TestCase
     /**
      * Shuts the kernel down if it was used in the test.
      */
-    protected static function ensureKernelShutdown()
+    protected static function ensureKernelShutdown(): void
     {
         if (null !== static::$kernel) {
             $container = static::$kernel->getContainer();

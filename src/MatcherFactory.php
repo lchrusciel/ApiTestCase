@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the ApiTestCase package.
  *
@@ -16,33 +18,22 @@ use Coduo\PHPMatcher\Matcher;
 
 class MatcherFactory extends Factory\SimpleFactory
 {
-    /**
-     * @return Matcher
-     */
-    public function buildXmlMatcher()
+    public function buildXmlMatcher(): Matcher
     {
         return $this->buildMatcher(Matcher\XmlMatcher::class);
     }
 
-    /**
-     * @return Matcher
-     */
-    public function buildJsonMatcher()
+    public function buildJsonMatcher(): Matcher
     {
         return $this->buildMatcher(Matcher\JsonMatcher::class);
     }
 
-    /**
-     * @param string $matcherClass
-     *
-     * @return Matcher
-     */
-    protected function buildMatcher($matcherClass)
+    protected function buildMatcher(string $matcherClass): Matcher
     {
         $orMatcher = $this->buildOrMatcher();
-        $chainMatcher = new Matcher\ChainMatcher(array(
+        $chainMatcher = new Matcher\ChainMatcher([
             new $matcherClass($orMatcher),
-        ));
+        ]);
 
         return new Matcher($chainMatcher);
     }

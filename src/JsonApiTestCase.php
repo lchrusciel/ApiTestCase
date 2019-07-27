@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the ApiTestCase package.
  *
@@ -11,6 +13,7 @@
 
 namespace ApiTestCase;
 
+use Coduo\PHPMatcher\Matcher;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class JsonApiTestCase extends ApiTestCase
@@ -18,15 +21,12 @@ abstract class JsonApiTestCase extends ApiTestCase
     /**
      * @before
      */
-    public function setUpClient()
+    public function setUpClient(): void
     {
-        $this->client = static::createClient(array(), array('HTTP_ACCEPT' => 'application/json'));
+        $this->client = static::createClient([], ['HTTP_ACCEPT' => 'application/json']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function buildMatcher()
+    protected function buildMatcher(): Matcher
     {
         return $this->matcherFactory->buildJsonMatcher();
     }
@@ -36,13 +36,9 @@ abstract class JsonApiTestCase extends ApiTestCase
      * If filename is set, asserts that response content matches the one in given file.
      * If statusCode is set, asserts that response has given status code.
      *
-     * @param Response $response
-     * @param string $filename
-     * @param int $statusCode (optional)
-     *
      * @throws \Exception
      */
-    protected function assertResponse(Response $response, string $filename, int $statusCode = 200)
+    protected function assertResponse(Response $response, string $filename, int $statusCode = 200): void
     {
         if (isset($_SERVER['OPEN_ERROR_IN_BROWSER']) && true === $_SERVER['OPEN_ERROR_IN_BROWSER']) {
             $this->showErrorInBrowserIfOccurred($response);
@@ -53,10 +49,7 @@ abstract class JsonApiTestCase extends ApiTestCase
         $this->assertJsonResponseContent($response, $filename);
     }
 
-    /**
-     * @param Response $response
-     */
-    protected function assertJsonHeader(Response $response)
+    protected function assertJsonHeader(Response $response): void
     {
         parent::assertHeader($response, 'application');
         parent::assertHeader($response, 'json');
@@ -65,30 +58,23 @@ abstract class JsonApiTestCase extends ApiTestCase
     /**
      * Asserts that response has JSON content matching the one given in file.
      *
-     * @param Response $response
-     * @param string $filename
-     *
      * @throws \Exception
      */
-    protected function assertJsonResponseContent(Response $response, string $filename)
+    protected function assertJsonResponseContent(Response $response, string $filename): void
     {
         parent::assertResponseContent($this->prettifyJson($response->getContent()), $filename, 'json');
     }
 
-    /**
-     * @param mixed $content
-     *
-     * @return string
-     */
-    protected function prettifyJson($content)
+    protected function prettifyJson($content): string
     {
-        $jsonFlags = JSON_PRETTY_PRINT;
+        $jsonFlags = \JSON_PRETTY_PRINT;
         if (!isset($_SERVER['ESCAPE_JSON']) || true !== $_SERVER['ESCAPE_JSON']) {
-            $jsonFlags = $jsonFlags | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
+            $jsonFlags |= \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES;
         }
 
         /** @var string $encodedContent */
         $encodedContent = json_encode(json_decode($content, true), $jsonFlags);
+
         return $encodedContent;
     }
 }
