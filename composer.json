@@ -24,7 +24,7 @@
         }
     ],
     "require": {
-        "php": "^7.1",
+        "php": "^7.2",
         "ext-json": "*",
 
         "coduo/php-matcher": "^2.3|^3.0",
