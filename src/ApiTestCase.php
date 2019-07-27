@@ -16,21 +16,23 @@ use Coduo\PHPMatcher\Matcher;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Fidry\AliceDataFixtures\LoaderInterface;
+use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\DependencyInjection\ResettableContainerInterface;
+use Webmozart\Assert\Assert;
 
 abstract class ApiTestCase extends WebTestCase
 {
     /**
-     * @var Kernel
+     * @var KernelInterface
      */
     protected static $sharedKernel;
 
     /**
-     * @var Client
+     * @var Client|null
      */
     protected $client;
 
@@ -55,12 +57,12 @@ abstract class ApiTestCase extends WebTestCase
     protected $matcherFactory;
 
     /**
-     * @var LoaderInterface
+     * @var LoaderInterface|null
      */
     private $fixtureLoader;
 
     /**
-     * @var EntityManager
+     * @var EntityManager|null
      */
     private $entityManager;
 
@@ -108,10 +110,19 @@ abstract class ApiTestCase extends WebTestCase
     public function setUpDatabase()
     {
         if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
-            $this->entityManager = static::$sharedKernel->getContainer()->get('doctrine.orm.entity_manager');
+            $container = static::$sharedKernel->getContainer();
+            Assert::notNull($container);
+
+            /** @var EntityManager $entityManager */
+            $entityManager = $container->get('doctrine.orm.entity_manager');
+            Assert::notNull($entityManager);
+
+            $this->entityManager = $entityManager;
             $this->entityManager->getConnection()->connect();
 
-            $this->fixtureLoader = static::$sharedKernel->getContainer()->get('fidry_alice_data_fixtures.loader.doctrine');
+            /** @var LoaderInterface $fixtureLoader */
+            $fixtureLoader        = $container->get('fidry_alice_data_fixtures.loader.doctrine');
+            $this->fixtureLoader = $fixtureLoader;
 
             $this->purgeDatabase();
         }
@@ -123,8 +134,11 @@ abstract class ApiTestCase extends WebTestCase
             null !== $this->client->getContainer() &&
             $this->client->getContainer() instanceof \PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer
         ) {
-            foreach ($this->client->getContainer()->getMockedServices() as $id => $service) {
-                $this->client->getContainer()->unmock($id);
+            $container = $this->client->getContainer();
+            Assert::notNull($container);
+
+            foreach ($container->getMockedServices() as $id => $service) {
+                $container->unmock($id);
             }
 
             \Mockery::close();
@@ -176,7 +190,13 @@ abstract class ApiTestCase extends WebTestCase
      */
     protected function get($id)
     {
-        return $this->client->getContainer()->get($id);
+        $client = $this->client;
+        Assert::notNull($client);
+
+        $container = $client->getContainer();
+        Assert::notNull($container);
+
+        return $container->get($id);
     }
 
     /**
@@ -192,21 +212,12 @@ abstract class ApiTestCase extends WebTestCase
      * @param Response $response
      * @param string $contentType
      */
-    protected function assertHeader(Response $response, $contentType)
+    protected function assertHeader(Response $response, string $contentType)
     {
-        if (method_exists(self::class, 'assertStringContainsString')) {
-            self::assertStringContainsString(
-                $contentType,
-                $response->headers->get('Content-Type'),
-                $response->headers
-            );
-        } else {
-            self::assertContains(
-                $contentType,
-                $response->headers->get('Content-Type'),
-                $response->headers
-            );
-        }
+        $headerContentType = $response->headers->get('Content-Type');
+        Assert::string($headerContentType);
+
+        self::assertContains( $contentType, $headerContentType, $response->headers );
     }
 
     /**
@@ -218,10 +229,13 @@ abstract class ApiTestCase extends WebTestCase
     {
         $responseSource = $this->getExpectedResponsesFolder();
 
-        $actualResponse = trim($actualResponse);
-        $expectedResponse = trim(file_get_contents(PathBuilder::build($responseSource, sprintf('%s.%s', $filename, $mimeType))));
+        $contents  = file_get_contents(PathBuilder::build($responseSource, sprintf('%s.%s', $filename, $mimeType)));
+        Assert::string($contents);
+
+        $expectedResponse = trim($contents);
 
         $matcher = $this->buildMatcher();
+        $actualResponse = trim($actualResponse);
         $result = $matcher->match($actualResponse, $expectedResponse);
 
         if (!$result) {
@@ -259,11 +273,14 @@ abstract class ApiTestCase extends WebTestCase
      *
      * @throws \Exception
      */
-    protected function getJsonResponseFixture($filename)
+    protected function getJsonResponseFixture(string $filename)
     {
         $responseSource = $this->getMockedResponsesFolder();
 
-        return json_decode(file_get_contents(PathBuilder::build($responseSource, $filename . '.json')), true);
+        $fileContent = file_get_contents(PathBuilder::build($responseSource, $filename.'.json'));
+        Assert::string($fileContent);
+
+        return json_decode($fileContent, true);
     }
 
     /**
@@ -271,7 +288,7 @@ abstract class ApiTestCase extends WebTestCase
      *
      * @return array
      */
-    protected function loadFixturesFromDirectory($source = '')
+    protected function loadFixturesFromDirectory(string $source = '')
     {
         $source = $this->getFixtureRealPath($source);
         $this->assertSourceExists($source);
@@ -288,7 +305,7 @@ abstract class ApiTestCase extends WebTestCase
             $files[] = $file->getRealPath();
         }
 
-        return $this->getFixtureLoader()->load($files);
+        return $this->getFixtureLoader()->load(array_filter($files));
     }
 
     /**
@@ -338,13 +355,17 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * @return EntityManager
      */
-    protected function getEntityManager()
+    protected function getEntityManager(): EntityManager
     {
-        if (null === $this->entityManager || !$this->entityManager->getConnection()->isConnected()) {
+        $entityManager = $this->entityManager;
+        if (null === $entityManager || !$entityManager->getConnection()->isConnected()) {
             static::fail('Could not establish test database connection.');
+
+            // PHPStan can not figure out that this part of the code should never be reached
+            throw new InvalidArgumentException('Could not establish test database connection.');
         }
 
-        return $this->entityManager;
+        return $entityManager;
     }
 
     /**
@@ -366,7 +387,7 @@ abstract class ApiTestCase extends WebTestCase
     {
         if (null === $this->dataFixturesPath) {
             $this->dataFixturesPath = isset($_SERVER['FIXTURES_DIR']) ?
-                PathBuilder::build($this->getRootDir(), $_SERVER['FIXTURES_DIR'] ) :
+                PathBuilder::build($this->getRootDir(), $_SERVER['FIXTURES_DIR']) :
                 PathBuilder::build($this->getCalledClassFolder(), '..', 'DataFixtures', 'ORM');
         }
 
@@ -406,8 +427,11 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getCalledClassFolder()
     {
-        $calledClass = get_called_class();
-        $calledClassFolder = dirname((new \ReflectionClass($calledClass))->getFileName());
+        $calledClass       = get_called_class();
+
+        /** @var string $fileName */
+        $fileName          = (new \ReflectionClass($calledClass))->getFileName();
+        $calledClassFolder = dirname($fileName);
 
         $this->assertSourceExists($calledClassFolder);
 
@@ -429,6 +453,9 @@ abstract class ApiTestCase extends WebTestCase
      */
     private function getRootDir()
     {
-        return $this->get('kernel')->getRootDir();
+        /** @var KernelInterface $kernel
+         */
+        $kernel = $this->get('kernel');
+        return $kernel->getRootDir();
     }
 }

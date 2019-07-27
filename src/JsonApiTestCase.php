@@ -37,12 +37,12 @@ abstract class JsonApiTestCase extends ApiTestCase
      * If statusCode is set, asserts that response has given status code.
      *
      * @param Response $response
-     * @param string|null $filename
-     * @param int|null $statusCode
+     * @param string $filename
+     * @param int $statusCode (optional)
      *
      * @throws \Exception
      */
-    protected function assertResponse(Response $response, $filename, $statusCode = 200)
+    protected function assertResponse(Response $response, string $filename, int $statusCode = 200)
     {
         if (isset($_SERVER['OPEN_ERROR_IN_BROWSER']) && true === $_SERVER['OPEN_ERROR_IN_BROWSER']) {
             $this->showErrorInBrowserIfOccurred($response);
@@ -70,13 +70,13 @@ abstract class JsonApiTestCase extends ApiTestCase
      *
      * @throws \Exception
      */
-    protected function assertJsonResponseContent(Response $response, $filename)
+    protected function assertJsonResponseContent(Response $response, string $filename)
     {
         parent::assertResponseContent($this->prettifyJson($response->getContent()), $filename, 'json');
     }
 
     /**
-     * @param $content
+     * @param mixed $content
      *
      * @return string
      */
@@ -87,6 +87,8 @@ abstract class JsonApiTestCase extends ApiTestCase
             $jsonFlags = $jsonFlags | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
         }
 
-        return json_encode(json_decode($content), $jsonFlags);
+        /** @var string $encodedContent */
+        $encodedContent = json_encode(json_decode($content, true), $jsonFlags);
+        return $encodedContent;
     }
 }
