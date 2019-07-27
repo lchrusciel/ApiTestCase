@@ -2,6 +2,7 @@
 
 <phpunit backupGlobals="false" colors="true">
     <php>
+        <env name="SHELL_VERBOSITY" value="-1" />
         <server name="OPEN_ERROR_IN_BROWSER" value="true" />
         <server name="IS_DOCTRINE_ORM_SUPPORTED" value="true" />
         <server name="KERNEL_CLASS" value="ApiTestCase\Test\App\AppKernel" />
