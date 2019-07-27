@@ -74,6 +74,7 @@ abstract class JsonApiTestCase extends ApiTestCase
 
         /** @var string $encodedContent */
         $encodedContent = json_encode(json_decode($content, true), $jsonFlags);
+
         return $encodedContent;
     }
 }

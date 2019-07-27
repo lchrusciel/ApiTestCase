@@ -18,25 +18,21 @@ use Coduo\PHPMatcher\Matcher;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Fidry\AliceDataFixtures\LoaderInterface;
-use InvalidArgumentException;
 use Fidry\AliceDataFixtures\ProcessorInterface;
+use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Component\DependencyInjection\ResettableContainerInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\DependencyInjection\ResettableContainerInterface;
 use Webmozart\Assert\Assert;
 
 abstract class ApiTestCase extends WebTestCase
 {
-    /**
-     * @var KernelInterface
-     */
+    /** @var KernelInterface */
     protected static $sharedKernel;
 
-    /**
-     * @var Client|null
-     */
+    /** @var Client|null */
     protected $client;
 
     /** @var string|null */
@@ -112,7 +108,7 @@ abstract class ApiTestCase extends WebTestCase
             $this->entityManager->getConnection()->connect();
 
             /** @var LoaderInterface $fixtureLoader */
-            $fixtureLoader        = $container->get('fidry_alice_data_fixtures.loader.doctrine');
+            $fixtureLoader = $container->get('fidry_alice_data_fixtures.loader.doctrine');
             $this->fixtureLoader = $fixtureLoader;
 
             $this->purgeDatabase();
@@ -145,7 +141,7 @@ abstract class ApiTestCase extends WebTestCase
     abstract protected function buildMatcher(): Matcher;
 
     /**
-     * @return array|ProcessorInterface[]
+     * @return ProcessorInterface[]
      */
     protected function getFixtureProcessors(): array
     {
@@ -172,7 +168,7 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * Gets service from DIC.
      */
-    protected function get(string $id): object
+    protected function get(string $id)
     {
         $client = $this->client;
         Assert::notNull($client);
@@ -203,7 +199,7 @@ abstract class ApiTestCase extends WebTestCase
     {
         $responseSource = $this->getExpectedResponsesFolder();
 
-        $contents  = file_get_contents(PathBuilder::build($responseSource, sprintf('%s.%s', $filename, $mimeType)));
+        $contents = file_get_contents(PathBuilder::build($responseSource, sprintf('%s.%s', $filename, $mimeType)));
         Assert::string($contents);
 
         $expectedResponse = trim($contents);
@@ -245,7 +241,7 @@ abstract class ApiTestCase extends WebTestCase
     {
         $responseSource = $this->getMockedResponsesFolder();
 
-        $fileContent = file_get_contents(PathBuilder::build($responseSource, $filename.'.json'));
+        $fileContent = file_get_contents(PathBuilder::build($responseSource, $filename . '.json'));
         Assert::string($fileContent);
 
         return json_decode($fileContent, true);
@@ -280,9 +276,9 @@ abstract class ApiTestCase extends WebTestCase
     }
 
     /**
-     * @param array|string[] $sources
+     * @param string[] $sources
      *
-     * @return array|object[]
+     * @return object[]
      */
     protected function loadFixturesFromFiles(array $sources): array
     {
@@ -362,7 +358,7 @@ abstract class ApiTestCase extends WebTestCase
 
     private function getCalledClassFolder(): string
     {
-        $calledClass  = get_called_class();
+        $calledClass = get_called_class();
 
         /** @var string $fileName */
         $fileName = (new \ReflectionClass($calledClass))->getFileName();
@@ -382,9 +378,7 @@ abstract class ApiTestCase extends WebTestCase
 
     private function getProjectDir(): string
     {
-        /**
-         * @var KernelInterface $kernel
-         */
+        /** @var KernelInterface $kernel */
         $kernel = $this->get('kernel');
 
         return $kernel->getProjectDir();

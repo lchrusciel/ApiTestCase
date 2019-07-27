@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony package.
  *
@@ -17,8 +19,6 @@ use Webmozart\Assert\Assert;
 
 /**
  * WebTestCase is the base class for functional tests.
- *
- * @author Fabien Potencier <fabien@symfony.com>
  */
 abstract class WebTestCase extends KernelTestCase
 {

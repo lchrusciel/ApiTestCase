@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ApiTestCase;
 
 use Coduo\PHPMatcher\Factory;
-use Coduo\PHPMatcher\Lexer;
 use Coduo\PHPMatcher\Matcher;
 
 class MatcherFactory extends Factory\SimpleFactory
@@ -32,9 +31,9 @@ class MatcherFactory extends Factory\SimpleFactory
     protected function buildMatcher(string $matcherClass): Matcher
     {
         $orMatcher = $this->buildOrMatcher();
-        $chainMatcher = new Matcher\ChainMatcher(array(
+        $chainMatcher = new Matcher\ChainMatcher([
             new $matcherClass($orMatcher),
-        ));
+        ]);
 
         return new Matcher($chainMatcher);
     }

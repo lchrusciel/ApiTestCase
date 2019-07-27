@@ -52,10 +52,7 @@ class Product
         $this->price = $price;
     }
 
-    /**
-     * @return string
-     */
-    public function getUuid()
+    public function getUuid(): string
     {
         return $this->uuid;
     }
@@ -63,7 +60,7 @@ class Product
     /**
      * @param string $uuid
      */
-    public function setUuid($uuid)
+    public function setUuid($uuid): void
     {
         $this->uuid = $uuid;
     }

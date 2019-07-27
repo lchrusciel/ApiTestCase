@@ -5,5 +5,5 @@ imports:
 
 parameters:
     skip:
-        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingTraversableReturnTypeHintSpecification: ~
-        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint: ~
+        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff:
+            MissingTraversableParameterTypeHintSpecification: '*'
