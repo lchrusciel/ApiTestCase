@@ -12,8 +12,6 @@ php:
 
 env:
     - SYMFONY_VERSION=3.4.*
-    - PHPUNIT_VERSION=^6.0
-    - PHPUNIT_VERSION=^7.0
     - CODUO_VERSION=^2.3
     - MOST_RECENT=true
 
@@ -31,12 +29,6 @@ install:
         fi
 
     - |
-        if [ ! -z "${PHPUNIT_VERSION}" ]
-        then
-            composer require --dev "phpunit/phpunit:${PHPUNIT_VERSION}" --no-update --no-scripts --prefer-dist
-        fi
-
-    - |
         if [ ! -z "${CODUO_VERSION}" ]
         then
             composer require "coduo/php-matcher:${CODUO_VERSION}" --no-update --no-scripts --prefer-dist
@@ -51,4 +43,4 @@ script:
     - composer validate --strict
     - composer analyse
 
-    - vendor/bin/phpunit
+    - vendor/bin/simple-phpunit
