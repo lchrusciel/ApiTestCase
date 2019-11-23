@@ -181,7 +181,7 @@ abstract class ApiTestCase extends WebTestCase
 
     protected function assertResponseCode(Response $response, int $statusCode): void
     {
-        self::assertEquals($statusCode, $response->getStatusCode(), $response->getContent());
+        self::assertEquals($statusCode, $response->getStatusCode(), $response->getContent() ?: '');
     }
 
     protected function assertHeader(Response $response, string $contentType): void

@@ -1,7 +1,7 @@
 imports:
     - { resource: 'vendor/sylius-labs/coding-standard/easy-coding-standard.yml' }
-    - { resource: 'vendor/symplify/easy-coding-standard/config/clean-code.yml' }
-    - { resource: 'vendor/symplify/easy-coding-standard/config/php71.yml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/set/clean-code.yaml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/set/php71.yaml' }
 
 parameters:
     skip:
