@@ -44,7 +44,7 @@ install:
             composer require "coduo/php-matcher:${CODUO_VERSION}" --no-update --no-scripts --prefer-dist
         fi
 
-    - composer update --prefer-dist
+    - COMPOSER_MEMORY_LIMIT=-1 composer update --prefer-dist
 
 before_script:
     - test/app/console doctrine:schema:update --force -vvv
