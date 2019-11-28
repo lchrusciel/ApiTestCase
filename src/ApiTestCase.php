@@ -209,9 +209,7 @@ abstract class ApiTestCase extends WebTestCase
         $result = $matcher->match($actualResponse, $expectedResponse);
 
         if (!$result) {
-            $diff = new \Diff(explode(\PHP_EOL, $expectedResponse), explode(\PHP_EOL, $actualResponse), []);
-
-            self::fail($matcher->getError() . \PHP_EOL . $diff->render(new \Diff_Renderer_Text_Unified()));
+            self::fail($matcher->getError() . \PHP_EOL . ((string) $matcher->backtrace()));
         }
     }
 

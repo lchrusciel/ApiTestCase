@@ -20,21 +20,15 @@ class MatcherFactory extends Factory\SimpleFactory
 {
     public function buildXmlMatcher(): Matcher
     {
-        return $this->buildMatcher(Matcher\XmlMatcher::class);
+        $matcherFactory = new Factory\MatcherFactory();
+
+        return $matcherFactory->createMatcher();
     }
 
     public function buildJsonMatcher(): Matcher
     {
-        return $this->buildMatcher(Matcher\JsonMatcher::class);
-    }
+        $matcherFactory = new Factory\MatcherFactory();
 
-    protected function buildMatcher(string $matcherClass): Matcher
-    {
-        $orMatcher = $this->buildOrMatcher();
-        $chainMatcher = new Matcher\ChainMatcher([
-            new $matcherClass($orMatcher),
-        ]);
-
-        return new Matcher($chainMatcher);
+        return $matcherFactory->createMatcher();
     }
 }

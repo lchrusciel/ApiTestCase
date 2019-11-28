@@ -16,7 +16,7 @@
                 "uuid": @uuid@
             },
             {
-                "id": @integer@,
+                "id": @string@,
                 "name": "Mug",
                 "price": 5,
                 "uuid": @uuid@
