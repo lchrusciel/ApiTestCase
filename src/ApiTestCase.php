@@ -13,14 +13,13 @@ declare(strict_types=1);
 
 namespace ApiTestCase;
 
-use ApiTestCase\Symfony\WebTestCase;
 use Coduo\PHPMatcher\Matcher;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Fidry\AliceDataFixtures\ProcessorInterface;
 use InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ResettableContainerInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;

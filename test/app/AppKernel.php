@@ -45,7 +45,7 @@ class AppKernel extends Kernel
                 'test' => null,
                 'secret' => 'secret',
                 'router' => array(
-                    'resource' => '%kernel.root_dir%/config/routing.yml',
+                    'resource' => '%kernel.project_dir%/test/app/config/routing.yml',
                 ),
             ));
             $container->loadFromExtension('doctrine', array(
@@ -59,7 +59,7 @@ class AppKernel extends Kernel
                     'auto_mapping' => false,
                     'mappings' => array(
                         'ApiTestCase' => array(
-                            'dir' => '%kernel.root_dir%/config/doctrine',
+                            'dir' => '%kernel.project_dir%/test/app/config/doctrine',
                             'prefix' => 'ApiTestCase\Test\Entity',
                             'alias' => 'ApiTestCase',
                             'is_bundle' => false,
