@@ -35,6 +35,11 @@ class AppKernel extends Kernel
         );
     }
 
+    public function getProjectDir()
+    {
+        return \dirname(__DIR__);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -45,7 +50,7 @@ class AppKernel extends Kernel
                 'test' => null,
                 'secret' => 'secret',
                 'router' => array(
-                    'resource' => '%kernel.root_dir%/config/routing.yml',
+                    'resource' => '%kernel.project_dir%/app/config/routing.yml',
                 ),
             ));
             $container->loadFromExtension('doctrine', array(
@@ -59,7 +64,7 @@ class AppKernel extends Kernel
                     'auto_mapping' => false,
                     'mappings' => array(
                         'ApiTestCase' => array(
-                            'dir' => '%kernel.root_dir%/config/doctrine',
+                            'dir' => '%kernel.project_dir%/app/config/doctrine',
                             'prefix' => 'ApiTestCase\Test\Entity',
                             'alias' => 'ApiTestCase',
                             'is_bundle' => false,
@@ -72,6 +77,7 @@ class AppKernel extends Kernel
             $apiClientDefinition = new Definition(ThirdPartyApiClient::class);
             $apiClientDefinition->setPublic(true);
 
+            $container->setDefinition('app.third_party_api_client', $apiClientDefinition);
             $container->setDefinition('app.third_party_api_client', $apiClientDefinition);
         });
     }
