@@ -13,18 +13,18 @@ declare(strict_types=1);
 
 namespace ApiTestCase;
 
-use ApiTestCase\Symfony\WebTestCase;
 use Coduo\PHPMatcher\Matcher;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Fidry\AliceDataFixtures\LoaderInterface;
 use Fidry\AliceDataFixtures\ProcessorInterface;
 use InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Client;
-use Symfony\Component\DependencyInjection\ResettableContainerInterface;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Contracts\Service\ResetInterface;
 use Webmozart\Assert\Assert;
 
 abstract class ApiTestCase extends WebTestCase
@@ -32,7 +32,7 @@ abstract class ApiTestCase extends WebTestCase
     /** @var KernelInterface */
     protected static $sharedKernel;
 
-    /** @var Client|null */
+    /** @var KernelBrowser|null */
     protected $client;
 
     /** @var string|null */
@@ -77,7 +77,7 @@ abstract class ApiTestCase extends WebTestCase
         if (null !== static::$sharedKernel) {
             $container = static::$sharedKernel->getContainer();
             static::$sharedKernel->shutdown();
-            if ($container instanceof ResettableContainerInterface) {
+            if ($container instanceof ResetInterface) {
                 $container->reset();
             }
         }
