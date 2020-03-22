@@ -38,9 +38,6 @@ abstract class ApiTestCase extends WebTestCase
     /** @var string|null */
     protected $expectedResponsesPath;
 
-    /** @var string|null */
-    protected $mockedResponsesPath;
-
     /** @var string */
     protected $dataFixturesPath;
 
@@ -117,20 +114,6 @@ abstract class ApiTestCase extends WebTestCase
 
     protected function tearDown(): void
     {
-        if (null !== $this->client &&
-            null !== $this->client->getContainer() &&
-            $this->client->getContainer() instanceof \PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer
-        ) {
-            $container = $this->client->getContainer();
-            Assert::notNull($container);
-
-            foreach (array_keys($container->getMockedServices()) as $id) {
-                $container->unmock($id);
-            }
-
-            \Mockery::close();
-        }
-
         $this->client = null;
         $this->entityManager = null;
         $this->fixtureLoader = null;
@@ -189,7 +172,7 @@ abstract class ApiTestCase extends WebTestCase
         $headerContentType = $response->headers->get('Content-Type');
         Assert::string($headerContentType);
 
-        self::assertContains(
+        self::assertStringContainsString(
             $contentType,
             $headerContentType
         );
@@ -230,21 +213,6 @@ abstract class ApiTestCase extends WebTestCase
 
             throw new \Exception('Internal server error.');
         }
-    }
-
-    /**
-     * Provides array from decoded json file. Requires MOCKED_RESPONSE_DIR defined variable to work properly.
-     *
-     * @throws \Exception
-     */
-    protected function getJsonResponseFixture(string $filename): array
-    {
-        $responseSource = $this->getMockedResponsesFolder();
-
-        $fileContent = file_get_contents(PathBuilder::build($responseSource, $filename . '.json'));
-        Assert::string($fileContent);
-
-        return json_decode($fileContent, true);
     }
 
     protected function loadFixturesFromDirectory(string $source = ''): array
@@ -343,17 +311,6 @@ abstract class ApiTestCase extends WebTestCase
         }
 
         return $this->expectedResponsesPath;
-    }
-
-    private function getMockedResponsesFolder(): string
-    {
-        if (null === $this->mockedResponsesPath) {
-            $this->mockedResponsesPath = isset($_SERVER['MOCKED_RESPONSE_DIR']) ?
-                PathBuilder::build($this->getProjectDir(), $_SERVER['MOCKED_RESPONSE_DIR']) :
-                PathBuilder::build($this->getCalledClassFolder(), '..', 'Responses', 'Mocked');
-        }
-
-        return $this->mockedResponsesPath;
     }
 
     private function getCalledClassFolder(): string

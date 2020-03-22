@@ -14,22 +14,27 @@ declare(strict_types=1);
 namespace ApiTestCase\Test\Controller;
 
 use ApiTestCase\Test\Entity\Product;
-use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-class SampleController extends AbstractController
+final class SampleController
 {
-    /**
-     * @return JsonResponse|Response
-     */
-    public function helloWorldAction(Request $request)
+    /** @var EntityManagerInterface */
+    private $objectManager;
+
+    public function __construct(EntityManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
+    public function helloWorldAction(Request $request): Response
     {
         $acceptFormat = $request->headers->get('Accept');
 
@@ -54,58 +59,29 @@ class SampleController extends AbstractController
         return $response;
     }
 
-    /**
-     * @return JsonResponse|Response
-     */
-    public function useThirdPartyApiAction(Request $request)
+    public function productIndexAction(Request $request): Response
     {
-        $acceptFormat = $request->headers->get('Accept');
-        $content = $this->get('app.third_party_api_client')->getInventory();
-
-        if ('application/json' === $acceptFormat) {
-            return new JsonResponse($content);
-        }
-
-        $content = sprintf('<?xml version="1.0" encoding="UTF-8"?><message>%s</message>', $content['message']);
-
-        $response = new Response($content);
-        $response->headers->set('Content-Type', 'application/xml');
-
-        return $response;
-    }
-
-    /**
-     * @return JsonResponse|Response
-     */
-    public function productIndexAction(Request $request)
-    {
-        $productRepository = $this->getDoctrine()->getRepository('ApiTestCase:Product');
+        $productRepository = $this->objectManager->getRepository('ApiTestCase:Product');
         $products = $productRepository->findAll();
 
         return $this->respond($request, $products);
     }
 
-    /**
-     * @return JsonResponse|Response
-     */
-    public function categoryIndexAction(Request $request)
+    public function categoryIndexAction(Request $request): Response
     {
-        $categoryRepository = $this->getDoctrine()->getRepository('ApiTestCase:Category');
+        $categoryRepository = $this->objectManager->getRepository('ApiTestCase:Category');
         $categories = $categoryRepository->findAll();
 
         return $this->respond($request, $categories);
     }
 
-    /**
-     * @return JsonResponse|Response
-     */
-    public function showAction(Request $request)
+    public function showAction(Request $request): Response
     {
-        $productRepository = $this->getDoctrine()->getRepository('ApiTestCase:Product');
+        $productRepository = $this->objectManager->getRepository('ApiTestCase:Product');
         $product = $productRepository->find($request->get('id'));
 
         if (!$product) {
-            throw $this->createNotFoundException();
+            throw new NotFoundHttpException();
         }
 
         return $this->respond($request, $product);
@@ -118,10 +94,8 @@ class SampleController extends AbstractController
         $product->setPrice($request->request->get('price'));
         $product->setUuid($request->request->get('uuid'));
 
-        /** @var ObjectManager $productManager */
-        $productManager = $this->getDoctrine()->getManager();
-        $productManager->persist($product);
-        $productManager->flush();
+        $this->objectManager->persist($product);
+        $this->objectManager->flush();
 
         return $this->respond($request, $product, Response::HTTP_CREATED);
     }

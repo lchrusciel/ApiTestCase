@@ -13,12 +13,13 @@ namespace ApiTestCase\Test\App;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle;
-use ApiTestCase\Test\Service\ThirdPartyApiClient;
 use Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Definition;
+use ApiTestCase\Test\Controller\SampleController;
 
 class AppKernel extends Kernel
 {
@@ -27,15 +28,15 @@ class AppKernel extends Kernel
      */
     public function registerBundles()
     {
-        return array(
+        return [
             new FrameworkBundle(),
             new DoctrineBundle(),
             new NelmioAliceBundle(),
             new FidryAliceDataFixturesBundle(),
-        );
+        ];
     }
 
-    public function getProjectDir()
+    public function getProjectDir(): string
     {
         return \dirname(__DIR__);
     }
@@ -45,48 +46,40 @@ class AppKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(function ($container) {
-            $container->loadFromExtension('framework', array(
+        $loader->load(static function (ContainerBuilder $container): void {
+            $container->loadFromExtension('framework', [
                 'test' => null,
                 'secret' => 'secret',
-                'router' => array(
+                'router' => [
                     'resource' => '%kernel.project_dir%/app/config/routing.yml',
-                ),
-            ));
-            $container->loadFromExtension('doctrine', array(
-                'dbal' => array(
+                ],
+            ]);
+            $container->loadFromExtension('doctrine', [
+                'dbal' => [
                     'driver' => 'pdo_sqlite',
                     'user' => 'root',
                     'password' => '',
                     'path' => '%kernel.cache_dir%/db.sqlite',
-                ),
-                'orm' => array(
+                ],
+                'orm' => [
                     'auto_mapping' => false,
-                    'mappings' => array(
-                        'ApiTestCase' => array(
+                    'mappings' => [
+                        'ApiTestCase' => [
                             'dir' => '%kernel.project_dir%/app/config/doctrine',
                             'prefix' => 'ApiTestCase\Test\Entity',
                             'alias' => 'ApiTestCase',
                             'is_bundle' => false,
                             'type' => 'yml',
-                        ),
-                    ),
-                ),
-            ));
+                        ],
+                    ],
+                ],
+            ]);
 
-            $apiClientDefinition = new Definition(ThirdPartyApiClient::class);
-            $apiClientDefinition->setPublic(true);
+            $controllerDefinition = new Definition(SampleController::class);
+            $controllerDefinition->setPublic(true);
+            $controllerDefinition->setAutowired(true);
 
-            $container->setDefinition('app.third_party_api_client', $apiClientDefinition);
-            $container->setDefinition('app.third_party_api_client', $apiClientDefinition);
+            $container->setDefinition(SampleController::class, $controllerDefinition);
         });
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getContainerBaseClass()
-    {
-        return '\PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer';
     }
 }
