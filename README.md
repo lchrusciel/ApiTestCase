@@ -239,43 +239,6 @@ Finally, to use these fixtures in a test, just call a proper method:
     }
 ```
 
-### Additional features
-
-You may also add `polishsymfonycommunity/symfony-mocker-container` library to project and take advantage of mocking external API callse. 
-
-First, you have to slightly change your Kernel logic to support SymfonyMockerContainer:
-
-```php
-// app/AppKernel.php
-
-use \PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer;
-
-protected function getContainerBaseClass()
-{
-    if ('test' === $this->environment) {
-        return MockerContainer::class;
-    }
-
-    return parent::getContainerBaseClass();
-}
-```
-
-And you are good to test endpoints, which communicate with some external API in a meantime. To check behaviour of our app with different responses from external API we can use [SymfonyMockerContainer](https://github.com/PolishSymfonyCommunity/SymfonyMockerContainer). This library allows to mock the third party API response, and asserts number of calls.
-This is extra useful when you work with APIs like Google Maps, Stripe etc. You can also mock response from other apps in your SOA project.
-
-```php
-    public function testGetResponseFromMockedService()
-    {
-        $this->client->getContainer()->mock('app.third_party_api_client', 'ApiTestCase\Test\Service\ThirdPartyApiClient')
-            ->shouldReceive('getInventory')
-            ->once()
-            ->andReturn($this->getJsonResponseFixture('third_party_api_inventory'))
-        ;
-    }
-```
-
-From this moment, first `getInventory` method call will return the response defined in `third_party_api_inventory.json` file placed in a ``src/AppBundle/Tests/Responses/Mocked/`` folder, or any other location you have defined in ``phpunit.xml`` file.
-
 Configuration Reference
 -----------------------
 

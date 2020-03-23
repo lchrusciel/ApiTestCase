@@ -27,9 +27,6 @@ class SampleControllerXmlTest extends XmlApiTestCase
         $this->assertResponse($response, 'hello_world');
     }
 
-    /**
-     * @expectedException \PHPUnit\Framework\AssertionFailedError
-     */
     public function testGetHelloWorldIncorrectResponse(): void
     {
         $this->expectException(AssertionFailedError::class);
@@ -39,6 +36,7 @@ class SampleControllerXmlTest extends XmlApiTestCase
         $response = $this->client->getResponse();
 
         $this->assertResponse($response, 'incorrect_hello_world');
+        $this->expectException(AssertionFailedError::class);
     }
 
     public function testGetHelloWorldWithMatcherResponse(): void
@@ -57,21 +55,6 @@ class SampleControllerXmlTest extends XmlApiTestCase
         $response = $this->client->getResponse();
 
         $this->assertResponse($response, 'hello_wild_card');
-    }
-
-    public function testGetProductInventoryFromThirdPartyApi(): void
-    {
-        $this->client->getContainer()->mock('app.third_party_api_client', 'ApiTestCase\Test\Service\ThirdPartyApiClient')
-            ->shouldReceive('getInventory')
-            ->once()
-            ->andReturn($this->getJsonResponseFixture('third_party_api_inventory'))
-        ;
-
-        $this->client->request('GET', '/use-third-party-api/');
-
-        $response = $this->client->getResponse();
-
-        $this->assertResponse($response, 'use_third_party_api');
     }
 
     public function testProductIndexResponse(): void

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ApiTestCase\Symfony;
 
-use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Webmozart\Assert\Assert;
 
@@ -28,9 +28,9 @@ abstract class WebTestCase extends KernelTestCase
      * @param array $options An array of options to pass to the createKernel method
      * @param array $server  An array of server parameters
      *
-     * @return Client A Client instance
+     * @return KernelBrowser A Client instance
      */
-    protected static function createClient(array $options = [], array $server = []): Client
+    protected static function createClient(array $options = [], array $server = []): KernelBrowser
     {
         $kernel = static::bootKernel($options);
 
@@ -38,7 +38,7 @@ abstract class WebTestCase extends KernelTestCase
             $container = $kernel->getContainer();
             Assert::notNull($container);
 
-            /** @var Client $client */
+            /** @var KernelBrowser $client */
             $client = $container->get('test.client');
         } catch (ServiceNotFoundException $e) {
             throw new \LogicException('You cannot create the client used in functional tests if the BrowserKit component is not available. Try running "composer require symfony/browser-kit".');

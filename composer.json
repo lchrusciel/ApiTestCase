@@ -27,25 +27,24 @@
         "php": "^7.2",
         "ext-json": "*",
 
-        "coduo/php-matcher": "^2.3|^3.0",
+        "coduo/php-matcher": "^3.0",
         "doctrine/data-fixtures": "^1.2",
-        "doctrine/doctrine-bundle": "^1.6",
+        "doctrine/doctrine-bundle": "^1.6|^2.0",
         "doctrine/orm": "^2.5",
-        "nelmio/alice": "^3.1",
+        "nelmio/alice": "^3.6",
         "phpspec/php-diff": "^1.1",
-        "phpunit/phpunit": "^6.0|^7.0|^8.0",
-        "symfony/browser-kit": "^3.4|^4.0",
-        "symfony/finder": "^3.4|^4.0",
-        "symfony/framework-bundle": "^3.4|^4.0",
+        "phpunit/phpunit": "^7.0|^8.0",
+        "symfony/browser-kit": "^4.4|^5.0",
+        "symfony/finder": "^4.4|^5.0",
+        "symfony/framework-bundle": "^4.4|^5.0",
         "theofidry/alice-data-fixtures": "^1.0"
     },
     "require-dev": {
-        "polishsymfonycommunity/symfony-mocker-container": "^1.0",
-        "phpstan/phpstan": "^0.11",
-        "phpstan/phpstan-strict-rules": "^0.11",
-        "phpstan/phpstan-webmozart-assert": "^0.11",
-        "symfony/serializer": "^3.4|^4.0",
-        "sylius-labs/coding-standard": "^3.0"
+        "phpstan/phpstan-strict-rules": "^0.12",
+        "phpstan/phpstan-webmozart-assert": "^0.12",
+        "symfony/serializer": "^4.4|^5.0",
+        "sylius-labs/coding-standard": "^3.1.2",
+        "phpstan/phpstan": "^0.12"
     },
     "scripts": {
         "fix": [
@@ -53,7 +52,7 @@
         ],
         "analyse": [
             "vendor/bin/ecs check --ansi --no-progress-bar src test/src",
-            "vendor/bin/phpstan analyse --ansi --no-progress -l max src"
+            "vendor/bin/phpstan.phar analyse --ansi --no-progress -l 5 src"
         ]
     },
     "conflict": {
