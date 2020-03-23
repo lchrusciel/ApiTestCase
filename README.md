@@ -257,7 +257,7 @@ To customize your test suite configuration you can add a few more options to php
 ```
 
  * `KERNEL_CLASS` allows you to specify exactly which class should be used in order to setup the Kernel. 
- * `ERESPONSE_DIR` variable contain paths to folder with expected responses. It is used when API result is compared with existing json file. If this value isn't set, ApiTestCase will try to guess location of responses, looking for the responses in a folder: '../Responses/Expected' relatively located to your controller test class.
+ * `ERESPONSE_DIR` variable contain paths to folder with expected responses. It is used when API result is compared with existing json file. If this value isn't set, ApiTestCase will try to guess location of responses, looking for the responses in a folder: '../Responses' relatively located to your controller test class.
  * `FIXTURES_DIR` variable contains a path to folder with your data fixtures. By default if this variable isn't set it will search for `../DataFixtures/ORM/` relatively located to your test class . ApiTestCase throws RunTimeException if folder doesn't exist or there won't be any files to load.
  * `OPEN_ERROR_IN_BROWSER` is a flag which turns on displaying error in a browser window. The default value is false.
  * `OPEN_BROWSER_COMMAND` is a command which will be used to open browser with an exception.

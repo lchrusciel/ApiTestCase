@@ -307,7 +307,7 @@ abstract class ApiTestCase extends WebTestCase
         if (null === $this->expectedResponsesPath) {
             $this->expectedResponsesPath = isset($_SERVER['EXPECTED_RESPONSE_DIR']) ?
                 PathBuilder::build($this->getProjectDir(), $_SERVER['EXPECTED_RESPONSE_DIR']) :
-                PathBuilder::build($this->getCalledClassFolder(), '..', 'Responses', 'Expected');
+                PathBuilder::build($this->getCalledClassFolder(), '..', 'Responses');
         }
 
         return $this->expectedResponsesPath;
