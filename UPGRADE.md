@@ -3,6 +3,7 @@
 ## Upgrading from v4 to v5
 
 * Path resolution for `FIXTURES_DIR`, `EXPECTED_RESPONSE_DIR` and `MOCKED_RESPONSE_DIR` should be adjusted to reflect a relative position according to project root dir. 
+* Support for SymfonyMockerContainer was dropped. If required it should be adjusted manually on clients app according to [SymfonyMockerContainer docs](https://github.com/PolishSymfonyCommunity/SymfonyMockerContainer#installation)
 
 ## Upgrading from v3 to v4
 
