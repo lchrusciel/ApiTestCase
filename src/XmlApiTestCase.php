@@ -31,7 +31,7 @@ abstract class XmlApiTestCase extends ApiTestCase
      */
     protected function buildMatcher(): Matcher
     {
-        return $this->matcherFactory->buildXmlMatcher();
+        return $this->matcherFactory->createMatcher();
     }
 
     /**

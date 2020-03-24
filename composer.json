@@ -27,7 +27,7 @@
         "php": "^7.2",
         "ext-json": "*",
 
-        "coduo/php-matcher": "^3.0",
+        "coduo/php-matcher": "^4.0",
         "doctrine/data-fixtures": "^1.2",
         "doctrine/doctrine-bundle": "^1.6|^2.0",
         "doctrine/orm": "^2.5",
