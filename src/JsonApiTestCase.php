@@ -28,7 +28,7 @@ abstract class JsonApiTestCase extends ApiTestCase
 
     protected function buildMatcher(): Matcher
     {
-        return $this->matcherFactory->buildJsonMatcher();
+        return $this->matcherFactory->createMatcher();
     }
 
     /**

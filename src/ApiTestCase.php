@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ApiTestCase;
 
+use Coduo\PHPMatcher\Factory\MatcherFactory;
 use Coduo\PHPMatcher\Matcher;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
