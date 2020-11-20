@@ -54,7 +54,7 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * @before
      */
-    public function initMatcherFactory()
+    public function initMatcherFactory(): void
     {
         $this->matcherFactory = new MatcherFactory();
     }
