@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ApiTestCase;
 
+use Coduo\PHPMatcher\Backtrace\InMemoryBacktrace;
 use Coduo\PHPMatcher\Matcher;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,7 +32,7 @@ abstract class XmlApiTestCase extends ApiTestCase
      */
     protected function buildMatcher(): Matcher
     {
-        return $this->matcherFactory->createMatcher();
+        return $this->matcherFactory->createMatcher(new InMemoryBacktrace());
     }
 
     /**

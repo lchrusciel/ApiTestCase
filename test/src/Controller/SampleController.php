@@ -91,7 +91,7 @@ final class SampleController
     {
         $product = new Product();
         $product->setName($request->request->get('name'));
-        $product->setPrice($request->request->get('price'));
+        $product->setPrice($request->request->getInt('price'));
         $product->setUuid($request->request->get('uuid'));
 
         $this->objectManager->persist($product);

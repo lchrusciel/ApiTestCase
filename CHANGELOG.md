@@ -1,5 +1,9 @@
 # Changelog
 
+## Changes from v5 to v5.1
+
+- Support for PHP 8.0
+
 ## Changes from v4 to v5
 
 #### TL;DR:
