@@ -7,7 +7,6 @@ cache:
         - ~/.composer/cache/files
 
 php:
-    - 7.2
     - 7.3
     - 7.4
     - 8.0
@@ -15,19 +14,13 @@ php:
 env:
     - SYMFONY_VERSION=4.4.*
     - SYMFONY_VERSION=5.0.*
-    - PHPUNIT_VERSION=^7.0
+    - SYMFONY_VERSION=5.1.*
+    - SYMFONY_VERSION=5.2.*
     - PHPUNIT_VERSION=^8.0
     - PHPUNIT_VERSION=^9.0
+    - PHP_MATCHER=^5.0
+    - PHP_MATCHER=^6.0
     - MOST_RECENT=true
-
-jobs:
-    exclude:
-        - php: 7.2
-          env:
-            - PHPUNIT_VERSION=^9.0
-        - php: 8.0
-          env:
-            - PHPUNIT_VERSION=^7.0
 
 before_install:
     - phpenv config-rm xdebug.ini || true

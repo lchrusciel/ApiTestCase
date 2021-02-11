@@ -24,7 +24,7 @@
         }
     ],
     "require": {
-        "php": "^7.2 || ^8.0",
+        "php": "^7.3 || ^8.0",
         "ext-json": "*",
 
         "coduo/php-matcher": "^5.0 || ^6.0",
@@ -44,15 +44,10 @@
         "phpstan/phpstan-strict-rules": "^0.12",
         "phpstan/phpstan-webmozart-assert": "^0.12",
         "symfony/serializer": "^4.4|^5.0",
-        "sylius-labs/coding-standard": "^3.1.2",
         "phpstan/phpstan": "^0.12"
     },
     "scripts": {
-        "fix": [
-            "vendor/bin/ecs check --ansi --no-progress-bar src test/src --fix || true"
-        ],
         "analyse": [
-            "vendor/bin/ecs check --ansi --no-progress-bar src test/src || true",
             "vendor/bin/phpstan.phar analyse --ansi --no-progress -l 5 src"
         ]
     },
