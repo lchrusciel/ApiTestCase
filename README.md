@@ -181,25 +181,6 @@ return [
 ];
 ```
 
-**Symfony 3**
-
-```php
-// app/AppKernel.php
-class AppKernel extends Kernel
-{
-    public function registerBundles()
-    {
-        // ...
-
-        if ('test' === $this->getEnvironment()) {
-            new Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle(),
-            new Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle(),
-        }
-    }
-}
-
-```
-
 Now, let's say you have a mapped Doctrine entity called Book in your application: 
 
 ```php
