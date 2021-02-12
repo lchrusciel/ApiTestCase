@@ -1,0 +1,54 @@
+name: Build
+
+on:
+  push: ~
+  pull_request: ~
+  release:
+    types: [created]
+  schedule:
+    -
+      cron: "0 1 * * 6" # Run at 1am every Saturday
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          -
+            php: 7.3
+          -
+            php: 7.4
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: "Setup PHP"
+      uses: "shivammathur/setup-php@v2"
+      with:
+        php-version: "${{ matrix.php }}"
+        coverage: "none"
+
+    - name: "Validate composer.json and composer.lock"
+      run: "composer validate --strict"
+
+    - name: "Cache Composer packages"
+      id: "composer-cache"
+      uses: "actions/cache@v2"
+      with:
+        path: "vendor"
+        key: "${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}"
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: "Install dependencies"
+      if: "steps.composer-cache.outputs.cache-hit != 'true'"
+      run: "composer install --prefer-dist --no-progress --no-suggest"
+
+    - name: "Run analyse"
+      run: composer analyse
+
+    - name: "Run tests"
+      run: vendor/bin/phpunit
