@@ -48,11 +48,11 @@ jobs:
     - name: "Restrict phpunit/phpunit version"
       run: "composer require \"phpunit/phpunit:${{ matrix.phpunit }}\" --no-update --no-scripts"
 
-    - name: "Validate composer.json and composer.lock"
-      run: "composer validate --strict"
-
     - name: "Install dependencies"
       run: "composer install --prefer-dist --no-progress --no-suggest"
+
+    - name: "Validate composer.json and composer.lock"
+      run: "composer validate --strict"
 
     - name: "Run analyse"
       run: "composer analyse"
