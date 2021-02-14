@@ -1,19 +1,19 @@
-name: Build
+name: "Build"
 
 on:
   push:
     branches:
-      - master
+      - "master"
   pull_request: ~
   release:
-    types: [created]
+    types: ["created"]
   schedule:
     -
       cron: "0 1 * * 6" # Run at 1am every Saturday
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-latest"
 
     strategy:
       fail-fast: false
@@ -29,7 +29,7 @@ jobs:
               php-matcher: ^5.0
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: "actions/checkout@v2"
 
     - name: "Setup PHP"
       uses: "shivammathur/setup-php@v2"
@@ -55,10 +55,10 @@ jobs:
       run: "composer install --prefer-dist --no-progress --no-suggest"
 
     - name: "Run analyse"
-      run: composer analyse
+      run: "composer analyse"
 
     - name: "Setup database"
-      run: test/app/console doctrine:schema:update --force -vvv
+      run: "test/app/console doctrine:schema:update --force -vvv"
 
     - name: "Run tests"
-      run: vendor/bin/phpunit
+      run: "vendor/bin/phpunit"
