@@ -23,6 +23,8 @@ jobs:
         exclude:
           -   php: 7.3
               php-matcher: ^6.0
+          -   php: 8.0
+              php-matcher: ^5.0
 
     steps:
     - uses: actions/checkout@v2
