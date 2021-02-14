@@ -60,5 +60,8 @@ jobs:
     - name: "Run analyse"
       run: composer analyse
 
+    - name: "Setup database"
+      run: test/app/console doctrine:schema:update --force -vvv
+
     - name: "Run tests"
       run: vendor/bin/phpunit
