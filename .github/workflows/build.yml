@@ -16,13 +16,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          -
-            php: 7.3
-          -
-            php: 7.4
-          -
-            php: 8.0
+        php: [7.3, 7.4, 8.0]
+        symfony: [4.4.*, 5.2.*]
+        phpunit: [^8.0, ^9.0]
+        php-matcher: [^5.0, ^6.0]
 
     steps:
     - uses: actions/checkout@v2
@@ -32,6 +29,17 @@ jobs:
       with:
         php-version: "${{ matrix.php }}"
         coverage: "none"
+
+    - name: "Restrict Symfony version"
+      run: |
+        composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^1.10"
+        composer config extra.symfony.require "${{ matrix.symfony }}"
+
+    - name: "Restrict coduo/php-matcher version"
+      run: "composer require \"coduo/php-matcher:${{ matrix.php-matcher }}\" --no-update --no-scripts"
+
+    - name: "Restrict phpunit/phpunit version"
+      run: "composer require \"phpunit/phpunit:${{ matrix.phpunit }}\" --no-update --no-scripts"
 
     - name: "Validate composer.json and composer.lock"
       run: "composer validate --strict"
