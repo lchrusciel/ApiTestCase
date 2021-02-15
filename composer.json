@@ -28,7 +28,6 @@
         "ext-json": "*",
 
         "coduo/php-matcher": "^5.0 || ^6.0",
-        "openlss/lib-array2xml": "^1.0",
         "doctrine/data-fixtures": "^1.2",
         "doctrine/doctrine-bundle": "^1.6|^2.0",
         "doctrine/orm": "^2.5",
