@@ -1,7 +1,7 @@
 ApiTestCase
 ===========
 
-[![Build Status](https://travis-ci.org/lchrusciel/ApiTestCase.svg?branch=master)](https://travis-ci.org/lchrusciel/ApiTestCase)
+![Build](https://github.com/lchrusciel/ApiTestCase/workflows/Build/badge.svg)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/lchrusciel/ApiTestCase/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/lchrusciel/ApiTestCase/?branch=master)
 
 **ApiTestCase** is a PHPUnit TestCase that will make your life as a Symfony API developer much easier. It extends basic [Symfony](https://symfony.com/) WebTestCase with some cool features. 
