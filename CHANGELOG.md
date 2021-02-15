@@ -2,8 +2,14 @@
 
 ## Changes from v5 to v5.1
 
-- Support for PHP 8.0
-- Drop of support for PHP 7.2
+#### TL;DR:
+
+- Support for PHP 8.0 added and for PHP 7.2 dropped
+- Support for PHP-Matcher 5 & 6 added, for PHP-Matcher 4 dropped
+- Support for PHPUnit 7 dropped
+
+### Added
+- [#182](https://github.com/lchrusciel/ApiTestCase/issues/182) Support for PHP 8.0 added ([@lchrusciel](https://github.com/lchrusciel), [@emodric](https://github.com/emodric))
 
 ## Changes from v4 to v5
 
