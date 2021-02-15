@@ -22,7 +22,7 @@ Installation
 Assuming you already have Composer installed globally:
 
 ```bash
-$ composer require --dev lchrusciel/api-test-case
+composer require --dev lchrusciel/api-test-case
 ```
 
 And it's done! ApiTestCase is working with the default configuration.
@@ -74,7 +74,7 @@ Now define the expected response file:
 Run your tests:
 
 ```bash
-$ bin/phpunit
+vendor/bin/phpunit
 ```
 
 Your test should fail with some errors, you are probably missing the controller and routing, so go ahead and define them!
@@ -181,25 +181,6 @@ return [
 ];
 ```
 
-**Symfony 3**
-
-```php
-// app/AppKernel.php
-class AppKernel extends Kernel
-{
-    public function registerBundles()
-    {
-        // ...
-
-        if ('test' === $this->getEnvironment()) {
-            new Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle(),
-            new Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle(),
-        }
-    }
-}
-
-```
-
 Now, let's say you have a mapped Doctrine entity called Book in your application: 
 
 ```php
@@ -275,10 +256,10 @@ In the ``test/`` directory, you can find sample Symfony project with minimal con
 In order to run our PHPUnit tests suite, execute following commands:
 
 ```bash
-$ composer install
-$ test/app/console doctrine:database:create
-$ test/app/console doctrine:schema:create
-$ bin/phpunit
+composer install
+test/app/console doctrine:database:create
+test/app/console doctrine:schema:create
+vendor/bin/phpunit
 ```
 
 Bug Tracking and Suggestions
