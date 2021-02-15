@@ -1,0 +1,77 @@
+name: "Build"
+
+on:
+    push:
+        branches:
+            - "master"
+    pull_request: ~
+    release:
+        types: ["created"]
+    schedule:
+        -
+            cron: "0 1 * * 6" # Run at 1am every Saturday
+
+jobs:
+    build:
+        runs-on: "ubuntu-latest"
+
+        name: "PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}, PHPUnit ${{ matrix.phpunit }}, PHP-Matcher ${{ matrix.php-matcher }}"
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php: [7.3, 7.4, 8.0]
+                symfony: [4.4.*, 5.2.*]
+                phpunit: [^8.0, ^9.0]
+                php-matcher: [^5.0, ^6.0]
+                exclude:
+                    -
+                      php: 7.3
+                      php-matcher: ^6.0
+                    -
+                      php: 8.0
+                      php-matcher: ^5.0
+
+        steps:
+        - uses: "actions/checkout@v2"
+
+        -
+            name: "Setup PHP"
+            uses: "shivammathur/setup-php@v2"
+            with:
+                php-version: "${{ matrix.php }}"
+                coverage: "none"
+
+        -
+          name: "Restrict Symfony version"
+          run: |
+                composer global require --no-progress --no-scripts --no-plugins "symfony/flex:^1.10"
+                composer config extra.symfony.require "${{ matrix.symfony }}"
+
+        -
+          name: "Restrict coduo/php-matcher version"
+          run: "composer require \"coduo/php-matcher:${{ matrix.php-matcher }}\" --no-update --no-scripts"
+
+        -
+          name: "Restrict phpunit/phpunit version"
+          run: "composer require \"phpunit/phpunit:${{ matrix.phpunit }}\" --no-update --no-scripts"
+
+        -
+          name: "Install dependencies"
+          run: "composer install --prefer-dist --no-progress --no-suggest"
+
+        -
+          name: "Validate composer.json and composer.lock"
+          run: "composer validate --strict"
+
+        -
+          name: "Run analyse"
+          run: "composer analyse"
+
+        -
+          name: "Setup database"
+          run: "test/app/console doctrine:schema:update --force -vvv"
+
+        -
+          name: "Run tests"
+          run: "vendor/bin/phpunit"

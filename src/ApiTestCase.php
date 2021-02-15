@@ -277,9 +277,6 @@ abstract class ApiTestCase extends WebTestCase
         $entityManager = $this->entityManager;
         if (null === $entityManager || !$entityManager->getConnection()->isConnected()) {
             static::fail('Could not establish test database connection.');
-
-            // PHPStan can not figure out that this part of the code should never be reached
-            throw new InvalidArgumentException('Could not establish test database connection.');
         }
 
         return $entityManager;
