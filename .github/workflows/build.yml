@@ -30,7 +30,7 @@ jobs:
                       php-matcher: ^5.0
                     -
                       php: 7.4
-                      symfony: 4.4
+                      symfony: 6.0.*
 
         steps:
         - uses: "actions/checkout@v2"
