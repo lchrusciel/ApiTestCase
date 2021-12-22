@@ -20,13 +20,16 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: [7.4, 8.0]
+                php: [7.4, 8.0, 8.1]
                 symfony: [4.4.*, 5.4.*, 6.0.*]
                 phpunit: [^8.0, ^9.0]
                 php-matcher: [^5.0, ^6.0]
                 exclude:
                     -
                       php: 8.0
+                      php-matcher: ^5.0
+                    -
+                      php: 8.1
                       php-matcher: ^5.0
                     -
                       php: 7.4
