@@ -41,14 +41,14 @@
         "theofidry/alice-data-fixtures": "^1.0"
     },
     "require-dev": {
-        "phpstan/phpstan-strict-rules": "^0.12",
-        "phpstan/phpstan-webmozart-assert": "^0.12",
+        "phpstan/phpstan-strict-rules": "^1.0",
+        "phpstan/phpstan-webmozart-assert": "^1.0",
         "symfony/serializer": "^5.4 || ^6.0",
-        "phpstan/phpstan": "^0.12"
+        "phpstan/phpstan": "^1.8"
     },
     "scripts": {
         "analyse": [
-            "vendor/bin/phpstan.phar analyse --ansi --no-progress -l 5 src"
+            "vendor/bin/phpstan analyse --ansi --no-progress src"
         ]
     },
     "conflict": {
