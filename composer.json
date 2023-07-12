@@ -24,31 +24,31 @@
         }
     ],
     "require": {
-        "php": "^7.3 || ^8.0",
+        "php": "^8.0",
         "ext-json": "*",
 
-        "coduo/php-matcher": "^5.0 || ^6.0",
+        "coduo/php-matcher": "^6.0",
         "openlss/lib-array2xml": "^1.0",
         "doctrine/data-fixtures": "^1.2",
-        "doctrine/doctrine-bundle": "^1.6 || ^2.0",
+        "doctrine/doctrine-bundle": "^2.0",
         "doctrine/orm": "^2.5",
         "nelmio/alice": "^3.6",
         "phpspec/php-diff": "^1.1",
-        "phpunit/phpunit": "^8.0 || ^9.0",
-        "symfony/browser-kit": "^4.4 || ^5.4 || ^6.0",
-        "symfony/finder": "^4.4 || ^5.4 || ^6.0",
-        "symfony/framework-bundle": "^4.4 || ^5.4 || ^6.0",
+        "phpunit/phpunit": "^9.0 || ^10.0",
+        "symfony/browser-kit": "^5.4 || ^6.0",
+        "symfony/finder": "^5.4 || ^6.0",
+        "symfony/framework-bundle": "^5.4 || ^6.0",
         "theofidry/alice-data-fixtures": "^1.0"
     },
     "require-dev": {
-        "phpstan/phpstan-strict-rules": "^0.12",
-        "phpstan/phpstan-webmozart-assert": "^0.12",
-        "symfony/serializer": "^4.4 || ^5.4 || ^6.0",
-        "phpstan/phpstan": "^0.12"
+        "phpstan/phpstan-strict-rules": "^1.0",
+        "phpstan/phpstan-webmozart-assert": "^1.0",
+        "symfony/serializer": "^5.4 || ^6.0",
+        "phpstan/phpstan": "^1.8"
     },
     "scripts": {
         "analyse": [
-            "vendor/bin/phpstan.phar analyse --ansi --no-progress -l 5 src"
+            "vendor/bin/phpstan analyse --ansi --no-progress src"
         ]
     },
     "conflict": {
@@ -71,6 +71,11 @@
     "extra": {
         "branch-alias": {
             "dev-master": "5.2-dev"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     }
 }

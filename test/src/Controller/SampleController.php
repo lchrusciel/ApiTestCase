@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ApiTestCase\Test\Controller;
 
 use ApiTestCase\Test\Entity\Product;
+use ApiTestCase\Test\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,7 +62,7 @@ final class SampleController
 
     public function productIndexAction(Request $request): Response
     {
-        $productRepository = $this->objectManager->getRepository('ApiTestCase:Product');
+        $productRepository = $this->objectManager->getRepository(Product::class);
         $products = $productRepository->findAll();
 
         return $this->respond($request, $products);
@@ -69,7 +70,7 @@ final class SampleController
 
     public function categoryIndexAction(Request $request): Response
     {
-        $categoryRepository = $this->objectManager->getRepository('ApiTestCase:Category');
+        $categoryRepository = $this->objectManager->getRepository(Category::class);
         $categories = $categoryRepository->findAll();
 
         return $this->respond($request, $categories);
@@ -77,7 +78,7 @@ final class SampleController
 
     public function showAction(Request $request): Response
     {
-        $productRepository = $this->objectManager->getRepository('ApiTestCase:Product');
+        $productRepository = $this->objectManager->getRepository(Product::class);
         $product = $productRepository->find($request->get('id'));
 
         if (!$product) {
