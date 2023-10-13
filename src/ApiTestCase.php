@@ -41,7 +41,7 @@ abstract class ApiTestCase extends WebTestCase
     /** @var string */
     protected $dataFixturesPath;
 
-    /** @var MatcherFactory */
+    /** @var MatcherFactory|null */
     protected $matcherFactory;
 
     /** @var LoaderInterface|null */
@@ -49,13 +49,6 @@ abstract class ApiTestCase extends WebTestCase
 
     /** @var EntityManager|null */
     private $entityManager;
-
-    public function __construct(?string $name = null)
-    {
-        parent::__construct($name);
-
-        $this->matcherFactory = new MatcherFactory();
-    }
 
     /**
      * @beforeClass
@@ -86,6 +79,14 @@ abstract class ApiTestCase extends WebTestCase
     public function setUpClient(): void
     {
         $this->client = static::createClient(['debug' => false]);
+    }
+
+    /**
+     * @before
+     */
+    public function createMatcher(): void
+    {
+        $this->matcherFactory = new MatcherFactory();
     }
 
     /**
