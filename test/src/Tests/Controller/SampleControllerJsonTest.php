@@ -28,6 +28,23 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'hello_world');
     }
 
+    /**
+     * @dataProvider provideTestData
+     */
+    public function testGetHelloWorldResponseWithDataProvider(string $method): void
+    {
+        $this->client->request($method, '/');
+
+        $response = $this->client->getResponse();
+
+        $this->assertResponse($response, 'hello_world');
+    }
+
+    public static function provideTestData(): iterable
+    {
+        yield ['method' => 'GET'];
+    }
+
     public function testGetHelloWorldResponseWithCharsetOnContentType(): void
     {
         $this->client->request('GET', '/', [], [], ['HTTP_ACCEPT' => 'application/json; charset=utf-8']);
