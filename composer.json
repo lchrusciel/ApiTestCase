@@ -51,9 +51,6 @@
             "vendor/bin/phpstan analyse --ansi --no-progress src"
         ]
     },
-    "conflict": {
-        "symfony/dependency-injection": "4.1.0"
-    },
     "suggest": {
         "polishsymfonycommunity/symfony-mocker-container": "For mocking container services and external APIs"
     },
