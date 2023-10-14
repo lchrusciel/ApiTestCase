@@ -24,16 +24,6 @@ jobs:
                 symfony: [5.4.*, 6.2.*, 6.3.*]
                 phpunit: [^9.0, ^10.0]
                 php-matcher: [^6.0]
-                exclude:
-                    -
-                      php: 8.0
-                      phpunit: ^10.0
-                    -
-                      php: 8.0
-                      symfony: 6.2.*
-                    -
-                      php: 8.0
-                      symfony: 6.3.*
 
         steps:
         - uses: "actions/checkout@v2"
