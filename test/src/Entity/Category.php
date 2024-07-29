@@ -15,17 +15,39 @@ namespace ApiTestCase\Test\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity]
+#[ORM\Table(name: "test_category")]
 class Category
 {
-    /** @var int|null */
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(type: "integer")]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    private ?int $id;
 
-    /** @var string */
-    private $name;
+    #[ORM\Column(type: "string")]
+    private string $name;
 
-    /** @var Collection|Product[] */
-    private $products;
+    #[ORM\ManyToMany(targetEntity: Product::class, cascade: ["all"])]
+    #[ORM\JoinTable(
+        name: "app_category_products",
+        joinColumns: [
+            new ORM\JoinColumn(
+                name: "category_id",
+                referencedColumnName: "id",
+                onDelete: "cascade"
+            )
+        ],
+        inverseJoinColumns: [
+            new ORM\JoinColumn(
+                name: "product_id",
+                referencedColumnName: "id",
+                onDelete: "cascade"
+            )
+        ]
+    )]
+    private Collection $products;
 
     public function __construct()
     {
@@ -58,9 +80,9 @@ class Category
     }
 
     /**
-     * @return Collection|Product[]
+     * @return Product[]
      */
-    public function getProducts()
+    public function getProducts(): Collection
     {
         return $this->products;
     }

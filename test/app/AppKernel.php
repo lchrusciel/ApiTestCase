@@ -65,11 +65,11 @@ class AppKernel extends Kernel
                     'auto_mapping' => false,
                     'mappings' => [
                         'ApiTestCase' => [
-                            'dir' => '%kernel.project_dir%/app/config/doctrine',
+                            'dir' => '%kernel.project_dir%/src/Entity',
                             'prefix' => 'ApiTestCase\Test\Entity',
                             'alias' => 'ApiTestCase',
                             'is_bundle' => false,
-                            'type' => 'yml',
+                            'type' => 'attribute',
                         ],
                     ],
                 ],
