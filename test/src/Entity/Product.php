@@ -13,19 +13,25 @@ declare(strict_types=1);
 
 namespace ApiTestCase\Test\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: "test_product")]
 class Product
 {
-    /** @var int|null */
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(type: "integer")]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    private ?int $id;
 
-    /** @var string */
-    private $name;
+    #[ORM\Column(type: "string")]
+    private string $name;
 
-    /** @var int */
-    private $price;
+    #[ORM\Column(type: "integer")]
+    private int $price;
 
-    /** @var string */
-    private $uuid;
+    #[ORM\Column(type: "string")]
+    private string $uuid;
 
     public function getId(): ?int
     {
@@ -57,10 +63,7 @@ class Product
         return $this->uuid;
     }
 
-    /**
-     * @param string $uuid
-     */
-    public function setUuid($uuid): void
+    public function setUuid(string $uuid): void
     {
         $this->uuid = $uuid;
     }
