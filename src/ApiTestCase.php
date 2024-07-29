@@ -103,7 +103,7 @@ abstract class ApiTestCase extends WebTestCase
             Assert::notNull($entityManager);
 
             $this->entityManager = $entityManager;
-            $this->entityManager->getConnection()->connect();
+            $this->entityManager->getConnection()->getNativeConnection();
 
             /** @var LoaderInterface $fixtureLoader */
             $fixtureLoader = $container->get('fidry_alice_data_fixtures.loader.doctrine');
