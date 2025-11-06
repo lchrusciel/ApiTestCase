@@ -219,6 +219,102 @@ Finally, to use these fixtures in a test, just call a proper method:
     }
 ```
 
+Advanced Usage: Trait Composition
+----------------------------------
+
+Starting with version 5.3, ApiTestCase uses **trait-based architecture** for better flexibility and composability. This allows you to pick only the features you need in your tests.
+
+### Available Traits
+
+#### DatabaseManagement
+
+Provides database management functionality:
+- Automatic EntityManager setup
+- Database purging between tests
+- Connection management
+
+```php
+use ApiTestCase\Trait\DatabaseManagement;
+
+class MyTest extends WebTestCase
+{
+    use DatabaseManagement;
+
+    public function testWithDatabase()
+    {
+        // EntityManager is available
+        $em = $this->getEntityManager();
+
+        // Database is automatically purged before each test
+        $this->purgeDatabase();
+    }
+}
+```
+
+#### FixtureLoading
+
+Provides fixture loading with Alice:
+- Load fixtures from single file
+- Load fixtures from multiple files
+- Load all fixtures from directory
+- Support for custom fixture processors
+
+```php
+use ApiTestCase\Trait\FixtureLoading;
+
+class MyTest extends WebTestCase
+{
+    use FixtureLoading;
+
+    public function testWithFixtures()
+    {
+        // Load from single file
+        $this->loadFixturesFromFile('products.yml');
+
+        // Load from multiple files
+        $this->loadFixturesFromFiles(['products.yml', 'categories.yml']);
+
+        // Load all fixtures from directory
+        $this->loadFixturesFromDirectory('shop');
+    }
+}
+```
+
+### Using Traits Together
+
+You can combine multiple traits for more functionality:
+
+```php
+use ApiTestCase\ApiTestCase;
+use ApiTestCase\Trait\DatabaseManagement;
+use ApiTestCase\Trait\FixtureLoading;
+
+class MyApiTest extends ApiTestCase
+{
+    use DatabaseManagement;
+    use FixtureLoading;
+
+    public function testProductApi()
+    {
+        $this->loadFixturesFromFile('products.yml');
+
+        $this->client->request('GET', '/api/products');
+        $response = $this->client->getResponse();
+
+        $this->assertResponseCode($response, 200);
+    }
+}
+```
+
+### Benefits of Trait Composition
+
+- **Flexibility**: Use only what you need
+- **Performance**: Don't load unnecessary dependencies
+- **Clarity**: Explicit about which features your test uses
+- **Testing**: Tests without database don't require Doctrine
+
+**Note**: JsonApiTestCase and XmlApiTestCase already include all traits by default, maintaining full backward compatibility.
+
 Configuration Reference
 -----------------------
 
