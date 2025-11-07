@@ -20,16 +20,34 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: [8.1, 8.2, 8.3]
-                symfony: [6.4.*, 7.0.*]
-                phpunit: [^9.0, ^10.0, ^11.0]
+                php: [8.1, 8.2, 8.3, 8.4]
+                symfony: [6.4.*, 7.3.*, 8.0.*]
+                phpunit: [^10.0, ^11.0]
                 php-matcher: [^6.0]
                 orm: [^2.5, ^3.0]
                 exclude:
                     - php: 8.1
-                      symfony: 7.0.*
+                      symfony: 7.3.*
                     - php: 8.1
                       phpunit: ^11.0
+                    - php: 8.1
+                      symfony: 8.0.*
+                    - php: 8.2
+                      symfony: 8.0.*
+                    - php: 8.3
+                      symfony: 8.0.*
+                    - php: 8.1
+                      symfony: 8.0.*
+                      orm: ^2.5
+                    - php: 8.2
+                      symfony: 8.0.*
+                      orm: ^2.5
+                    - php: 8.3
+                      symfony: 8.0.*
+                      orm: ^2.5
+                    - php: 8.4
+                      symfony: 8.0.*
+                      orm: ^2.5
 
         steps:
         - uses: "actions/checkout@v4"

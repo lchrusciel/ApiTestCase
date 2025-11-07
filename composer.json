@@ -24,26 +24,26 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "ext-json": "*",
 
         "coduo/php-matcher": "^6.0",
         "openlss/lib-array2xml": "^1.0",
-        "doctrine/data-fixtures": "^1.2",
-        "doctrine/doctrine-bundle": "^2.0",
+        "doctrine/data-fixtures": "^2.1",
+        "doctrine/doctrine-bundle": "^2.0 || ^3.0",
         "doctrine/orm": "^2.5 || ^3.0",
         "nelmio/alice": "^3.6",
         "phpspec/php-diff": "^1.1",
-        "phpunit/phpunit": "^9.0 || ^10.0 || ^11.0",
-        "symfony/browser-kit": "^6.4 || ^7.0",
-        "symfony/finder": "^6.4 || ^7.0",
-        "symfony/framework-bundle": "^6.4 || ^7.0",
+        "phpunit/phpunit": "^10.0 || ^11.0",
+        "symfony/browser-kit": "^6.4 || ^7.3 || ^8.0",
+        "symfony/finder": "^6.4 || ^7.3 || ^8.0",
+        "symfony/framework-bundle": "^6.4 || ^7.3 || ^8.0",
         "theofidry/alice-data-fixtures": "^1.0"
     },
     "require-dev": {
         "phpstan/phpstan-strict-rules": "^1.0",
         "phpstan/phpstan-webmozart-assert": "^1.0",
-        "symfony/serializer": "^5.4 || ^6.0",
+        "symfony/serializer": "^6.4 || ^7.3 || ^8.0",
         "phpstan/phpstan": "^1.8"
     },
     "scripts": {

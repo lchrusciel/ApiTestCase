@@ -76,10 +76,10 @@ final class SampleController
         return $this->respond($request, $categories);
     }
 
-    public function showAction(Request $request): Response
+    public function showAction(Request $request, int $id): Response
     {
         $productRepository = $this->objectManager->getRepository(Product::class);
-        $product = $productRepository->find($request->get('id'));
+        $product = $productRepository->find($id);
 
         if (!$product) {
             throw new NotFoundHttpException();
