@@ -44,7 +44,7 @@ class AppKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(static function (ContainerBuilder $container): void {
             $container->loadFromExtension('framework', [
