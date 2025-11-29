@@ -37,7 +37,7 @@ final class SampleController
 
     public function helloWorldAction(Request $request): Response
     {
-        $acceptFormat = $request->headers->get('Accept');
+        $acceptFormat = $request->headers->get('Accept', '');
 
         if (
             false !== strpos($acceptFormat, 'application')
@@ -104,7 +104,7 @@ final class SampleController
     private function respond(Request $request, $data, int $statusCode = Response::HTTP_OK): Response
     {
         $serializer = $this->createSerializer();
-        $acceptFormat = $request->headers->get('Accept');
+        $acceptFormat = $request->headers->get('Accept', 'application/json');
 
         if ('application/xml' === $acceptFormat) {
             $content = $serializer->serialize($data, 'xml');
@@ -115,13 +115,11 @@ final class SampleController
             return $response;
         }
 
-        if ('application/json' === $acceptFormat) {
-            $content = $serializer->serialize($data, 'json');
-            $response = new Response($content, $statusCode);
-            $response->headers->set('Content-Type', 'application/json');
+        $content = $serializer->serialize($data, 'json');
+        $response = new Response($content, $statusCode);
+        $response->headers->set('Content-Type', 'application/json');
 
-            return $response;
-        }
+        return $response;
     }
 
     private function createSerializer(): Serializer

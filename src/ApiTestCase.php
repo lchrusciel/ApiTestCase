@@ -29,9 +29,6 @@ use Webmozart\Assert\Assert;
 
 abstract class ApiTestCase extends WebTestCase
 {
-    /** @var KernelInterface */
-    protected static $sharedKernel;
-
     /** @var KernelBrowser|null */
     protected $client;
 
@@ -50,52 +47,13 @@ abstract class ApiTestCase extends WebTestCase
     /** @var EntityManager|null */
     private $entityManager;
 
-    /**
-     * @beforeClass
-     */
-    public static function createSharedKernel(): void
-    {
-        static::$sharedKernel = static::createKernel(['debug' => false]);
-        static::$sharedKernel->boot();
-    }
-
-    /**
-     * @afterClass
-     */
-    public static function ensureSharedKernelShutdown(): void
-    {
-        if (null !== static::$sharedKernel) {
-            $container = static::$sharedKernel->getContainer();
-            static::$sharedKernel->shutdown();
-            if ($container instanceof ResetInterface) {
-                $container->reset();
-            }
-        }
-    }
-
-    /**
-     * @before
-     */
-    public function setUpClient(): void
+    protected function setUp(): void
     {
         $this->client = static::createClient(['debug' => false]);
-    }
-
-    /**
-     * @before
-     */
-    public function createMatcher(): void
-    {
         $this->matcherFactory = new MatcherFactory();
-    }
 
-    /**
-     * @before
-     */
-    public function setUpDatabase(): void
-    {
         if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
-            $container = static::$sharedKernel->getContainer();
+            $container = $this->client->getContainer();
             Assert::notNull($container);
 
             /** @var EntityManager $entityManager */

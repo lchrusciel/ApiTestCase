@@ -15,6 +15,7 @@ namespace ApiTestCase\Test\Tests\Controller;
 
 use ApiTestCase\JsonApiTestCase;
 use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Response;
 
 class SampleControllerJsonTest extends JsonApiTestCase
@@ -28,9 +29,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'hello_world');
     }
 
-    /**
-     * @dataProvider provideTestData
-     */
+    #[DataProvider('provideTestData')]
     public function testGetHelloWorldResponseWithDataProvider(string $method): void
     {
         $this->client->request($method, '/');
@@ -42,7 +41,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
 
     public static function provideTestData(): iterable
     {
-        yield ['method' => 'GET'];
+        yield ['GET'];
     }
 
     public function testGetHelloWorldResponseWithCharsetOnContentType(): void

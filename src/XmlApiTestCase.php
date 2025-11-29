@@ -19,12 +19,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class XmlApiTestCase extends ApiTestCase
 {
-    /**
-     * @before
-     */
-    public function setUpClient(): void
+    protected function setUp(): void
     {
-        $this->client = static::createClient([], ['HTTP_ACCEPT' => 'application/xml']);
+        parent::setUp();
+
+        $this->client->setServerParameter('HTTP_ACCEPT', 'application/xml');
     }
 
     /**
