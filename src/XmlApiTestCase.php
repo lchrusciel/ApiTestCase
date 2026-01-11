@@ -15,13 +15,12 @@ namespace ApiTestCase;
 
 use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
 use Coduo\PHPMatcher\Matcher;
+use PHPUnit\Framework\Attributes\Before;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class XmlApiTestCase extends ApiTestCase
 {
-    /**
-     * @before
-     */
+    #[Before]
     public function setUpClient(): void
     {
         $this->client = static::createClient([], ['HTTP_ACCEPT' => 'application/xml']);
