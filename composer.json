@@ -43,7 +43,7 @@
     "require-dev": {
         "phpstan/phpstan-strict-rules": "^1.0",
         "phpstan/phpstan-webmozart-assert": "^1.0",
-        "symfony/serializer": "^5.4 || ^6.0",
+        "symfony/serializer": "^5.4 || ^6.0 || ^7.0 || ^8.0",
         "phpstan/phpstan": "^1.8"
     },
     "scripts": {
