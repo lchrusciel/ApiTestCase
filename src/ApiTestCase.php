@@ -24,6 +24,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use PHPUnit\Framework\Attributes\AfterClass;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\BeforeClass;
 use Symfony\Contracts\Service\ResetInterface;
 use Webmozart\Assert\Assert;
 
@@ -50,18 +53,14 @@ abstract class ApiTestCase extends WebTestCase
     /** @var EntityManager|null */
     private $entityManager;
 
-    /**
-     * @beforeClass
-     */
+    #[BeforeClass]
     public static function createSharedKernel(): void
     {
         static::$sharedKernel = static::createKernel(['debug' => false]);
         static::$sharedKernel->boot();
     }
 
-    /**
-     * @afterClass
-     */
+    #[AfterClass]
     public static function ensureSharedKernelShutdown(): void
     {
         if (null !== static::$sharedKernel) {
@@ -73,25 +72,19 @@ abstract class ApiTestCase extends WebTestCase
         }
     }
 
-    /**
-     * @before
-     */
+    #[Before]
     public function setUpClient(): void
     {
         $this->client = static::createClient(['debug' => false]);
     }
 
-    /**
-     * @before
-     */
+    #[Before]
     public function createMatcher(): void
     {
         $this->matcherFactory = new MatcherFactory();
     }
 
-    /**
-     * @before
-     */
+    #[Before]
     public function setUpDatabase(): void
     {
         if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
