@@ -79,7 +79,7 @@ final class SampleController
     public function showAction(Request $request): Response
     {
         $productRepository = $this->objectManager->getRepository(Product::class);
-        $product = $productRepository->find($request->get('id'));
+        $product = $productRepository->find($request->attributes->get('id'));
 
         if (!$product) {
             throw new NotFoundHttpException();
