@@ -28,6 +28,8 @@ abstract class JsonApiTestCase extends ApiTestCase
 
     protected function buildMatcher(): Matcher
     {
+        \Webmozart\Assert\Assert::notNull($this->matcherFactory);
+
         return $this->matcherFactory->createMatcher(new VoidBacktrace());
     }
 
@@ -65,15 +67,15 @@ abstract class JsonApiTestCase extends ApiTestCase
         parent::assertResponseContent($this->prettifyJson($response->getContent()), $filename, 'json');
     }
 
-    protected function prettifyJson($content): string
+    protected function prettifyJson(string|false $content): string
     {
         $jsonFlags = \JSON_PRETTY_PRINT;
         if (!isset($_SERVER['ESCAPE_JSON']) || true !== $_SERVER['ESCAPE_JSON']) {
             $jsonFlags |= \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES;
         }
 
-        /** @var string $encodedContent */
-        $encodedContent = json_encode(json_decode($content, true), $jsonFlags);
+        $encodedContent = json_encode(json_decode((string) $content, true), $jsonFlags);
+        \Webmozart\Assert\Assert::string($encodedContent);
 
         return $encodedContent;
     }

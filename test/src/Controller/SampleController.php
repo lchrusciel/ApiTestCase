@@ -37,11 +37,11 @@ final class SampleController
 
     public function helloWorldAction(Request $request): Response
     {
-        $acceptFormat = $request->headers->get('Accept');
+        $acceptFormat = $request->headers->get('Accept') ?? '';
 
         if (
-            false !== strpos($acceptFormat, 'application')
-            && false !== strpos($acceptFormat, 'json')
+            str_contains($acceptFormat, 'application')
+            && str_contains($acceptFormat, 'json')
         ) {
             return new JsonResponse([
                 'message' => 'Hello ApiTestCase World!',
@@ -91,9 +91,9 @@ final class SampleController
     public function createAction(Request $request): Response
     {
         $product = new Product();
-        $product->setName($request->request->get('name'));
+        $product->setName($request->request->getString('name'));
         $product->setPrice($request->request->getInt('price'));
-        $product->setUuid($request->request->get('uuid'));
+        $product->setUuid($request->request->getString('uuid'));
 
         $this->objectManager->persist($product);
         $this->objectManager->flush();
@@ -101,7 +101,7 @@ final class SampleController
         return $this->respond($request, $product, Response::HTTP_CREATED);
     }
 
-    private function respond(Request $request, $data, int $statusCode = Response::HTTP_OK): Response
+    private function respond(Request $request, mixed $data, int $statusCode = Response::HTTP_OK): Response
     {
         $serializer = $this->createSerializer();
         $acceptFormat = $request->headers->get('Accept');
@@ -115,13 +115,11 @@ final class SampleController
             return $response;
         }
 
-        if ('application/json' === $acceptFormat) {
-            $content = $serializer->serialize($data, 'json');
-            $response = new Response($content, $statusCode);
-            $response->headers->set('Content-Type', 'application/json');
+        $content = $serializer->serialize($data, 'json');
+        $response = new Response($content, $statusCode);
+        $response->headers->set('Content-Type', 'application/json');
 
-            return $response;
-        }
+        return $response;
     }
 
     private function createSerializer(): Serializer

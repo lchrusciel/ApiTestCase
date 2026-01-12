@@ -29,6 +29,7 @@ class Category
     #[ORM\Column(type: "string")]
     private string $name;
 
+    /** @var Collection<int, Product> */
     #[ORM\ManyToMany(targetEntity: Product::class, cascade: ["all"])]
     #[ORM\JoinTable(
         name: "app_category_products",
@@ -80,7 +81,7 @@ class Category
     }
 
     /**
-     * @return Product[]
+     * @return Collection<int, Product>
      */
     public function getProducts(): Collection
     {
