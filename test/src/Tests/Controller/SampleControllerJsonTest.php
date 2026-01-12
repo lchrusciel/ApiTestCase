@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ApiTestCase\Test\Tests\Controller;
 
 use ApiTestCase\JsonApiTestCase;
+use ApiTestCase\Test\Entity\Product;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +40,9 @@ class SampleControllerJsonTest extends JsonApiTestCase
         $this->assertResponse($response, 'hello_world');
     }
 
+    /**
+     * @return iterable<array{method: string}>
+     */
     public static function provideTestData(): iterable
     {
         yield ['method' => 'GET'];
@@ -128,6 +132,7 @@ class SampleControllerJsonTest extends JsonApiTestCase
     public function testProductShowResponse(): void
     {
         $objects = $this->loadFixturesFromDirectory();
+        \Webmozart\Assert\Assert::isInstanceOf($objects['product1'], Product::class);
 
         $this->client->request('GET', '/products/' . $objects['product1']->getId());
 

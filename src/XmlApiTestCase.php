@@ -26,11 +26,10 @@ abstract class XmlApiTestCase extends ApiTestCase
         $this->client = static::createClient([], ['HTTP_ACCEPT' => 'application/xml']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function buildMatcher(): Matcher
     {
+        \Webmozart\Assert\Assert::notNull($this->matcherFactory);
+
         return $this->matcherFactory->createMatcher(new VoidBacktrace());
     }
 
@@ -68,6 +67,9 @@ abstract class XmlApiTestCase extends ApiTestCase
         $domXmlDocument->formatOutput = true;
         $domXmlDocument->loadXML(str_replace("\n", '', $actualResponse));
 
-        return $domXmlDocument->saveXML();
+        $result = $domXmlDocument->saveXML();
+        \Webmozart\Assert\Assert::string($result);
+
+        return $result;
     }
 }

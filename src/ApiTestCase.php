@@ -32,26 +32,19 @@ use Webmozart\Assert\Assert;
 
 abstract class ApiTestCase extends WebTestCase
 {
-    /** @var KernelInterface */
-    protected static $sharedKernel;
+    protected static ?KernelInterface $sharedKernel = null;
 
-    /** @var KernelBrowser|null */
-    protected $client;
+    protected ?KernelBrowser $client = null;
 
-    /** @var string|null */
-    protected $expectedResponsesPath;
+    protected ?string $expectedResponsesPath = null;
 
-    /** @var string */
-    protected $dataFixturesPath;
+    protected ?string $dataFixturesPath = null;
 
-    /** @var MatcherFactory|null */
-    protected $matcherFactory;
+    protected ?MatcherFactory $matcherFactory = null;
 
-    /** @var LoaderInterface|null */
-    private $fixtureLoader;
+    private ?LoaderInterface $fixtureLoader = null;
 
-    /** @var EntityManager|null */
-    private $entityManager;
+    private ?EntityManager $entityManager = null;
 
     #[BeforeClass]
     public static function createSharedKernel(): void
@@ -88,6 +81,7 @@ abstract class ApiTestCase extends WebTestCase
     public function setUpDatabase(): void
     {
         if (isset($_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) && $_SERVER['IS_DOCTRINE_ORM_SUPPORTED']) {
+            Assert::notNull(static::$sharedKernel);
             $container = static::$sharedKernel->getContainer();
             Assert::notNull($container);
 
@@ -145,7 +139,7 @@ abstract class ApiTestCase extends WebTestCase
     /**
      * Gets service from DIC.
      */
-    protected function get(string $id)
+    protected function get(string $id): ?object
     {
         $client = $this->client;
         Assert::notNull($client);
@@ -209,6 +203,9 @@ abstract class ApiTestCase extends WebTestCase
         }
     }
 
+    /**
+     * @return object[]
+     */
     protected function loadFixturesFromDirectory(string $source = ''): array
     {
         $source = $this->getFixtureRealPath($source);
@@ -229,6 +226,9 @@ abstract class ApiTestCase extends WebTestCase
         return $this->getFixtureLoader()->load(array_filter($files));
     }
 
+    /**
+     * @return object[]
+     */
     protected function loadFixturesFromFile(string $source): array
     {
         $source = $this->getFixtureRealPath($source);

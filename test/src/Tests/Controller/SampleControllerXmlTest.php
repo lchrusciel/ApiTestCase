@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ApiTestCase\Test\Tests\Controller;
 
+use ApiTestCase\Test\Entity\Product;
 use ApiTestCase\XmlApiTestCase;
 use PHPUnit\Framework\AssertionFailedError;
 
@@ -82,6 +83,7 @@ class SampleControllerXmlTest extends XmlApiTestCase
     public function testProductShowResponse(): void
     {
         $objects = $this->loadFixturesFromDirectory();
+        \Webmozart\Assert\Assert::isInstanceOf($objects['product1'], Product::class);
 
         $this->client->request('GET', '/products/' . $objects['product1']->getId());
 

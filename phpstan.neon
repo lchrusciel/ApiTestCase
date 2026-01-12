@@ -2,7 +2,12 @@ includes:
     - vendor/phpstan/phpstan-webmozart-assert/extension.neon
 
 parameters:
-    level: 5
+    level: 8
     paths:
         - src
         - test/src/
+    ignoreErrors:
+        # Test code - less strict on nullable checks
+        - '#Cannot call method (request|getResponse)\(\) on Symfony\\Bundle\\FrameworkBundle\\KernelBrowser\|null#'
+        # Test entities - Doctrine handles this
+        - '#Property .* is never written, only read#'
