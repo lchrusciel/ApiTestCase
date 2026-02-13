@@ -91,4 +91,21 @@ class SampleControllerXmlTest extends XmlApiTestCase
 
         $this->assertResponse($response, 'get_product');
     }
+
+    public function testDiffVisualizationShowsContextAndColors(): void
+    {
+        try {
+            $this->client->request('GET', '/');
+            $response = $this->client->getResponse();
+            $this->assertResponse($response, 'incorrect_hello_world');
+            $this->fail('Expected assertion to fail but it passed');
+        } catch (AssertionFailedError $e) {
+            $message = $e->getMessage();
+
+            $this->assertStringContainsString('Expected file:', $message);
+            $this->assertStringContainsString('incorrect_hello_world.xml', $message);
+            $this->assertStringContainsString('-', $message);
+            $this->assertStringContainsString('+', $message);
+        }
+    }
 }
