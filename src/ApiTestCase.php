@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ApiTestCase;
 
+use ApiTestCase\Renderer\ContextualDiffRenderer;
 use Coduo\PHPMatcher\Factory\MatcherFactory;
 use Coduo\PHPMatcher\Matcher;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
@@ -169,8 +170,9 @@ abstract class ApiTestCase extends WebTestCase
     protected function assertResponseContent(string $actualResponse, string $filename, string $mimeType): void
     {
         $responseSource = $this->getExpectedResponsesFolder();
+        $expectedFilePath = PathBuilder::build($responseSource, sprintf('%s.%s', $filename, $mimeType));
 
-        $contents = file_get_contents(PathBuilder::build($responseSource, sprintf('%s.%s', $filename, $mimeType)));
+        $contents = file_get_contents($expectedFilePath);
         Assert::string($contents);
 
         $expectedResponse = trim($contents);
@@ -180,9 +182,17 @@ abstract class ApiTestCase extends WebTestCase
         $result = $matcher->match($actualResponse, $expectedResponse);
 
         if (!$result) {
-            $diff = new \Diff(explode(\PHP_EOL, $expectedResponse), explode(\PHP_EOL, $actualResponse), []);
+            $diff = new \Diff(
+                explode(\PHP_EOL, $expectedResponse),
+                explode(\PHP_EOL, $actualResponse),
+                ['context' => 3]
+            );
 
-            self::fail($matcher->getError() . \PHP_EOL . $diff->render(new \Diff_Renderer_Text_Unified()));
+            $renderer = new ContextualDiffRenderer([
+                'expectedFilePath' => $expectedFilePath,
+            ]);
+
+            self::fail($matcher->getError() . \PHP_EOL . $diff->render($renderer));
         }
     }
 
