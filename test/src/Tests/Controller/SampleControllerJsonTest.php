@@ -157,4 +157,23 @@ EOT;
 
         $this->assertResponse($response, 'create_product', Response::HTTP_CREATED);
     }
+
+    public function testDiffVisualizationShowsContextAndColors(): void
+    {
+        try {
+            $this->client->request('GET', '/');
+            $response = $this->client->getResponse();
+            $this->assertResponse($response, 'incorrect_hello_world');
+            $this->fail('Expected assertion to fail but it passed');
+        } catch (AssertionFailedError $e) {
+            $message = $e->getMessage();
+
+            $this->assertStringContainsString('--- Expected:', $message);
+            $this->assertStringContainsString('incorrect_hello_world.json', $message);
+            $this->assertStringContainsString('+++ Actual', $message);
+            $this->assertStringContainsString('-', $message);
+            $this->assertStringContainsString('+', $message);
+            $this->assertStringContainsString('message', $message);
+        }
+    }
 }
