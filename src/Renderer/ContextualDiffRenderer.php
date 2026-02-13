@@ -49,12 +49,6 @@ class ContextualDiffRenderer extends \Diff_Renderer_Abstract
     {
         $output = '';
 
-        // Add expected file path if provided
-        if ($this->expectedFilePath !== null) {
-            $output .= sprintf("--- Expected: %s\n", $this->expectedFilePath);
-            $output .= "+++ Actual\n";
-        }
-
         $opCodes = $this->diff->getGroupedOpcodes();
 
         foreach ($opCodes as $group) {
@@ -98,6 +92,12 @@ class ContextualDiffRenderer extends \Diff_Renderer_Abstract
                     }
                 }
             }
+        }
+
+        // Add expected file path at the end if provided
+        if ($this->expectedFilePath !== null) {
+            $absolutePath = realpath($this->expectedFilePath) ?: $this->expectedFilePath;
+            $output .= sprintf("\nExpected file: %s\n", $absolutePath);
         }
 
         return $output;

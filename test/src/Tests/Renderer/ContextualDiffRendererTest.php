@@ -70,8 +70,7 @@ class ContextualDiffRendererTest extends TestCase
         ]);
         $output = $diff->render($renderer);
 
-        $this->assertStringContainsString('--- Expected: /path/to/expected.json', $output);
-        $this->assertStringContainsString('+++ Actual', $output);
+        $this->assertStringContainsString('Expected file: /path/to/expected.json', $output);
     }
 
     public function testRenderHandlesInsertions(): void

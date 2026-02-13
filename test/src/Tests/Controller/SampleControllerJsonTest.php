@@ -168,9 +168,8 @@ EOT;
         } catch (AssertionFailedError $e) {
             $message = $e->getMessage();
 
-            $this->assertStringContainsString('--- Expected:', $message);
+            $this->assertStringContainsString('Expected file:', $message);
             $this->assertStringContainsString('incorrect_hello_world.json', $message);
-            $this->assertStringContainsString('+++ Actual', $message);
             $this->assertStringContainsString('-', $message);
             $this->assertStringContainsString('+', $message);
             $this->assertStringContainsString('message', $message);
