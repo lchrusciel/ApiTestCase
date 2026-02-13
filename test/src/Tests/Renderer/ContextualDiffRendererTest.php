@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace ApiTestCase\Test\Tests\Renderer;
 
 use ApiTestCase\Renderer\ContextualDiffRenderer;
+use Coduo\PHPMatcher\Backtrace\VoidBacktrace;
+use Coduo\PHPMatcher\Factory\MatcherFactory;
 use PHPUnit\Framework\TestCase;
 
 class ContextualDiffRendererTest extends TestCase
@@ -208,5 +210,36 @@ class ContextualDiffRendererTest extends TestCase
         $this->assertStringContainsString('line 11', $output);
         $this->assertStringContainsString('line 12', $output);
         $this->assertStringContainsString('line 13', $output);
+    }
+
+    public function testPatternAwareDiffDoesNotShowMatchingPatterns(): void
+    {
+        $expected = [
+            '{',
+            '    "message": @string@,',
+            '    "path": @string@,',
+            '    "count": 42',
+            '}',
+        ];
+
+        $actual = [
+            '{',
+            '    "message": "Hello World",',
+            '    "path": "/p/a/t/h",',
+            '    "count": 99',
+            '}',
+        ];
+
+        $matcherFactory = new MatcherFactory();
+        $matcher = $matcherFactory->createMatcher(new VoidBacktrace());
+
+        $diff = new \Diff($expected, $actual);
+        $renderer = new ContextualDiffRenderer(['matcher' => $matcher]);
+        $output = $diff->render($renderer);
+
+        $this->assertStringNotContainsString('"message": @string@', $output);
+        $this->assertStringNotContainsString('"path": @string@', $output);
+        $this->assertStringContainsString('-    "count": 42', $output);
+        $this->assertStringContainsString('+    "count": 99', $output);
     }
 }

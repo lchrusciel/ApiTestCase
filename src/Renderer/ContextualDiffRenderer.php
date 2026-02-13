@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace ApiTestCase\Renderer;
 
+use Coduo\PHPMatcher\Matcher;
+
 /**
  * PHPUnit-like contextual diff renderer.
  * Shows only differences with configurable context lines above and below each change.
@@ -31,13 +33,20 @@ class ContextualDiffRenderer extends \Diff_Renderer_Abstract
     private ?string $expectedFilePath;
 
     /**
+     * @var Matcher|null PHPMatcher instance for pattern-aware diffing
+     */
+    private ?Matcher $matcher;
+
+    /**
      * @param array<string, mixed> $options Optional configuration:
      *                                      - 'expectedFilePath' (string): Path to expected response file
+     *                                      - 'matcher' (Matcher): PHPMatcher for pattern-aware diffing
      */
     public function __construct(array $options = [])
     {
         parent::__construct($options);
         $this->expectedFilePath = $options['expectedFilePath'] ?? null;
+        $this->matcher = $options['matcher'] ?? null;
     }
 
     /**
@@ -74,6 +83,26 @@ class ContextualDiffRenderer extends \Diff_Renderer_Abstract
                     foreach ($lines as $line) {
                         $output .= ' ' . $line . "\n";
                     }
+                } elseif ($tag === 'replace' && $this->matcher !== null) {
+                    $expectedLines = $this->diff->GetA($i1, $i2);
+                    $actualLines = $this->diff->GetB($j1, $j2);
+                    $maxLines = max(count($expectedLines), count($actualLines));
+
+                    for ($lineIndex = 0; $lineIndex < $maxLines; $lineIndex++) {
+                        $expectedLine = $expectedLines[$lineIndex] ?? '';
+                        $actualLine = $actualLines[$lineIndex] ?? '';
+
+                        if ($this->linesMatchViaPattern($actualLine, $expectedLine)) {
+                            $output .= ' ' . $actualLine . "\n";
+                        } else {
+                            if (isset($expectedLines[$lineIndex])) {
+                                $output .= $this->colorRed('-' . $expectedLine) . "\n";
+                            }
+                            if (isset($actualLines[$lineIndex])) {
+                                $output .= $this->colorGreen('+' . $actualLine) . "\n";
+                            }
+                        }
+                    }
                 } else {
                     // Handle deletions (expected but not found in actual)
                     if ($tag === 'replace' || $tag === 'delete') {
@@ -101,6 +130,24 @@ class ContextualDiffRenderer extends \Diff_Renderer_Abstract
         }
 
         return $output;
+    }
+
+    /**
+     * Check if actual line matches expected line via phpmatcher patterns.
+     *
+     * @param string $actualLine The actual line from response
+     * @param string $expectedLine The expected line (may contain patterns)
+     * @return bool True if lines match via patterns
+     */
+    private function linesMatchViaPattern(string $actualLine, string $expectedLine): bool
+    {
+        if ($this->matcher === null) {
+            return false;
+        }
+
+        $result = $this->matcher->match($actualLine, $expectedLine);
+
+        return $result;
     }
 
     /**

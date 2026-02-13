@@ -190,6 +190,7 @@ abstract class ApiTestCase extends WebTestCase
 
             $renderer = new ContextualDiffRenderer([
                 'expectedFilePath' => $expectedFilePath,
+                'matcher' => $matcher,
             ]);
 
             self::fail($diff->render($renderer));
