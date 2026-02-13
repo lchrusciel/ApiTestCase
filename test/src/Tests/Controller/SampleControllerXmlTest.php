@@ -102,9 +102,8 @@ class SampleControllerXmlTest extends XmlApiTestCase
         } catch (AssertionFailedError $e) {
             $message = $e->getMessage();
 
-            $this->assertStringContainsString('--- Expected:', $message);
+            $this->assertStringContainsString('Expected file:', $message);
             $this->assertStringContainsString('incorrect_hello_world.xml', $message);
-            $this->assertStringContainsString('+++ Actual', $message);
             $this->assertStringContainsString('-', $message);
             $this->assertStringContainsString('+', $message);
         }

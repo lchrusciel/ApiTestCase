@@ -192,7 +192,7 @@ abstract class ApiTestCase extends WebTestCase
                 'expectedFilePath' => $expectedFilePath,
             ]);
 
-            self::fail($matcher->getError() . \PHP_EOL . $diff->render($renderer));
+            self::fail($diff->render($renderer));
         }
     }
 
